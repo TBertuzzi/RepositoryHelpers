@@ -12,6 +12,7 @@
     <Description>Extensions for HttpClient and Custom Repository based on dapper</Description>
     <PackageIconUrl>https://github.com/TBertuzzi/RepositoryHelpers/blob/master/Resource/RepositoryHelpersIcon.png?raw=true</PackageIconUrl>
     <RepositoryUrl>https://github.com/TBertuzzi/RepositoryHelpers</RepositoryUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
