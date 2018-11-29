@@ -2,6 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>tbertuzzi</Authors>
+    <Company>KBits</Company>
+    <Copyright>Copyright ©2018 KBits</Copyright>
+    <PackageLicenseUrl>http://opensource.org/licenses/MS-PL</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/TBertuzzi/RepositoryHelpers</PackageProjectUrl>
+    <PackageTags>repository helpers dapper litedb ddd mvc httpclient rest pattern</PackageTags>
+    <PackageReleaseNotes>Initial Version</PackageReleaseNotes>
+    <Description>Extensions for HttpClient and Custom Repository based on dapper</Description>
+    <PackageIconUrl>https://github.com/TBertuzzi/RepositoryHelpers/blob/master/Resource/RepositoryHelpersIcon.png?raw=true</PackageIconUrl>
+    <RepositoryUrl>https://github.com/TBertuzzi/RepositoryHelpers</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
