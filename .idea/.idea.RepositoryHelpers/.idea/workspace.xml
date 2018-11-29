@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="49a70e24-7a9a-4768-99fd-d451436683e6" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.RepositoryHelpers/.idea/contentModel.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.RepositoryHelpers/.idea/indexLayout.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.RepositoryHelpers/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.RepositoryHelpers/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.RepositoryHelpers/riderModule.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RepositoryHelpers.sln" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RepositoryHelpers/DapperIgnore.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RepositoryHelpers/DataBase/Connection.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RepositoryHelpers/Repository/Base/ILiteDbRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RepositoryHelpers/Repository/Base/IRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RepositoryHelpers/Repository/CustomRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RepositoryHelpers/Repository/LiteDbRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RepositoryHelpers/RepositoryHelpers.csproj" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/RepositoryHelpers/Utils/Enum.cs" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="1385415057">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.open.time.3" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="cs" value="7" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="C#" value="7" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="cs" value="142" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="C#" value="142" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/RepositoryHelpers/DapperIgnore.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="160">
+              <caret line="10" column="1" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
+              <folding>
+                <marker date="1543492383023" expanded="true" signature="41:203" ph="{...}" />
+                <marker date="1543492383023" expanded="true" signature="92:201" ph="{...}" />
+                <marker date="1543492383023" expanded="true" signature="140:195" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/RepositoryHelpers/Repository/CustomRepository.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="342">
+              <caret line="187" column="62" selection-start-line="187" selection-start-column="62" selection-end-line="187" selection-end-column="62" />
+              <folding>
+                <marker date="1543492486619" expanded="false" signature="6:235" ph="..." />
+                <marker date="1543492486619" expanded="true" signature="275:7079" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="344:7077" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="541:599" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="609:5664" ph="DAPPER" />
+                <marker date="1543492486619" expanded="true" signature="670:1779" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="748:1769" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="1010:1580" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="1353:1460" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="1924:3348" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="2002:3338" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="2273:2858" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="2975:3181" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="3202:3324" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="3504:3720" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="3591:3710" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="3895:4093" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="3983:4083" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="4283:4536" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="4361:4526" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="4664:5120" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="4742:5110" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="4885:4938" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="5451:5644" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="5529:5634" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="5674:7070" ph="ADO" />
+                <marker date="1543492486619" expanded="true" signature="5772:6620" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="5850:6610" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="5938:6596" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="6106:6231" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="6298:6578" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="6424:6556" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="6721:6908" ph="{...}" />
+                <marker date="1543492486619" expanded="true" signature="6799:6898" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/RepositoryHelpers/Repository/Base/ILiteDbRepository.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="160">
+              <caret line="10" selection-start-line="10" selection-end-line="10" />
+              <folding>
+                <marker date="1543492341873" expanded="true" signature="58:180" ph="{...}" />
+                <marker date="1543492341873" expanded="true" signature="99:178" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/RepositoryHelpers/Repository/Base/IRepository.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="240">
+              <caret line="17" column="28" selection-start-line="17" selection-start-column="28" selection-end-line="17" selection-end-column="28" />
+              <folding>
+                <marker date="1543492452151" expanded="false" signature="6:82" ph="..." />
+                <marker date="1543492452151" expanded="true" signature="127:1222" ph="{...}" />
+                <marker date="1543492452151" expanded="true" signature="174:1220" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/RepositoryHelpers/DataBase/Connection.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="216">
+              <caret line="40" column="45" selection-start-line="40" selection-start-column="31" selection-end-line="40" selection-end-column="45" />
+              <folding>
+                <marker date="1543492478411" expanded="true" signature="6:120" ph="..." />
+                <marker date="1543492478411" expanded="true" signature="189:1977" ph="{...}" />
+                <marker date="1543492478411" expanded="true" signature="226:1975" ph="{...}" />
+                <marker date="1543492478411" expanded="true" signature="383:797" ph="{...}" />
+                <marker date="1543492478411" expanded="true" signature="409:787" ph="{...}" />
+                <marker date="1543492478411" expanded="true" signature="457:773" ph="{...}" />
+                <marker date="1543492478411" expanded="true" signature="875:1238" ph="{...}" />
+                <marker date="1543492478411" expanded="true" signature="915:1228" ph="{...}" />
+                <marker date="1543492478411" expanded="true" signature="1287:1572" ph="{...}" />
+                <marker date="1543492478411" expanded="true" signature="1327:1562" ph="{...}" />
+                <marker date="1543492478411" expanded="true" signature="1650:1969" ph="{...}" />
+                <marker date="1543492478411" expanded="true" signature="1690:1959" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/RepositoryHelpers/Utils/Enum.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="20" selection-start-column="20" selection-end-column="20" />
+              <folding>
+                <marker date="1543492423901" expanded="true" signature="33:120" ph="{...}" />
+                <marker date="1543492423901" expanded="true" signature="64:118" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/RepositoryHelpers/Repository/LiteDbRepository.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="400">
+              <caret line="27" column="9" selection-start-line="27" selection-start-column="9" selection-end-line="27" selection-end-column="9" />
+              <folding>
+                <marker date="1543492375654" expanded="false" signature="6:66" ph="..." />
+                <marker date="1543492375654" expanded="true" signature="147:907" ph="{...}" />
+                <marker date="1543492375654" expanded="true" signature="221:905" ph="{...}" />
+                <marker date="1543492375654" expanded="true" signature="337:422" ph="{...}" />
+                <marker date="1543492375654" expanded="true" signature="459:541" ph="{...}" />
+                <marker date="1543492375654" expanded="true" signature="577:642" ph="{...}" />
+                <marker date="1543492375654" expanded="true" signature="678:743" ph="{...}" />
+                <marker date="1543492375654" expanded="true" signature="777:899" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/RepositoryHelpers/Repository/CustomRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/RepositoryHelpers/Repository/Base/IRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/RepositoryHelpers/DapperIgnore.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/RepositoryHelpers/Utils/Enum.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/RepositoryHelpers/DataBase/Connection.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/RepositoryHelpers/Repository/LiteDbRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/RepositoryHelpers/Repository/Base/ILiteDbRepository.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/RepositoryHelpers/Repository/Repository.cs" />
+        <option value="$PROJECT_DIR$/RepositoryHelpers/Repository/Base/ILiteDbRepository.cs" />
+        <option value="$PROJECT_DIR$/RepositoryHelpers/Repository/LiteDbRepository.cs" />
+        <option value="$PROJECT_DIR$/RepositoryHelpers/DapperIgnore.cs" />
+        <option value="$PROJECT_DIR$/RepositoryHelpers/Utils/Enum.cs" />
+        <option value="$PROJECT_DIR$/RepositoryHelpers/Repository/Base/IRepository.cs" />
+        <option value="$PROJECT_DIR$/RepositoryHelpers/DataBase/Connection.cs" />
+        <option value="$PROJECT_DIR$/RepositoryHelpers/Repository/CustomRepository.cs" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="y" value="23" />
+    <option name="width" value="1440" />
+    <option name="height" value="829" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="SolutionExplorer" proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="FileSystemExplorer" />
+      <pane id="SolutionExplorer">
+        <subPane>
+          <expand>
+            <path>
+              <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
+              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
+            </path>
+            <path>
+              <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
+              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
+            </path>
+            <path>
+              <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
+              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="DataBase" type="24d0babc:SolutionExplorerModelNode" />
+            </path>
+            <path>
+              <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
+              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="Repository" type="24d0babc:SolutionExplorerModelNode" />
+            </path>
+            <path>
+              <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
+              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="Repository" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="Base" type="24d0babc:SolutionExplorerModelNode" />
+            </path>
+            <path>
+              <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
+              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
+              <item name="Utils" type="24d0babc:SolutionExplorerModelNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+        <option name="show-all-files" value="false" />
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="Rider.DefaultBreakpoints.AreToggled" value="true" />
+    <property name="Rider.ProjectViewActivator.IsNotFirstRun" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="49a70e24-7a9a-4768-99fd-d451436683e6" name="Default Changelist" comment="" />
+      <created>1543491494328</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1543491494328</updated>
+      <workItem from="1543491497013" duration="971000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="971000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="23" width="1440" height="829" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Favorites" side_tool="true" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2532189" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="NuGet" />
+      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Inspection Results" weight="0.32971507" />
+      <window_info anchor="bottom" id="Unit Tests" />
+      <window_info anchor="bottom" id="Terminal" />
+      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="right" id="Errors In Solution" />
+      <window_info anchor="right" id="Database" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="UnityProjectConfiguration" hasMinimizedUI="null" />
+  <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" suspend="NONE" type="DotNet Exception Breakpoints">
+          <properties exception="System.Threading.ThreadAbortException" displayValue="System.Threading.ThreadAbortException" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/RepositoryHelpers/Utils/Enum.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="20" selection-start-column="20" selection-end-column="20" />
+          <folding>
+            <marker date="1543492423901" expanded="true" signature="33:120" ph="{...}" />
+            <marker date="1543492423901" expanded="true" signature="64:118" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RepositoryHelpers/DapperIgnore.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="10" column="1" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
+          <folding>
+            <marker date="1543492383023" expanded="true" signature="41:203" ph="{...}" />
+            <marker date="1543492383023" expanded="true" signature="92:201" ph="{...}" />
+            <marker date="1543492383023" expanded="true" signature="140:195" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RepositoryHelpers/Repository/LiteDbRepository.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="27" column="9" selection-start-line="27" selection-start-column="9" selection-end-line="27" selection-end-column="9" />
+          <folding>
+            <marker date="1543492375654" expanded="false" signature="6:66" ph="..." />
+            <marker date="1543492375654" expanded="true" signature="147:907" ph="{...}" />
+            <marker date="1543492375654" expanded="true" signature="221:905" ph="{...}" />
+            <marker date="1543492375654" expanded="true" signature="337:422" ph="{...}" />
+            <marker date="1543492375654" expanded="true" signature="459:541" ph="{...}" />
+            <marker date="1543492375654" expanded="true" signature="577:642" ph="{...}" />
+            <marker date="1543492375654" expanded="true" signature="678:743" ph="{...}" />
+            <marker date="1543492375654" expanded="true" signature="777:899" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RepositoryHelpers/Repository/Base/IRepository.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="17" column="28" selection-start-line="17" selection-start-column="28" selection-end-line="17" selection-end-column="28" />
+          <folding>
+            <marker date="1543492452151" expanded="false" signature="6:82" ph="..." />
+            <marker date="1543492452151" expanded="true" signature="127:1222" ph="{...}" />
+            <marker date="1543492452151" expanded="true" signature="174:1220" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RepositoryHelpers/Repository/Base/ILiteDbRepository.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
+          <folding>
+            <marker date="1543492341873" expanded="true" signature="58:180" ph="{...}" />
+            <marker date="1543492341873" expanded="true" signature="99:178" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RepositoryHelpers/DataBase/Connection.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="40" column="45" selection-start-line="40" selection-start-column="31" selection-end-line="40" selection-end-column="45" />
+          <folding>
+            <marker date="1543492478411" expanded="true" signature="6:120" ph="..." />
+            <marker date="1543492478411" expanded="true" signature="189:1977" ph="{...}" />
+            <marker date="1543492478411" expanded="true" signature="226:1975" ph="{...}" />
+            <marker date="1543492478411" expanded="true" signature="383:797" ph="{...}" />
+            <marker date="1543492478411" expanded="true" signature="409:787" ph="{...}" />
+            <marker date="1543492478411" expanded="true" signature="457:773" ph="{...}" />
+            <marker date="1543492478411" expanded="true" signature="875:1238" ph="{...}" />
+            <marker date="1543492478411" expanded="true" signature="915:1228" ph="{...}" />
+            <marker date="1543492478411" expanded="true" signature="1287:1572" ph="{...}" />
+            <marker date="1543492478411" expanded="true" signature="1327:1562" ph="{...}" />
+            <marker date="1543492478411" expanded="true" signature="1650:1969" ph="{...}" />
+            <marker date="1543492478411" expanded="true" signature="1690:1959" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RepositoryHelpers/Repository/CustomRepository.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="187" column="62" selection-start-line="187" selection-start-column="62" selection-end-line="187" selection-end-column="62" />
+          <folding>
+            <marker date="1543492486619" expanded="false" signature="6:235" ph="..." />
+            <marker date="1543492486619" expanded="true" signature="275:7079" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="344:7077" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="541:599" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="609:5664" ph="DAPPER" />
+            <marker date="1543492486619" expanded="true" signature="670:1779" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="748:1769" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="1010:1580" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="1353:1460" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="1924:3348" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="2002:3338" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="2273:2858" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="2975:3181" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="3202:3324" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="3504:3720" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="3591:3710" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="3895:4093" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="3983:4083" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="4283:4536" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="4361:4526" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="4664:5120" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="4742:5110" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="4885:4938" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="5451:5644" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="5529:5634" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="5674:7070" ph="ADO" />
+            <marker date="1543492486619" expanded="true" signature="5772:6620" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="5850:6610" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="5938:6596" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="6106:6231" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="6298:6578" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="6424:6556" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="6721:6908" ph="{...}" />
+            <marker date="1543492486619" expanded="true" signature="6799:6898" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="$PROJECT_DIR$" t="IncludeFlat">
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="RepositoryHelpers" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="DapperIgnore.cs" t="Include" />
+        <e p="DataBase" t="Include">
+          <e p="Connection.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netstandard2.0" t="Include">
+              <e p="RepositoryHelpers.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Repository" t="Include">
+          <e p="Base" t="Include">
+            <e p="ILiteDbRepository.cs" t="Include" />
+            <e p="IRepository.cs" t="Include" />
+          </e>
+          <e p="CustomRepository.cs" t="Include" />
+          <e p="LiteDbRepository.cs" t="Include" />
+        </e>
+        <e p="RepositoryHelpers.csproj" t="IncludeRecursive" />
+        <e p="Utils" t="Include">
+          <e p="Enum.cs" t="Include" />
+        </e>
+      </e>
+      <e p="RepositoryHelpers.sln" t="IncludeFlat" />
+    </e>
+    <e p="$USER_HOME$/Library/Caches/Rider2018.2/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/Library/Caches/Rider2018.2/resharper-host/local/Transient/ReSharperHost/v182/SolutionCaches/_RepositoryHelpers.1704678440.00" t="ExcludeRecursive" />
+  </component>
+</project>
