@@ -2,19 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="49a70e24-7a9a-4768-99fd-d451436683e6" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/RepositoryHelpers/DataBaseRepository/Base/ILiteDbRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RepositoryHelpers/DataBaseRepository/Base/IRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RepositoryHelpers/DataBaseRepository/CustomRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RepositoryHelpers/DataBaseRepository/LiteDbRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/HttpExtension.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/ServiceResponse.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.RepositoryHelpers/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.RepositoryHelpers/.idea/contentModel.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.RepositoryHelpers/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.RepositoryHelpers/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RepositoryHelpers/Repository/Base/ILiteDbRepository.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RepositoryHelpers/Repository/Base/IRepository.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RepositoryHelpers/Repository/CustomRepository.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RepositoryHelpers/Repository/LiteDbRepository.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/RepositoryHelpers/RepositoryHelpers.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/RepositoryHelpers/RepositoryHelpers.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/HttpExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/HttpExtension.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/ServiceResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/ServiceResponse.cs" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -42,12 +31,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="cs" value="256" />
+          <entry key="cs" value="258" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="C#" value="256" />
+          <entry key="C#" value="258" />
         </counts>
       </usages-collector>
     </session>
@@ -162,20 +151,19 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/ServiceResponse.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="288">
-              <caret line="18" column="29" selection-start-line="18" selection-start-column="29" selection-end-line="18" selection-end-column="29" />
+            <state relative-caret-position="752">
+              <caret line="47" column="25" lean-forward="true" selection-start-line="47" selection-start-column="25" selection-end-line="47" selection-end-column="25" />
               <folding>
-                <marker date="1543516018166" expanded="true" signature="6:31" ph="..." />
-                <marker date="1543516018166" expanded="true" signature="78:1555" ph="{...}" />
-                <marker date="1543516018166" expanded="true" signature="116:1553" ph="{...}" />
-                <marker date="1543516018166" expanded="true" signature="131:201" ph="/// Gets the status code. ... " />
-                <marker date="1543516018166" expanded="true" signature="274:338" ph="/// Gets the value. ... " />
-                <marker date="1543516018166" expanded="true" signature="385:451" ph="/// Gets the content. ... " />
-                <marker date="1543516018166" expanded="true" signature="505:569" ph="/// Gets the error. ... " />
-                <marker date="1543516018166" expanded="true" signature="624:911" ph="/// Initializes a new instance of the &lt;see cref=&quot;ServiceResponse{T}&quot;/&gt; class. ... " />
-                <marker date="1543516018166" expanded="true" signature="979:1073" ph="{...}" />
-                <marker date="1543516018166" expanded="true" signature="1083:1370" ph="/// Initializes a new instance of the &lt;see cref=&quot;ServiceResponse{T}&quot;/&gt; class. ... " />
-                <marker date="1543516018166" expanded="true" signature="1453:1547" ph="{...}" />
+                <marker date="1543516365310" expanded="true" signature="6:31" ph="..." />
+                <marker date="1543516365310" expanded="true" signature="65:1316" ph="{...}" />
+                <marker date="1543516365310" expanded="true" signature="72:134" ph="/// Gets the status code. ... " />
+                <marker date="1543516365310" expanded="true" signature="199:255" ph="/// Gets the value. ... " />
+                <marker date="1543516365310" expanded="true" signature="294:352" ph="/// Gets the content. ... " />
+                <marker date="1543516365310" expanded="true" signature="398:454" ph="/// Gets the error. ... " />
+                <marker date="1543516365310" expanded="true" signature="501:756" ph="/// Initializes a new instance of the &lt;see cref=&quot;ServiceResponse{T}&quot;/&gt; class. ... " />
+                <marker date="1543516365310" expanded="true" signature="819:897" ph="{...}" />
+                <marker date="1543516365310" expanded="true" signature="903:1158" ph="/// Initializes a new instance of the &lt;see cref=&quot;ServiceResponse{T}&quot;/&gt; class. ... " />
+                <marker date="1543516365310" expanded="true" signature="1236:1314" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -184,27 +172,26 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/HttpExtension.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="11" column="5" lean-forward="true" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
+            <state relative-caret-position="224">
+              <caret line="14" column="27" selection-start-line="14" selection-start-column="27" selection-end-line="14" selection-end-column="27" />
               <folding>
-                <marker date="1543516198587" expanded="true" signature="6:160" ph="..." />
-                <marker date="1543516198587" expanded="true" signature="207:3390" ph="{...}" />
-                <marker date="1543516198587" expanded="true" signature="247:3388" ph="{...}" />
-                <marker date="1543516198587" expanded="true" signature="374:610" ph="{...}" />
-                <marker date="1543516198587" expanded="true" signature="746:1332" ph="{...}" />
-                <marker date="1543516198587" expanded="true" signature="772:1133" ph="{...}" />
-                <marker date="1543516198587" expanded="true" signature="1166:1322" ph="{...}" />
-                <marker date="1543516198587" expanded="true" signature="1442:1839" ph="{...}" />
-                <marker date="1543516198587" expanded="true" signature="1468:1640" ph="{...}" />
-                <marker date="1543516198587" expanded="true" signature="1673:1829" ph="{...}" />
-                <marker date="1543516198587" expanded="true" signature="1996:2662" ph="{...}" />
-                <marker date="1543516198587" expanded="true" signature="2022:2463" ph="{...}" />
-                <marker date="1543516198587" expanded="true" signature="2133:2234" ph="{...}" />
-                <marker date="1543516198587" expanded="true" signature="2496:2652" ph="{...}" />
-                <marker date="1543516198587" expanded="true" signature="2762:3382" ph="{...}" />
-                <marker date="1543516198587" expanded="true" signature="2867:3232" ph="{...}" />
-                <marker date="1543516198587" expanded="true" signature="3040:3119" ph="{...}" />
-                <marker date="1543516198587" expanded="true" signature="3265:3336" ph="{...}" />
+                <marker date="1543516355350" expanded="true" signature="6:160" ph="..." />
+                <marker date="1543516355350" expanded="true" signature="196:3017" ph="{...}" />
+                <marker date="1543516355350" expanded="true" signature="315:531" ph="{...}" />
+                <marker date="1543516355350" expanded="true" signature="659:1177" ph="{...}" />
+                <marker date="1543516355350" expanded="true" signature="677:1006" ph="{...}" />
+                <marker date="1543516355350" expanded="true" signature="1035:1171" ph="{...}" />
+                <marker date="1543516355350" expanded="true" signature="1283:1628" ph="{...}" />
+                <marker date="1543516355350" expanded="true" signature="1301:1457" ph="{...}" />
+                <marker date="1543516355350" expanded="true" signature="1486:1622" ph="{...}" />
+                <marker date="1543516355350" expanded="true" signature="1777:2367" ph="{...}" />
+                <marker date="1543516355350" expanded="true" signature="1795:2196" ph="{...}" />
+                <marker date="1543516355350" expanded="true" signature="1894:1983" ph="{...}" />
+                <marker date="1543516355350" expanded="true" signature="2225:2361" ph="{...}" />
+                <marker date="1543516355350" expanded="true" signature="2463:3015" ph="{...}" />
+                <marker date="1543516355350" expanded="true" signature="2556:2889" ph="{...}" />
+                <marker date="1543516355350" expanded="true" signature="2717:2784" ph="{...}" />
+                <marker date="1543516355350" expanded="true" signature="2918:2977" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -300,8 +287,8 @@
         <option value="$PROJECT_DIR$/RepositoryHelpers/DataBaseRepository/LiteDbRepository.cs" />
         <option value="$PROJECT_DIR$/RepositoryHelpers/DataBaseRepository/Base/ILiteDbRepository.cs" />
         <option value="$PROJECT_DIR$/RepositoryHelpers/DataBaseRepository/Base/IRepository.cs" />
-        <option value="$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/ServiceResponse.cs" />
         <option value="$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/HttpExtension.cs" />
+        <option value="$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/ServiceResponse.cs" />
       </list>
     </option>
   </component>
@@ -428,12 +415,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1543491494328</updated>
-      <workItem from="1543491497013" duration="5585000" />
+      <workItem from="1543491497013" duration="5768000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5585000" />
+    <option name="totallyTimeSpent" value="5768000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -449,9 +436,9 @@
     <editor active="true" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2532189" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2532189" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info active="true" anchor="bottom" id="NuGet" visible="true" weight="0.32971507" />
+      <window_info anchor="bottom" id="NuGet" visible="true" weight="0.32971507" />
       <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" show_stripe_button="false" />
@@ -663,47 +650,45 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/ServiceResponse.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="18" column="29" selection-start-line="18" selection-start-column="29" selection-end-line="18" selection-end-column="29" />
+        <state relative-caret-position="752">
+          <caret line="47" column="25" lean-forward="true" selection-start-line="47" selection-start-column="25" selection-end-line="47" selection-end-column="25" />
           <folding>
-            <marker date="1543516018166" expanded="true" signature="6:31" ph="..." />
-            <marker date="1543516018166" expanded="true" signature="78:1555" ph="{...}" />
-            <marker date="1543516018166" expanded="true" signature="116:1553" ph="{...}" />
-            <marker date="1543516018166" expanded="true" signature="131:201" ph="/// Gets the status code. ... " />
-            <marker date="1543516018166" expanded="true" signature="274:338" ph="/// Gets the value. ... " />
-            <marker date="1543516018166" expanded="true" signature="385:451" ph="/// Gets the content. ... " />
-            <marker date="1543516018166" expanded="true" signature="505:569" ph="/// Gets the error. ... " />
-            <marker date="1543516018166" expanded="true" signature="624:911" ph="/// Initializes a new instance of the &lt;see cref=&quot;ServiceResponse{T}&quot;/&gt; class. ... " />
-            <marker date="1543516018166" expanded="true" signature="979:1073" ph="{...}" />
-            <marker date="1543516018166" expanded="true" signature="1083:1370" ph="/// Initializes a new instance of the &lt;see cref=&quot;ServiceResponse{T}&quot;/&gt; class. ... " />
-            <marker date="1543516018166" expanded="true" signature="1453:1547" ph="{...}" />
+            <marker date="1543516365310" expanded="true" signature="6:31" ph="..." />
+            <marker date="1543516365310" expanded="true" signature="65:1316" ph="{...}" />
+            <marker date="1543516365310" expanded="true" signature="72:134" ph="/// Gets the status code. ... " />
+            <marker date="1543516365310" expanded="true" signature="199:255" ph="/// Gets the value. ... " />
+            <marker date="1543516365310" expanded="true" signature="294:352" ph="/// Gets the content. ... " />
+            <marker date="1543516365310" expanded="true" signature="398:454" ph="/// Gets the error. ... " />
+            <marker date="1543516365310" expanded="true" signature="501:756" ph="/// Initializes a new instance of the &lt;see cref=&quot;ServiceResponse{T}&quot;/&gt; class. ... " />
+            <marker date="1543516365310" expanded="true" signature="819:897" ph="{...}" />
+            <marker date="1543516365310" expanded="true" signature="903:1158" ph="/// Initializes a new instance of the &lt;see cref=&quot;ServiceResponse{T}&quot;/&gt; class. ... " />
+            <marker date="1543516365310" expanded="true" signature="1236:1314" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/HttpExtension.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="11" column="5" lean-forward="true" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
+        <state relative-caret-position="224">
+          <caret line="14" column="27" selection-start-line="14" selection-start-column="27" selection-end-line="14" selection-end-column="27" />
           <folding>
-            <marker date="1543516198587" expanded="true" signature="6:160" ph="..." />
-            <marker date="1543516198587" expanded="true" signature="207:3390" ph="{...}" />
-            <marker date="1543516198587" expanded="true" signature="247:3388" ph="{...}" />
-            <marker date="1543516198587" expanded="true" signature="374:610" ph="{...}" />
-            <marker date="1543516198587" expanded="true" signature="746:1332" ph="{...}" />
-            <marker date="1543516198587" expanded="true" signature="772:1133" ph="{...}" />
-            <marker date="1543516198587" expanded="true" signature="1166:1322" ph="{...}" />
-            <marker date="1543516198587" expanded="true" signature="1442:1839" ph="{...}" />
-            <marker date="1543516198587" expanded="true" signature="1468:1640" ph="{...}" />
-            <marker date="1543516198587" expanded="true" signature="1673:1829" ph="{...}" />
-            <marker date="1543516198587" expanded="true" signature="1996:2662" ph="{...}" />
-            <marker date="1543516198587" expanded="true" signature="2022:2463" ph="{...}" />
-            <marker date="1543516198587" expanded="true" signature="2133:2234" ph="{...}" />
-            <marker date="1543516198587" expanded="true" signature="2496:2652" ph="{...}" />
-            <marker date="1543516198587" expanded="true" signature="2762:3382" ph="{...}" />
-            <marker date="1543516198587" expanded="true" signature="2867:3232" ph="{...}" />
-            <marker date="1543516198587" expanded="true" signature="3040:3119" ph="{...}" />
-            <marker date="1543516198587" expanded="true" signature="3265:3336" ph="{...}" />
+            <marker date="1543516355350" expanded="true" signature="6:160" ph="..." />
+            <marker date="1543516355350" expanded="true" signature="196:3017" ph="{...}" />
+            <marker date="1543516355350" expanded="true" signature="315:531" ph="{...}" />
+            <marker date="1543516355350" expanded="true" signature="659:1177" ph="{...}" />
+            <marker date="1543516355350" expanded="true" signature="677:1006" ph="{...}" />
+            <marker date="1543516355350" expanded="true" signature="1035:1171" ph="{...}" />
+            <marker date="1543516355350" expanded="true" signature="1283:1628" ph="{...}" />
+            <marker date="1543516355350" expanded="true" signature="1301:1457" ph="{...}" />
+            <marker date="1543516355350" expanded="true" signature="1486:1622" ph="{...}" />
+            <marker date="1543516355350" expanded="true" signature="1777:2367" ph="{...}" />
+            <marker date="1543516355350" expanded="true" signature="1795:2196" ph="{...}" />
+            <marker date="1543516355350" expanded="true" signature="1894:1983" ph="{...}" />
+            <marker date="1543516355350" expanded="true" signature="2225:2361" ph="{...}" />
+            <marker date="1543516355350" expanded="true" signature="2463:3015" ph="{...}" />
+            <marker date="1543516355350" expanded="true" signature="2556:2889" ph="{...}" />
+            <marker date="1543516355350" expanded="true" signature="2717:2784" ph="{...}" />
+            <marker date="1543516355350" expanded="true" signature="2918:2977" ph="{...}" />
           </folding>
         </state>
       </provider>
