@@ -9,6 +9,7 @@
     <Compile Remove="Utils\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.5.1" />
     <PackageReference Include="Dapper.Contrib" Version="1.50.5" />
     <PackageReference Include="LiteDB" Version="4.1.4" />

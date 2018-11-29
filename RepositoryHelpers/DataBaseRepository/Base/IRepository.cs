@@ -2,7 +2,7 @@
 using System.Data;
 using System.Threading.Tasks;
 
-namespace RepositoryHelpers.Repository.Base
+namespace RepositoryHelpers.DataBaseRepository.Base
 {
     internal interface ICustomRepository <T>
     {

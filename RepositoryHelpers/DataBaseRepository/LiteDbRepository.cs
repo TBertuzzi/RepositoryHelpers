@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using LiteDB;
-using RepositoryHelpers.Repository.Base;
+using RepositoryHelpers.DataBaseRepository.Base;
 
-namespace RepositoryHelpers.Repository
+namespace RepositoryHelpers.DataBaseRepository
 {
     public sealed class LiteDbRepository<T> where T : ILiteDbRepository
     {

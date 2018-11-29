@@ -6,10 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using RepositoryHelpers.DataBase;
-using RepositoryHelpers.Repository.Base;
+using RepositoryHelpers.DataBaseRepository.Base;
 using RepositoryHelpers.Utils;
 
-namespace RepositoryHelpers.Repository
+namespace RepositoryHelpers.DataBaseRepository
 {
     public sealed class CustomRepository<T> : ICustomRepository<T>
     {

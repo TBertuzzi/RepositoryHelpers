@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RepositoryHelpers.Repository.Base
+namespace RepositoryHelpers.DataBaseRepository.Base
 {
     public interface ILiteDbRepository
     {
