@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Dapper;
 using RepositoryHelpers.DataBase;
 using RepositoryHelpers.Repository.Base;
+using RepositoryHelpers.Utils;
 
 namespace RepositoryHelpers.Repository
 {
@@ -24,6 +25,9 @@ namespace RepositoryHelpers.Repository
 
         public async Task UpdateAsync(T item)
         {
+            if (_connection.Database == DataBaseType.Oracle)
+                throw new NotImplementedDatabaseException();
+            
             using (var connection = _connection.DataBaseConnection)
             {
                 var sql = new StringBuilder();
@@ -57,6 +61,10 @@ namespace RepositoryHelpers.Repository
 
         public async Task<int> InsertAsync(T item, bool identity)
         {
+
+            if (_connection.Database == DataBaseType.Oracle)
+                throw new NotImplementedDatabaseException();
+            
             using (var connection = _connection.DataBaseConnection)
             {
                 var sql = new StringBuilder();

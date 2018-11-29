@@ -27,6 +27,7 @@
         <e p="RepositoryHelpers.csproj" t="IncludeRecursive" />
         <e p="Utils" t="Include">
           <e p="Enum.cs" t="Include" />
+          <e p="NotImplementedDatabaseException.cs" t="Include" />
         </e>
       </e>
       <e p="RepositoryHelpers.sln" t="IncludeFlat" />
