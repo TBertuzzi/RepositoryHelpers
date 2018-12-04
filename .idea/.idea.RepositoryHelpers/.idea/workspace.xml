@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="49a70e24-7a9a-4768-99fd-d451436683e6" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/HttpExtension.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/HttpExtension.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/ServiceResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/ServiceResponse.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.RepositoryHelpers/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.RepositoryHelpers/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,6 +14,7 @@
     <session id="1385415057">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
+          <entry key="project.closed" value="1" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.opened" value="1" />
         </counts>
@@ -172,8 +172,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/HttpExtension.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="224">
-              <caret line="14" column="27" selection-start-line="14" selection-start-column="27" selection-end-line="14" selection-end-column="27" />
+            <state relative-caret-position="1008">
+              <caret line="63" column="46" lean-forward="true" selection-start-line="63" selection-start-column="46" selection-end-line="63" selection-end-column="46" />
               <folding>
                 <marker date="1543516355350" expanded="true" signature="6:160" ph="..." />
                 <marker date="1543516355350" expanded="true" signature="196:3017" ph="{...}" />
@@ -415,12 +415,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1543491494328</updated>
-      <workItem from="1543491497013" duration="5768000" />
+      <workItem from="1543491497013" duration="8696000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5768000" />
+    <option name="totallyTimeSpent" value="8696000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -433,12 +433,11 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="829" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2532189" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="NuGet" visible="true" weight="0.32971507" />
+      <window_info anchor="bottom" id="NuGet" weight="0.32971507" />
       <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" show_stripe_button="false" />
@@ -669,8 +668,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/HttpExtension.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="14" column="27" selection-start-line="14" selection-start-column="27" selection-end-line="14" selection-end-column="27" />
+        <state relative-caret-position="1008">
+          <caret line="63" column="46" lean-forward="true" selection-start-line="63" selection-start-column="46" selection-end-line="63" selection-end-column="46" />
           <folding>
             <marker date="1543516355350" expanded="true" signature="6:160" ph="..." />
             <marker date="1543516355350" expanded="true" signature="196:3017" ph="{...}" />
