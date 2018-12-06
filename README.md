@@ -13,3 +13,5 @@ Extensions for HttpClient and Custom Repository based on dapper
 **Platform Support**
 
 RepositoryHelpers is a .NET Standard 2.0 library.
+
+Samples coming soon ..
