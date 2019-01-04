@@ -8,7 +8,7 @@ Extensions for HttpClient and Custom Repository based on dapper
 
 |Name|Info|
 | ------------------- | :------------------: |
-|RepositoryHelpers|[![NuGet](https://img.shields.io/badge/nuget-1.0.0-blue.svg)](https://www.nuget.org/packages/RepositoryHelpers/)|
+|RepositoryHelpers|[![NuGet](https://img.shields.io/badge/nuget-1.0.1-blue.svg)](https://www.nuget.org/packages/RepositoryHelpers/)|
 
 **Platform Support**
 
