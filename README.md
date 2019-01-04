@@ -95,7 +95,7 @@ if you want some property of your object to be ignored by Dapper, when inserting
 public string InternalControl { get; set; }
 ```
 
-*TIP : 
+*TIP Create a BaseRepository to declare the connection only once :
 
 ```csharp
 public class BaseRepository<T> 
