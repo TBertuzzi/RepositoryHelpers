@@ -16,6 +16,75 @@ RepositoryHelpers is a .NET Standard 2.0 library.
 
 **Database/Dapper Extensions**
 
+Use the connection class to define the type of database and connection string
+
+```csharp
+ var conecction = new Connection()
+ {
+     Database = RepositoryHelpers.Utils.DataBaseType.SqlServer, //RepositoryHelpers.Utils.DataBaseType.Oracl
+     ConnectionString = "Your string"
+ };
+```
+
+Create a CustomRepository of the type of object you want to return
+
+```csharp
+  var Repository = new CustomRepository<User>(conecction);
+```
+
+To get results just use the Get method. can be syncronous or asynchronous
+
+```csharp
+//Get All Users
+var usersAsync = await Repository.GetAsync();
+var users = Repository.Get();
+
+//Get User by Id
+var userAsync = await Repository.GetByIdAsync(1);
+var user = Repository.GetById(1);
+
+//Get by CustomQuery
+var customQuery = "Select name from user where login = @userLogin";
+var parameters = new Dictionary<string, object> { { "userLogin", "bertuzzi" } };
+var resultASync = await Repository.GetAsync(customQuery, parameters);
+var result = Repository.Get(customQuery, parameters);
+```
+
+Delete data
+
+```csharp
+Repository.Delete(1);
+Repository.DeleteAsync(1);
+```
+
+Insert Data :
+
+user identity parameter to return the id if your insert needs
+
+```csharp
+Repository.Insert(NewUser, true);
+```
+
+You can use ADO if you need
+
+```csharp
+//Return DataSet
+var customQuery = "Select name from user where login = @userLogin";
+var parameters = new Dictionary<string, object> { { "userLogin", "bertuzzi" } };
+Repository.GetDataSet(customQuery, parameters);
+
+//ExecuteQuery
+Repository.ExecuteQueryAsync();
+Repository.ExecuteQuery();
+
+//ExecuteScalar
+Repository.ExecuteScalarAsync();
+Repository.ExecuteScalar();
+```
+
+
+**LiteDB Extensions**
+
 coming soon ..
 
 **HttpClient Extensions**
