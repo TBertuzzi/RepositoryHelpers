@@ -21,7 +21,7 @@ Use the connection class to define the type of database and connection string
 ```csharp
  var conecction = new Connection()
  {
-     Database = RepositoryHelpers.Utils.DataBaseType.SqlServer, //RepositoryHelpers.Utils.DataBaseType.Oracl
+     Database = RepositoryHelpers.Utils.DataBaseType.SqlServer, //RepositoryHelpers.Utils.DataBaseType.Oracle
      ConnectionString = "Your string"
  };
 ```
@@ -95,6 +95,27 @@ if you want some property of your object to be ignored by Dapper, when inserting
 public string InternalControl { get; set; }
 ```
 
+*TIP : 
+
+```csharp
+public class BaseRepository<T> 
+    {
+        protected readonly Repository<T> Repository;
+
+        protected BaseRepository()
+        {
+            _configuration = configuration;
+
+           var conecction = new Connection()
+        {
+           Database = RepositoryHelpers.Utils.DataBaseType.SqlServer, 
+           ConnectionString = "Your string"
+        };
+
+            Repository = new Repository<T>(conexao);
+        }
+    }
+```
 
 **LiteDB Extensions**
 
