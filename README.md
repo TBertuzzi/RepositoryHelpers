@@ -19,7 +19,7 @@ RepositoryHelpers is a .NET Standard 2.0 library.
 Use the connection class to define the type of database and connection string
 
 ```csharp
- var conecction = new Connection()
+ var connection = new Connection()
  {
      Database = RepositoryHelpers.Utils.DataBaseType.SqlServer, //RepositoryHelpers.Utils.DataBaseType.Oracle
      ConnectionString = "Your string"
@@ -106,7 +106,7 @@ public class BaseRepository<T>
         {
             _configuration = configuration;
 
-           var conecction = new Connection()
+           var connection = new Connection()
         {
            Database = RepositoryHelpers.Utils.DataBaseType.SqlServer, 
            ConnectionString = "Your string"
