@@ -50,19 +50,26 @@ var resultASync = await Repository.GetAsync(customQuery, parameters);
 var result = Repository.Get(customQuery, parameters);
 ```
 
-Delete data
-
-```csharp
-Repository.Delete(1);
-Repository.DeleteAsync(1);
-```
-
 Insert Data :
 
 user identity parameter to return the id if your insert needs
 
 ```csharp
 Repository.Insert(NewUser, true);
+```
+
+Update data
+
+```csharp
+Repository.Update(updateUser);
+Repository.UpdateAsync(updateUser);
+```
+
+Delete data
+
+```csharp
+Repository.Delete(1);
+Repository.DeleteAsync(1);
 ```
 
 You can use ADO if you need
@@ -80,6 +87,12 @@ Repository.ExecuteQuery();
 //ExecuteScalar
 Repository.ExecuteScalarAsync();
 Repository.ExecuteScalar();
+```
+if you want some property of your object to be ignored by Dapper, when inserting or updating, just use the attribute :
+
+```csharp
+[DapperIgnore]
+public string InternalControl { get; set; }
 ```
 
 
