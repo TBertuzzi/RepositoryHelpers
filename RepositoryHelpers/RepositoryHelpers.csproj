@@ -13,6 +13,7 @@
     <PackageIconUrl>https://github.com/TBertuzzi/RepositoryHelpers/blob/master/Resource/RepositoryHelpersIcon.png?raw=true</PackageIconUrl>
     <RepositoryUrl>https://github.com/TBertuzzi/RepositoryHelpers</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
