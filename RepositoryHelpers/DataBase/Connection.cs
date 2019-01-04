@@ -8,7 +8,7 @@ namespace RepositoryHelpers.DataBase
 {
     public sealed class Connection
     {
-        public string StringConexao { get; set; }
+        public string ConnectionString { get; set; }
         public DataBaseType Database { get; set; }
 
         internal DbConnection DataBaseConnection
@@ -18,9 +18,9 @@ namespace RepositoryHelpers.DataBase
                 switch (Database)
                 {
                     case DataBaseType.SqlServer:
-                        return new SqlConnection(this.StringConexao);
+                        return new SqlConnection(this.ConnectionString);
                     case DataBaseType.Oracle:
-                        return new OracleConnection(this.StringConexao);
+                        return new OracleConnection(this.ConnectionString);
                     default: return null;
                 }
             }
