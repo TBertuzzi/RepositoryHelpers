@@ -100,12 +100,10 @@ public string InternalControl { get; set; }
 ```csharp
 public class BaseRepository<T> 
     {
-        protected readonly Repository<T> Repository;
+        protected readonly CustomRepository<T> Repository;
 
         protected BaseRepository()
         {
-            _configuration = configuration;
-
            var connection = new Connection()
         {
            Database = RepositoryHelpers.Utils.DataBaseType.SqlServer, 
