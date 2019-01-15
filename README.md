@@ -110,7 +110,7 @@ public class BaseRepository<T>
            ConnectionString = "Your string"
         };
 
-            Repository = new Repository<T>(conexao);
+            Repository = new CustomRepository<T>(connection);
         }
     }
 ```
