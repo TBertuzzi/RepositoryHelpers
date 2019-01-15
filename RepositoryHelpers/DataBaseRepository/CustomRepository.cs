@@ -68,10 +68,9 @@ namespace RepositoryHelpers.DataBaseRepository
             using (var connection = _connection.DataBaseConnection)
             {
                 var sql = new StringBuilder();
+                var sqlParameters = new StringBuilder();
 
                 var parameters = new Dictionary<string, object>();
-
-                sql.AppendLine($"insert into {typeof(T).Name} values (");
 
                 foreach (var p in item.GetType().GetProperties())
                 {
@@ -81,14 +80,14 @@ namespace RepositoryHelpers.DataBaseRepository
                     
                     if (p.Name.ToUpper() == "ID" ||
                         dapperAttribute.ToUpper() == DapperIgnore) continue;
-                    
-                    sql.Append($"@{p.Name},");
+
+                    sqlParameters.Append($"@{p.Name},");
                     parameters.Add($"@{p.Name}", item.GetType().GetProperty(p.Name)?.GetValue(item));
                 }
 
-                sql.Remove(sql.Length - 1, 1);
-                sql.AppendLine(");");
+                sqlParameters.Remove(sqlParameters.Length - 1, 1);
 
+                sql.AppendLine($"insert into {typeof(T).Name} ({sqlParameters.ToString().Replace("@","")}) values ({sqlParameters.ToString()}) ");
                 if (identity)
                 {
                     sql.AppendLine("SELECT CAST(SCOPE_IDENTITY() as int);");
