@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Dapper;
@@ -13,8 +15,10 @@ namespace RepositoryHelpers.DataBaseRepository
 {
     public sealed class CustomRepository<T> : ICustomRepository<T>
     {
-        private const string DapperIgnore = "RepositoryHelpers.DAPPERIGNORE";
-        
+        private const string DapperIgnore = "REPOSITORYHELPERS.DAPPERIGNORE";
+        private const string PrimaryKey = "REPOSITORYHELPERS.PRIMARYKEY";
+        private const string IdentityIgnore = "REPOSITORYHELPERS.IDENTITYIGNORE";
+
         private readonly Connection _connection;
         public CustomRepository(Connection connection)
         {
@@ -23,35 +27,83 @@ namespace RepositoryHelpers.DataBaseRepository
 
         #region DAPPER
 
+        private bool IgnoreAttribute(IEnumerable<CustomAttributeData> customAttributes)
+        {
+            if (customAttributes.Any())
+            {
+                var constainsAttributes = customAttributes.ToList().Where(x => x.AttributeType.ToString().ToUpper() == DapperIgnore
+               || x.AttributeType.ToString().ToUpper() == IdentityIgnore);
+
+                return constainsAttributes.Any();
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private string GetPrimaryKey(Type type)
+        {
+            foreach (var p in type.GetProperties())
+            {
+                var primaryKeyAttribute = p.CustomAttributes.ToList().Where(x => x.AttributeType.ToString().ToUpper() == PrimaryKey).Any();
+
+                if (primaryKeyAttribute)
+                {
+                    return p.Name;
+                }
+            }
+
+            return "";
+        }
+
+
         public async Task UpdateAsync(T item)
         {
             if (_connection.Database == DataBaseType.Oracle)
                 throw new NotImplementedDatabaseException();
-            
-            using (var connection = _connection.DataBaseConnection)
+
+            try
             {
-                var sql = new StringBuilder();
-
-                var parameters = new Dictionary<string, object>();
-
-                sql.AppendLine($"update {typeof(T).Name} set ");
-
-                foreach (var p in item.GetType().GetProperties())
+                using (var connection = _connection.DataBaseConnection)
                 {
-                    if (item.GetType().GetProperty(p.Name) == null) continue;
-                    
-                    var dapperAttribute = p.CustomAttributes.Any() ? p.CustomAttributes.ToList()[0].AttributeType.ToString() : "";
-                    if (p.Name.ToUpper() != "ID" && dapperAttribute.ToUpper() != DapperIgnore)
+                    var sql = new StringBuilder();
+                    var primaryKey = "";
+                    var parameters = new Dictionary<string, object>();
+
+                    sql.AppendLine($"update {typeof(T).Name} set ");
+
+                    foreach (var p in item.GetType().GetProperties())
                     {
-                        sql.Append($" {p.Name} = @{p.Name},");
+                        if (item.GetType().GetProperty(p.Name) == null) continue;
+
+                        if (!IgnoreAttribute(p.CustomAttributes))
+                        {
+                            sql.Append($" {p.Name} = @{p.Name},");
+                        }
+                        parameters.Add($"@{p.Name}", item.GetType().GetProperty(p.Name)?.GetValue(item));
+
+                        var primaryKeyAttribute = p.CustomAttributes.ToList().Where(x => x.AttributeType.ToString().ToUpper() == PrimaryKey).Any();
+
+                        if (primaryKeyAttribute)
+                        {
+                            primaryKey = p.Name;
+                        }
                     }
-                    parameters.Add($"@{p.Name}", item.GetType().GetProperty(p.Name)?.GetValue(item));
+
+                    sql.Remove(sql.Length - 1, 1);
+
+                    if (string.IsNullOrEmpty(primaryKey))
+                        throw new CustomRepositoryException("PrimaryKeyAttribute not defined");
+
+                    sql.AppendLine($" where {primaryKey} = @ID");
+
+                    await connection.ExecuteAsync(sql.ToString(), parameters);
                 }
-
-                sql.Remove(sql.Length - 1, 1);
-                sql.AppendLine(" where id = @ID");
-
-                await connection.ExecuteAsync(sql.ToString(), parameters);
+            }
+            catch(Exception ex)
+            {
+                throw new CustomRepositoryException(ex.Message);
             }
         }
 
@@ -64,51 +116,63 @@ namespace RepositoryHelpers.DataBaseRepository
 
             if (_connection.Database == DataBaseType.Oracle)
                 throw new NotImplementedDatabaseException();
-            
-            using (var connection = _connection.DataBaseConnection)
+
+            try
             {
-                var sql = new StringBuilder();
-                var sqlParameters = new StringBuilder();
-
-                var parameters = new Dictionary<string, object>();
-
-                foreach (var p in item.GetType().GetProperties())
+                using (var connection = _connection.DataBaseConnection)
                 {
-                    if (item.GetType().GetProperty(p.Name) == null) continue;
-                    
-                    var dapperAttribute = p.CustomAttributes.Any() ? p.CustomAttributes.ToList()[0].AttributeType.ToString(): "";
-                    
-                    if (p.Name.ToUpper() == "ID" ||
-                        dapperAttribute.ToUpper() == DapperIgnore) continue;
+                    var sql = new StringBuilder();
+                    var sqlParameters = new StringBuilder();
 
-                    sqlParameters.Append($"@{p.Name},");
-                    parameters.Add($"@{p.Name}", item.GetType().GetProperty(p.Name)?.GetValue(item));
-                }
+                    var parameters = new Dictionary<string, object>();
 
-                sqlParameters.Remove(sqlParameters.Length - 1, 1);
+                    foreach (var p in item.GetType().GetProperties())
+                    {
+                        if (item.GetType().GetProperty(p.Name) == null) continue;
 
-                sql.AppendLine($"insert into {typeof(T).Name} ({sqlParameters.ToString().Replace("@","")}) values ({sqlParameters.ToString()}) ");
-                if (identity)
-                {
-                    sql.AppendLine("SELECT CAST(SCOPE_IDENTITY() as int);");
-                    return connection.QuerySingleOrDefault<int>(sql.ToString(), parameters);
+                        if (IgnoreAttribute(p.CustomAttributes)) continue;
+
+                        sqlParameters.Append($"@{p.Name},");
+                        parameters.Add($"@{p.Name}", item.GetType().GetProperty(p.Name)?.GetValue(item));
+                    }
+
+                    sqlParameters.Remove(sqlParameters.Length - 1, 1);
+
+                    sql.AppendLine($"insert into {typeof(T).Name} ({sqlParameters.ToString().Replace("@", "")}) values ({sqlParameters.ToString()}) ");
+                    if (identity)
+                    {
+                        sql.AppendLine("SELECT CAST(SCOPE_IDENTITY() as int);");
+                        return connection.QuerySingleOrDefault<int>(sql.ToString(), parameters);
+                    }
+                    else
+                    {
+                        return await connection.ExecuteAsync(sql.ToString(), parameters);
+                    }
                 }
-                else
-                {
-                    return await connection.ExecuteAsync(sql.ToString(), parameters);
-                }
+            }
+            catch (Exception ex)
+            {
+                throw new CustomRepositoryException(ex.Message);
             }
         }
 
+      
         public int Insert(T item, bool identity) =>
             InsertAsync(item, identity).Result;
 
 
         public async Task<IEnumerable<T>> GetAsync()
         {
-            using (DbConnection connection = _connection.DataBaseConnection)
+            try
             {
-                return await connection.QueryAsync<T>($"Select * from {typeof(T).Name} ");
+                using (DbConnection connection = _connection.DataBaseConnection)
+                {
+                    return await connection.QueryAsync<T>($"Select * from {typeof(T).Name} ");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new CustomRepositoryException(ex.Message);
             }
         }
 
@@ -118,11 +182,18 @@ namespace RepositoryHelpers.DataBaseRepository
 
         public async Task<IEnumerable<T>> GetAsync(string sql, Dictionary<string, object> parameters)
         {
-
-            using (DbConnection connection = _connection.DataBaseConnection)
+            try
             {
-                return await connection.QueryAsync<T>(sql, parameters);
+                using (DbConnection connection = _connection.DataBaseConnection)
+                {
+                    return await connection.QueryAsync<T>(sql, parameters);
+                }
             }
+            catch (Exception ex)
+            {
+                throw new CustomRepositoryException(ex.Message);
+            }
+
         }
 
         public IEnumerable<T> Get(string sql, Dictionary<string, object> parameters)
@@ -131,11 +202,26 @@ namespace RepositoryHelpers.DataBaseRepository
 
         public async Task<T> GetByIdAsync(object id)
         {
-            using (var connection = _connection.DataBaseConnection)
+            try
             {
-                return await connection.QueryFirstOrDefaultAsync<T>($"Select * from {typeof(T).Name} where id = @ID ", new { ID = id });
+                var primaryKey = "";
+                primaryKey = GetPrimaryKey(typeof(T));
+
+                if (string.IsNullOrEmpty(primaryKey))
+                    throw new CustomRepositoryException("PrimaryKeyAttribute not defined");
+
+                using (var connection = _connection.DataBaseConnection)
+                {
+                    return await connection.QueryFirstOrDefaultAsync<T>($"Select * from {typeof(T).Name} where {primaryKey} = @ID ", new { ID = id });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new CustomRepositoryException(ex.Message);
             }
         }
+
+      
 
         public T GetById(object id)
             => GetByIdAsync(id).Result;
@@ -143,19 +229,33 @@ namespace RepositoryHelpers.DataBaseRepository
 
         public async Task DeleteAsync(object id)
         {
-            using (var connection = _connection.DataBaseConnection)
+            try
             {
-                var sql = new StringBuilder();
+                var primaryKey = "";
+                primaryKey = GetPrimaryKey(typeof(T));
 
-                var parameters = new Dictionary<string, object>
+                if (string.IsNullOrEmpty(primaryKey))
+                    throw new CustomRepositoryException("PrimaryKeyAttribute not defined");
+
+                using (var connection = _connection.DataBaseConnection)
+                {
+                    var sql = new StringBuilder();
+
+                    var parameters = new Dictionary<string, object>
                 {
                     { "@ID", id }
                 };
 
-                sql.AppendLine($"delete from {typeof(T).Name} where id = @ID");
+                    sql.AppendLine($"delete from {typeof(T).Name} where {primaryKey} = @ID");
 
-                await connection.ExecuteAsync(sql.ToString(), parameters);
+                    await connection.ExecuteAsync(sql.ToString(), parameters);
+                }
             }
+            catch (Exception ex)
+            {
+                throw new CustomRepositoryException(ex.Message);
+            }
+
         }
 
         public void Delete(object id)
@@ -167,9 +267,16 @@ namespace RepositoryHelpers.DataBaseRepository
 
         public async Task<object> ExecuteScalarAsync(string sql, Dictionary<string, object> parameters)
         {
+            try
+            { 
             using (var connection = _connection.DataBaseConnection)
             {
                 return await connection.ExecuteScalarAsync(sql, parameters);
+            }
+            }
+            catch (Exception ex)
+            {
+                throw new CustomRepositoryException(ex.Message);
             }
         }
 
@@ -180,37 +287,51 @@ namespace RepositoryHelpers.DataBaseRepository
 
         public DataSet GetDataSet(string sql, Dictionary<string, object> parameters)
         {
-            using (var connection = _connection.DataBaseConnection)
+            try
             {
-                using (var cmd = _connection.GetCommand(sql, connection))
+                using (var connection = _connection.DataBaseConnection)
                 {
-                    cmd.Parameters.Clear();
-                    cmd.CommandTimeout = 120; 
-
-                    foreach (var parameter in parameters)
+                    using (var cmd = _connection.GetCommand(sql, connection))
                     {
-                        cmd.Parameters.Add(_connection.GetParameter(parameter));
-                    }
+                        cmd.Parameters.Clear();
+                        cmd.CommandTimeout = 120;
 
-                    using (var da = _connection.GetDataAdapter())
-                    {
-                        da.SelectCommand = cmd;
-
-                        using (var ds = new DataSet())
+                        foreach (var parameter in parameters)
                         {
-                            da.Fill(ds);
-                            return ds;
+                            cmd.Parameters.Add(_connection.GetParameter(parameter));
+                        }
+
+                        using (var da = _connection.GetDataAdapter())
+                        {
+                            da.SelectCommand = cmd;
+
+                            using (var ds = new DataSet())
+                            {
+                                da.Fill(ds);
+                                return ds;
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new CustomRepositoryException(ex.Message);
             }
         }
 
         public async Task<int> ExecuteQueryAsync(string sql, Dictionary<string, object> parameters)
         {
-            using (var connection = _connection.DataBaseConnection)
+            try
             {
-                return await connection.ExecuteAsync(sql, parameters);
+                using (var connection = _connection.DataBaseConnection)
+                {
+                    return await connection.ExecuteAsync(sql, parameters);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new CustomRepositoryException(ex.Message);
             }
         }
 
