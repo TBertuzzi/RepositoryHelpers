@@ -30,7 +30,20 @@ Create a CustomRepository of the type of object you want to return
 
 ```csharp
   var Repository = new CustomRepository<User>(conecction);
-```
+
+Attributes:
+
+```csharp
+[DapperIgnore]
+public string InternalControl { get; set; }
+[PrimaryKey]
+public int MyCustomId { get; set; }
+[PrimaryKey]
+[IdentityIgnore]
+public int MyBdIdIndentity { get; set; }
+
+``````
+Get Data:
 
 To get results just use the Get method. can be syncronous or asynchronous
 
@@ -89,18 +102,6 @@ Repository.ExecuteScalarAsync();
 Repository.ExecuteScalar();
 ```
 
-Attributes:
-
-```csharp
-[DapperIgnore]
-public string InternalControl { get; set; }
-[PrimaryKey]
-public int MyCustomId { get; set; }
-[PrimaryKey]
-[IdentityIgnore]
-public int MyBdIdIndentity { get; set; }
-
-```
 DapperIgnore : if you want some property of your object to be ignored by Dapper, when inserting or updating, just use the attribute.
 PrimaryKey : Define your primary key. It is used for queries, updates, and deletes.
 IdentityIgnore: Determines that the field has identity, autoincrement ... Warns the repository to ignore it that the database will manage the field
