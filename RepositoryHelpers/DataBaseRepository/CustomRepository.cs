@@ -81,14 +81,15 @@ namespace RepositoryHelpers.DataBaseRepository
                         if (!IgnoreAttribute(p.CustomAttributes))
                         {
                             sql.Append($" {p.Name} = @{p.Name},");
+                            parameters.Add($"@{p.Name}", item.GetType().GetProperty(p.Name)?.GetValue(item));
                         }
-                        parameters.Add($"@{p.Name}", item.GetType().GetProperty(p.Name)?.GetValue(item));
-
+                  
                         var primaryKeyAttribute = p.CustomAttributes.ToList().Any(x => x.AttributeType.ToString().ToUpper() == PrimaryKey);
 
                         if (primaryKeyAttribute)
                         {
                             primaryKey = p.Name;
+                            parameters.Add($"@{primaryKey}", item.GetType().GetProperty(p.Name)?.GetValue(item));
                         }
                     }
 
@@ -97,7 +98,7 @@ namespace RepositoryHelpers.DataBaseRepository
                     if (string.IsNullOrEmpty(primaryKey))
                         throw new CustomRepositoryException("PrimaryKeyAttribute not defined");
 
-                    sql.AppendLine($" where {primaryKey} = @ID");
+                    sql.AppendLine($" where {primaryKey} = @{primaryKey}");
 
                     await connection.ExecuteAsync(sql.ToString(), parameters);
                 }
