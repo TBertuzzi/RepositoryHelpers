@@ -29,12 +29,13 @@ namespace RepositoryHelpers.DataBaseRepository
 
         private bool IgnoreAttribute(IEnumerable<CustomAttributeData> customAttributes)
         {
-            if (customAttributes.Any())
+            var customAttributeData = customAttributes.ToList();
+            if (customAttributeData.Any())
             {
-                var constainsAttributes = customAttributes.ToList().Where(x => x.AttributeType.ToString().ToUpper() == DapperIgnore
+                var containsAttributes = customAttributeData.Where(x => x.AttributeType.ToString().ToUpper() == DapperIgnore
                || x.AttributeType.ToString().ToUpper() == IdentityIgnore);
 
-                return constainsAttributes.Any();
+                return containsAttributes.Any();
             }
             else
             {
@@ -46,7 +47,7 @@ namespace RepositoryHelpers.DataBaseRepository
         {
             foreach (var p in type.GetProperties())
             {
-                var primaryKeyAttribute = p.CustomAttributes.ToList().Where(x => x.AttributeType.ToString().ToUpper() == PrimaryKey).Any();
+                var primaryKeyAttribute = p.CustomAttributes.ToList().Any(x => x.AttributeType.ToString().ToUpper() == PrimaryKey);
 
                 if (primaryKeyAttribute)
                 {
@@ -83,7 +84,7 @@ namespace RepositoryHelpers.DataBaseRepository
                         }
                         parameters.Add($"@{p.Name}", item.GetType().GetProperty(p.Name)?.GetValue(item));
 
-                        var primaryKeyAttribute = p.CustomAttributes.ToList().Where(x => x.AttributeType.ToString().ToUpper() == PrimaryKey).Any();
+                        var primaryKeyAttribute = p.CustomAttributes.ToList().Any(x => x.AttributeType.ToString().ToUpper() == PrimaryKey);
 
                         if (primaryKeyAttribute)
                         {
