@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Data.OracleClient;
 using System.Data.SqlClient;
@@ -10,6 +11,12 @@ namespace RepositoryHelpers.DataBase
     {
         public string ConnectionString { get; set; }
         public DataBaseType Database { get; set; }
+        public IsolationLevel IsolationLevel { get; set; }
+
+        public Connection()
+        {
+            IsolationLevel = IsolationLevel.ReadCommitted;
+        }
 
         internal DbConnection DataBaseConnection
         {
@@ -23,6 +30,18 @@ namespace RepositoryHelpers.DataBase
                         return new OracleConnection(this.ConnectionString);
                     default: return null;
                 }
+            }
+        }
+
+        internal DbCommand GetCommand()
+        {
+            switch (Database)
+            {
+                case DataBaseType.SqlServer:
+                    return new SqlCommand();
+                case DataBaseType.Oracle:
+                    return new OracleCommand();
+                default: return null;
             }
         }
 
