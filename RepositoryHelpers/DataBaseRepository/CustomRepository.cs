@@ -482,6 +482,7 @@ namespace RepositoryHelpers.DataBaseRepository
                 DbCommand.CommandType = CommandType.Text;
                 DbCommand.Parameters.Clear();
                 DbCommand.CommandTimeout = 120;
+                DbCommand.CommandText = sql;
 
                 if (DBConnection.State == ConnectionState.Closed)
                     DBConnection.Open();
