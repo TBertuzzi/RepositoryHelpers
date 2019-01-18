@@ -100,7 +100,22 @@ Repository.ExecuteQuery();
 //ExecuteScalar
 Repository.ExecuteScalarAsync();
 Repository.ExecuteScalar();
+
+//ExecuteProcedure
+Repository.ExecuteProcedureAsync();
+Repository.ExecuteProcedure();
 ```
+
+If using ADO it is possible to use transaction
+
+```csharp
+
+Repository.BeginTransaction();
+Repository.CommitTransaction();
+Repository.RollbackTransaction();
+
+```
+
 
 DapperIgnore : if you want some property of your object to be ignored by Dapper, when inserting or updating, just use the attribute.
 PrimaryKey : Define your primary key. It is used for queries, updates, and deletes.
