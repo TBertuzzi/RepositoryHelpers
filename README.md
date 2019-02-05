@@ -30,6 +30,7 @@ Create a CustomRepository of the type of object you want to return
 
 ```csharp
   var Repository = new CustomRepository<User>(conecction);
+``````
 
 Attributes:
 
