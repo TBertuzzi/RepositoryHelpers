@@ -4,7 +4,7 @@ Extensions for HttpClient and Custom Repository based on dapper
 
 ###### This is the component, works on .NET Core and.NET Framework
 
-**NuGet**
+**Info**
 
 |Name|Code Quality|Build|Nuget|
 | ------------------- | ------------------- | ------------------- | :------------------: |
