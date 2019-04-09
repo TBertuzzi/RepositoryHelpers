@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="49a70e24-7a9a-4768-99fd-d451436683e6" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.RepositoryHelpers/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.RepositoryHelpers/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.RepositoryHelpers/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.RepositoryHelpers/.idea/contentModel.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RepositoryHelpers/DataBaseRepository/CustomRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/RepositoryHelpers/DataBaseRepository/CustomRepository.cs" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -40,9 +41,28 @@
         </counts>
       </usages-collector>
     </session>
+    <session id="671897240">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="1" />
+          <entry key="project.open.time.5" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="cs" value="4" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="C#" value="4" />
+        </counts>
+      </usages-collector>
+    </session>
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/RepositoryHelpers/DapperIgnore.cs">
           <provider selected="true" editor-type-id="text-editor">
@@ -57,46 +77,71 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/RepositoryHelpers/DataBaseRepository/CustomRepository.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="32">
-              <caret line="11" column="11" selection-start-line="11" selection-start-column="11" selection-end-line="11" selection-end-column="11" />
+            <state relative-caret-position="384">
+              <caret line="24" column="37" lean-forward="true" selection-start-line="24" selection-start-column="37" selection-end-line="24" selection-end-column="37" />
               <folding>
-                <marker date="1543515892237" expanded="false" signature="6:274" ph="..." />
-                <marker date="1543515892237" expanded="true" signature="322:7397" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="391:7395" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="588:646" ph="{...}" />
-                <marker date="1543515892237" expanded="false" signature="656:5982" ph="DAPPER" />
-                <marker date="1543515892237" expanded="true" signature="717:1961" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="930:1951" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="1192:1762" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="1535:1642" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="2106:3666" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="2320:3656" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="2591:3176" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="3293:3499" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="3520:3642" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="3822:4038" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="3909:4028" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="4213:4411" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="4301:4401" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="4601:4854" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="4679:4844" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="4982:5438" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="5060:5428" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="5203:5256" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="5769:5962" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="5847:5952" ph="{...}" />
-                <marker date="1543515892237" expanded="false" signature="5992:7388" ph="ADO" />
-                <marker date="1543515892237" expanded="true" signature="6090:6938" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="6168:6928" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="6256:6914" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="6424:6549" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="6616:6896" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="6742:6874" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="7039:7226" ph="{...}" />
-                <marker date="1543515892237" expanded="true" signature="7117:7216" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="6:313" ph="..." />
+                <marker date="1547560868528" expanded="true" signature="361:11126" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="430:11124" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="775:833" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="843:9272" ph="DAPPER" />
+                <marker date="1547560868528" expanded="true" signature="946:1427" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="1064:1342" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="1359:1417" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="1476:1845" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="1538:1811" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="1726:1797" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="1893:3681" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="2042:3546" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="2128:3532" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="2450:3160" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="2621:2740" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="3037:3138" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="3578:3671" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="3826:5513" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="3976:5377" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="4062:5363" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="4335:4705" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="4964:5186" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="5211:5345" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="5410:5503" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="5676:6078" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="5702:5942" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="5797:5928" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="5975:6068" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="6253:6637" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="6279:6500" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="6374:6486" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="6533:6626" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="6827:7516" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="6853:7380" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="7179:7366" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="7413:7506" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="7652:8557" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="7678:8420" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="8004:8406" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="8159:8212" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="8453:8546" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="8888:9252" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="8914:9116" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="8997:9102" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="9149:9242" ph="{...}" />
+                <marker date="1547560868528" expanded="false" signature="9282:11117" ph="ADO" />
+                <marker date="1547560868528" expanded="true" signature="9380:10481" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="9406:10345" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="9492:10331" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="9588:10313" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="9771:9908" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="9979:10291" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="10117:10265" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="10378:10471" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="10582:10955" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="10608:10819" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="10694:10805" ph="{...}" />
+                <marker date="1547560868528" expanded="true" signature="10852:10945" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -152,7 +197,7 @@
         <entry file="file://$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/ServiceResponse.cs">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="752">
-              <caret line="47" column="25" lean-forward="true" selection-start-line="47" selection-start-column="25" selection-end-line="47" selection-end-column="25" />
+              <caret line="47" column="25" selection-start-line="47" selection-start-column="25" selection-end-line="47" selection-end-column="25" />
               <folding>
                 <marker date="1543516365310" expanded="true" signature="6:31" ph="..." />
                 <marker date="1543516365310" expanded="true" signature="65:1316" ph="{...}" />
@@ -169,13 +214,13 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/HttpExtension.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1008">
-              <caret line="63" column="46" lean-forward="true" selection-start-line="63" selection-start-column="46" selection-end-line="63" selection-end-column="46" />
+            <state relative-caret-position="464">
+              <caret line="35" column="28" selection-start-line="35" selection-start-column="28" selection-end-line="35" selection-end-column="28" />
               <folding>
-                <marker date="1543516355350" expanded="true" signature="6:160" ph="..." />
+                <marker date="1543516355350" expanded="false" signature="6:160" ph="..." />
                 <marker date="1543516355350" expanded="true" signature="196:3017" ph="{...}" />
                 <marker date="1543516355350" expanded="true" signature="315:531" ph="{...}" />
                 <marker date="1543516355350" expanded="true" signature="659:1177" ph="{...}" />
@@ -204,7 +249,6 @@
               <caret line="8" column="46" selection-start-line="8" selection-start-column="15" selection-end-line="8" selection-end-column="46" />
               <folding>
                 <marker date="1543495005542" expanded="true" signature="6:49" ph="..." />
-                <marker date="1543495005542" expanded="true" signature="84:433" ph="{...}" />
                 <marker date="1543495005542" expanded="true" signature="147:431" ph="{...}" />
                 <marker date="1543495005542" expanded="true" signature="269:289" ph="{...}" />
                 <marker date="1543495005542" expanded="true" signature="405:425" ph="{...}" />
@@ -216,22 +260,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/RepositoryHelpers/DataBase/Connection.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
+            <state relative-caret-position="640">
               <caret line="40" column="45" selection-start-line="40" selection-start-column="31" selection-end-line="40" selection-end-column="45" />
-              <folding>
-                <marker date="1543492478411" expanded="true" signature="6:120" ph="..." />
-                <marker date="1543492478411" expanded="true" signature="189:1977" ph="{...}" />
-                <marker date="1543492478411" expanded="true" signature="226:1975" ph="{...}" />
-                <marker date="1543492478411" expanded="true" signature="383:797" ph="{...}" />
-                <marker date="1543492478411" expanded="true" signature="409:787" ph="{...}" />
-                <marker date="1543492478411" expanded="true" signature="457:773" ph="{...}" />
-                <marker date="1543492478411" expanded="true" signature="875:1238" ph="{...}" />
-                <marker date="1543492478411" expanded="true" signature="915:1228" ph="{...}" />
-                <marker date="1543492478411" expanded="true" signature="1287:1572" ph="{...}" />
-                <marker date="1543492478411" expanded="true" signature="1327:1562" ph="{...}" />
-                <marker date="1543492478411" expanded="true" signature="1650:1969" ph="{...}" />
-                <marker date="1543492478411" expanded="true" signature="1690:1959" ph="{...}" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -260,16 +290,16 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/RepositoryHelpers/Utils/NotImplementedDatabaseException.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/RepositoryHelpers/DataBaseRepository/LiteDbRepository.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/RepositoryHelpers/DataBaseRepository/CustomRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/RepositoryHelpers/Utils/Enum.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/RepositoryHelpers/DataBaseRepository/Base/ILiteDbRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/RepositoryHelpers/Utils/NotImplementedDatabaseException.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/RepositoryHelpers/DataBase/Connection.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/RepositoryHelpers/DataBaseRepository/Base/IRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/RepositoryHelpers/DapperIgnore.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/ServiceResponse.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/HttpExtension.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/RepositoryHelpers/DapperIgnore.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/RepositoryHelpers/DataBaseRepository/LiteDbRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/RepositoryHelpers/DataBaseRepository/CustomRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/RepositoryHelpers/DataBaseRepository/Base/ILiteDbRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/RepositoryHelpers/DataBaseRepository/Base/IRepository.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -283,12 +313,12 @@
         <option value="$PROJECT_DIR$/RepositoryHelpers/DataBase/Connection.cs" />
         <option value="$PROJECT_DIR$/RepositoryHelpers/Utils/NotImplementedDatabaseException.cs" />
         <option value="$PROJECT_DIR$/RepositoryHelpers/Repository/CustomRepository.cs" />
-        <option value="$PROJECT_DIR$/RepositoryHelpers/DataBaseRepository/CustomRepository.cs" />
         <option value="$PROJECT_DIR$/RepositoryHelpers/DataBaseRepository/LiteDbRepository.cs" />
         <option value="$PROJECT_DIR$/RepositoryHelpers/DataBaseRepository/Base/ILiteDbRepository.cs" />
         <option value="$PROJECT_DIR$/RepositoryHelpers/DataBaseRepository/Base/IRepository.cs" />
         <option value="$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/HttpExtension.cs" />
         <option value="$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/ServiceResponse.cs" />
+        <option value="$PROJECT_DIR$/RepositoryHelpers/DataBaseRepository/CustomRepository.cs" />
       </list>
     </option>
   </component>
@@ -308,7 +338,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="FileSystemExplorer" />
       <pane id="SolutionExplorer">
         <subPane>
           <expand>
@@ -325,67 +354,14 @@
               <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
               <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
               <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="Dependencies" type="24d0babc:SolutionExplorerModelNode" />
-            </path>
-            <path>
-              <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
-              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="Dependencies" type="24d0babc:SolutionExplorerModelNode" />
-              <item name=".NETStandard 2" type="24d0babc:SolutionExplorerModelNode" />
-            </path>
-            <path>
-              <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
-              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="Dependencies" type="24d0babc:SolutionExplorerModelNode" />
-              <item name=".NETStandard 2" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="Packages" type="24d0babc:SolutionExplorerModelNode" />
-            </path>
-            <path>
-              <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
-              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="Dependencies" type="24d0babc:SolutionExplorerModelNode" />
-              <item name=".NETStandard 2" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="SDK" type="24d0babc:SolutionExplorerModelNode" />
-            </path>
-            <path>
-              <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
-              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="DataBase" type="24d0babc:SolutionExplorerModelNode" />
-            </path>
-            <path>
-              <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
-              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
               <item name="DataBaseRepository" type="24d0babc:SolutionExplorerModelNode" />
-            </path>
-            <path>
-              <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
-              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="DataBaseRepository" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="Base" type="24d0babc:SolutionExplorerModelNode" />
-            </path>
-            <path>
-              <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
-              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="ServiceRepository" type="24d0babc:SolutionExplorerModelNode" />
-            </path>
-            <path>
-              <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
-              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="RepositoryHelpers" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="Utils" type="24d0babc:SolutionExplorerModelNode" />
             </path>
           </expand>
           <select />
         </subPane>
         <option name="show-all-files" value="false" />
       </pane>
+      <pane id="FileSystemExplorer" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -416,11 +392,12 @@
       <option name="presentableId" value="Default" />
       <updated>1543491494328</updated>
       <workItem from="1543491497013" duration="8696000" />
+      <workItem from="1547560657665" duration="309000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="8696000" />
+    <option name="totallyTimeSpent" value="9005000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -434,17 +411,9 @@
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="829" extended-state="6" />
     <layout>
-      <window_info id="Favorites" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2532189" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25679544" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="NuGet" weight="0.32971507" />
-      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Inspection Results" weight="0.32971507" />
-      <window_info anchor="bottom" id="Unit Tests" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -452,17 +421,25 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="right" id="Errors In Solution" />
-      <window_info anchor="right" id="Database" />
+      <window_info anchor="bottom" id="NuGet" order="7" weight="0.32971507" />
+      <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="9" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="10" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Inspection Results" order="11" weight="0.32971507" />
+      <window_info anchor="bottom" id="Unit Tests" order="12" />
+      <window_info anchor="bottom" id="Terminal" order="13" />
+      <window_info anchor="bottom" id="Event Log" order="14" side_tool="true" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Errors In Solution" order="3" />
+      <window_info anchor="right" id="Database" order="4" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
-  <component name="UnityProjectConfiguration" hasMinimizedUI="null" />
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
@@ -478,80 +455,10 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/RepositoryHelpers/Utils/Enum.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="20" selection-start-column="20" selection-end-column="20" />
-          <folding>
-            <marker date="1543492423901" expanded="true" signature="33:120" ph="{...}" />
-            <marker date="1543492423901" expanded="true" signature="64:118" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/RepositoryHelpers/Repository/Base/IRepository.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="17" column="28" selection-start-line="17" selection-start-column="28" selection-end-line="17" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/RepositoryHelpers/Repository/Base/ILiteDbRepository.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="10" selection-start-line="10" selection-end-line="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/RepositoryHelpers/DataBase/Connection.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="40" column="45" selection-start-line="40" selection-start-column="31" selection-end-line="40" selection-end-column="45" />
-          <folding>
-            <marker date="1543492478411" expanded="true" signature="6:120" ph="..." />
-            <marker date="1543492478411" expanded="true" signature="189:1977" ph="{...}" />
-            <marker date="1543492478411" expanded="true" signature="226:1975" ph="{...}" />
-            <marker date="1543492478411" expanded="true" signature="383:797" ph="{...}" />
-            <marker date="1543492478411" expanded="true" signature="409:787" ph="{...}" />
-            <marker date="1543492478411" expanded="true" signature="457:773" ph="{...}" />
-            <marker date="1543492478411" expanded="true" signature="875:1238" ph="{...}" />
-            <marker date="1543492478411" expanded="true" signature="915:1228" ph="{...}" />
-            <marker date="1543492478411" expanded="true" signature="1287:1572" ph="{...}" />
-            <marker date="1543492478411" expanded="true" signature="1327:1562" ph="{...}" />
-            <marker date="1543492478411" expanded="true" signature="1650:1969" ph="{...}" />
-            <marker date="1543492478411" expanded="true" signature="1690:1959" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/RepositoryHelpers/Repository/LiteDbRepository.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="23" column="44" selection-start-line="23" selection-start-column="44" selection-end-line="23" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/RepositoryHelpers/Utils/NotImplementedDatabaseException.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
-          <caret line="8" column="46" selection-start-line="8" selection-start-column="15" selection-end-line="8" selection-end-column="46" />
-          <folding>
-            <marker date="1543495005542" expanded="true" signature="6:49" ph="..." />
-            <marker date="1543495005542" expanded="true" signature="84:433" ph="{...}" />
-            <marker date="1543495005542" expanded="true" signature="147:431" ph="{...}" />
-            <marker date="1543495005542" expanded="true" signature="269:289" ph="{...}" />
-            <marker date="1543495005542" expanded="true" signature="405:425" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/RepositoryHelpers/Repository/CustomRepository.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="528">
-          <caret line="33" lean-forward="true" selection-start-line="33" selection-end-line="33" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/RepositoryHelpers/Repository/Base/IRepository.cs" />
+    <entry file="file://$PROJECT_DIR$/RepositoryHelpers/Repository/Base/ILiteDbRepository.cs" />
+    <entry file="file://$PROJECT_DIR$/RepositoryHelpers/Repository/LiteDbRepository.cs" />
+    <entry file="file://$PROJECT_DIR$/RepositoryHelpers/Repository/CustomRepository.cs" />
     <entry file="file://$PROJECT_DIR$/RepositoryHelpers/DapperIgnore.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="176">
@@ -560,49 +467,6 @@
             <marker date="1543492383023" expanded="true" signature="41:203" ph="{...}" />
             <marker date="1543492383023" expanded="true" signature="92:201" ph="{...}" />
             <marker date="1543492383023" expanded="true" signature="140:195" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/RepositoryHelpers/DataBaseRepository/CustomRepository.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="32">
-          <caret line="11" column="11" selection-start-line="11" selection-start-column="11" selection-end-line="11" selection-end-column="11" />
-          <folding>
-            <marker date="1543515892237" expanded="false" signature="6:274" ph="..." />
-            <marker date="1543515892237" expanded="true" signature="322:7397" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="391:7395" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="588:646" ph="{...}" />
-            <marker date="1543515892237" expanded="false" signature="656:5982" ph="DAPPER" />
-            <marker date="1543515892237" expanded="true" signature="717:1961" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="930:1951" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="1192:1762" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="1535:1642" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="2106:3666" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="2320:3656" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="2591:3176" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="3293:3499" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="3520:3642" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="3822:4038" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="3909:4028" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="4213:4411" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="4301:4401" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="4601:4854" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="4679:4844" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="4982:5438" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="5060:5428" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="5203:5256" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="5769:5962" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="5847:5952" ph="{...}" />
-            <marker date="1543515892237" expanded="false" signature="5992:7388" ph="ADO" />
-            <marker date="1543515892237" expanded="true" signature="6090:6938" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="6168:6928" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="6256:6914" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="6424:6549" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="6616:6896" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="6742:6874" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="7039:7226" ph="{...}" />
-            <marker date="1543515892237" expanded="true" signature="7117:7216" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -650,7 +514,7 @@
     <entry file="file://$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/ServiceResponse.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="752">
-          <caret line="47" column="25" lean-forward="true" selection-start-line="47" selection-start-column="25" selection-end-line="47" selection-end-column="25" />
+          <caret line="47" column="25" selection-start-line="47" selection-start-column="25" selection-end-line="47" selection-end-column="25" />
           <folding>
             <marker date="1543516365310" expanded="true" signature="6:31" ph="..." />
             <marker date="1543516365310" expanded="true" signature="65:1316" ph="{...}" />
@@ -666,12 +530,43 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/RepositoryHelpers/Utils/NotImplementedDatabaseException.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="128">
+          <caret line="8" column="46" selection-start-line="8" selection-start-column="15" selection-end-line="8" selection-end-column="46" />
+          <folding>
+            <marker date="1543495005542" expanded="true" signature="6:49" ph="..." />
+            <marker date="1543495005542" expanded="true" signature="147:431" ph="{...}" />
+            <marker date="1543495005542" expanded="true" signature="269:289" ph="{...}" />
+            <marker date="1543495005542" expanded="true" signature="405:425" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RepositoryHelpers/DataBase/Connection.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="640">
+          <caret line="40" column="45" selection-start-line="40" selection-start-column="31" selection-end-line="40" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RepositoryHelpers/Utils/Enum.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="20" selection-start-column="20" selection-end-column="20" />
+          <folding>
+            <marker date="1543492423901" expanded="true" signature="33:120" ph="{...}" />
+            <marker date="1543492423901" expanded="true" signature="64:118" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/RepositoryHelpers/ServiceRepository/HttpExtension.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1008">
-          <caret line="63" column="46" lean-forward="true" selection-start-line="63" selection-start-column="46" selection-end-line="63" selection-end-column="46" />
+        <state relative-caret-position="464">
+          <caret line="35" column="28" selection-start-line="35" selection-start-column="28" selection-end-line="35" selection-end-column="28" />
           <folding>
-            <marker date="1543516355350" expanded="true" signature="6:160" ph="..." />
+            <marker date="1543516355350" expanded="false" signature="6:160" ph="..." />
             <marker date="1543516355350" expanded="true" signature="196:3017" ph="{...}" />
             <marker date="1543516355350" expanded="true" signature="315:531" ph="{...}" />
             <marker date="1543516355350" expanded="true" signature="659:1177" ph="{...}" />
@@ -688,6 +583,74 @@
             <marker date="1543516355350" expanded="true" signature="2556:2889" ph="{...}" />
             <marker date="1543516355350" expanded="true" signature="2717:2784" ph="{...}" />
             <marker date="1543516355350" expanded="true" signature="2918:2977" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RepositoryHelpers/DataBaseRepository/CustomRepository.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="384">
+          <caret line="24" column="37" lean-forward="true" selection-start-line="24" selection-start-column="37" selection-end-line="24" selection-end-column="37" />
+          <folding>
+            <marker date="1547560868528" expanded="true" signature="6:313" ph="..." />
+            <marker date="1547560868528" expanded="true" signature="361:11126" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="430:11124" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="775:833" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="843:9272" ph="DAPPER" />
+            <marker date="1547560868528" expanded="true" signature="946:1427" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="1064:1342" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="1359:1417" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="1476:1845" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="1538:1811" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="1726:1797" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="1893:3681" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="2042:3546" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="2128:3532" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="2450:3160" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="2621:2740" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="3037:3138" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="3578:3671" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="3826:5513" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="3976:5377" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="4062:5363" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="4335:4705" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="4964:5186" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="5211:5345" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="5410:5503" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="5676:6078" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="5702:5942" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="5797:5928" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="5975:6068" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="6253:6637" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="6279:6500" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="6374:6486" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="6533:6626" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="6827:7516" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="6853:7380" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="7179:7366" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="7413:7506" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="7652:8557" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="7678:8420" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="8004:8406" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="8159:8212" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="8453:8546" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="8888:9252" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="8914:9116" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="8997:9102" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="9149:9242" ph="{...}" />
+            <marker date="1547560868528" expanded="false" signature="9282:11117" ph="ADO" />
+            <marker date="1547560868528" expanded="true" signature="9380:10481" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="9406:10345" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="9492:10331" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="9588:10313" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="9771:9908" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="9979:10291" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="10117:10265" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="10378:10471" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="10582:10955" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="10608:10819" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="10694:10805" ph="{...}" />
+            <marker date="1547560868528" expanded="true" signature="10852:10945" ph="{...}" />
           </folding>
         </state>
       </provider>

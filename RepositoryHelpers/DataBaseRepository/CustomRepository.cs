@@ -52,27 +52,6 @@ namespace RepositoryHelpers.DataBaseRepository
             }
         }
 
-        //Default Transaction
-        private DbTransaction _transaction;
-        private DbTransaction Transaction
-        {
-            set
-            {
-                _transaction = value;
-            }
-            get
-            {
-                if (_transaction == null)
-                {
-                    if (DBConnection.State == ConnectionState.Closed)
-                        DBConnection.Open();
-
-                    _transaction = DBConnection.BeginTransaction(_connection.Database != DataBaseType.Oracle ? _connection.IsolationLevel
-                        : IsolationLevel.ReadCommitted);
-                }
-                return _transaction;
-            }
-        }
 
         //Default Command
         private DbCommand _DBCommand;
@@ -93,9 +72,9 @@ namespace RepositoryHelpers.DataBaseRepository
             }
         }
 
-        private void DisposeDB()
+        private void DisposeDB(bool dispose)
         {
-            if (DbCommand.Transaction == null)
+            if (dispose)
             {
                 DBConnection.Close();
                 _DBConnection.Dispose();
@@ -107,48 +86,6 @@ namespace RepositoryHelpers.DataBaseRepository
 
         #endregion
 
-        #region Transaction
-
-        /// <summary>
-        /// Start transaction
-        /// </summary>
-        public void BeginTransaction()
-        {
-            DbCommand.Transaction = Transaction;
-        }
-
-        /// <summary>
-        /// Commit transaction
-        /// </summary>
-        public void CommitTransaction()
-        {
-            if (DbCommand?.Transaction != null)
-            {
-                DbCommand.Transaction.Commit();
-                DBConnection.Close();
-                _DBConnection.Dispose();
-                _DBConnection = null;
-                _transaction.Dispose();
-                _transaction = null;
-            }
-        }
-
-        /// <summary>
-        /// Rollback transaction
-        /// </summary>
-        public void RollbackTransaction()
-        {
-            if (DbCommand.Transaction != null)
-            {
-                DbCommand.Transaction.Rollback();
-                DBConnection.Close();
-                _DBConnection.Dispose();
-                _DBConnection = null;
-                _transaction.Dispose();
-                _transaction = null;
-            }
-        }
-        #endregion
 
         #region DAPPER
 
@@ -467,7 +404,6 @@ namespace RepositoryHelpers.DataBaseRepository
 
         #region ADO
 
-
         /// <summary>
         /// Get DataSet result with parameters (Support transaction)
         /// </summary>
@@ -475,10 +411,27 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="parameters">Query parameters</param>
         /// <returns>DataSet of results</returns>
         public DataSet GetDataSet(string sql, Dictionary<string, object> parameters)
+           => GetDataSet(sql, parameters, null);
+
+
+        /// <summary>
+        /// Get DataSet result with parameters (Support transaction)
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <returns>DataSet of results</returns>
+        public DataSet GetDataSet(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction)
         {
+            var isCustomTransaction = customTransaction != null;
+
             try
             {
-                DbCommand.Connection = DBConnection;
+                if (isCustomTransaction)
+                    DbCommand = customTransaction.DbCommand;
+                else
+                    DbCommand.Connection = DBConnection;
+
+
                 DbCommand.CommandType = CommandType.Text;
                 DbCommand.Parameters.Clear();
                 DbCommand.CommandTimeout = 120;
@@ -509,7 +462,7 @@ namespace RepositoryHelpers.DataBaseRepository
             }
             finally
             {
-                DisposeDB();
+                DisposeDB(isCustomTransaction);
             }
         }
 
@@ -519,11 +472,18 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
         /// <returns>Number of rows affected</returns>
-        public async Task<int> ExecuteQueryAsync(string sql, Dictionary<string, object> parameters)
+        public async Task<int> ExecuteQueryAsync(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction)
         {
+            var isCustomTransaction = customTransaction != null;
+
             try
             {
-                DbCommand.Connection = DBConnection;
+                if (isCustomTransaction)
+                    DbCommand = customTransaction.DbCommand;
+                else
+                    DbCommand.Connection = DBConnection;
+
+
                 DbCommand.CommandType = CommandType.Text;
                 DbCommand.Parameters.Clear();
 
@@ -543,7 +503,7 @@ namespace RepositoryHelpers.DataBaseRepository
             }
             finally
             {
-                DisposeDB();
+                DisposeDB(isCustomTransaction);
             }
         }
 
@@ -553,8 +513,27 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
         /// <returns>Number of rows affected</returns>
+        public int ExecuteQuery(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction)
+            => ExecuteQueryAsync(sql, parameters, customTransaction).Result;
+
+        /// <summary>
+        /// Executes a query with parameters (Support transaction)
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <returns>Number of rows affected</returns>
         public int ExecuteQuery(string sql, Dictionary<string, object> parameters)
-            => ExecuteQueryAsync(sql, parameters).Result;
+            => ExecuteQueryAsync(sql, parameters, null).Result;
+
+        /// <summary>
+        /// Executes a query with parameters (Support transaction)
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <returns>Number of rows affected</returns>
+        public async Task<int> ExecuteQueryAsync(string sql, Dictionary<string, object> parameters)
+            => await ExecuteQueryAsync(sql, parameters, null);
+
 
         /// <summary>
         /// Executes a insert with parameters asynchronously (Support transaction)
@@ -563,8 +542,10 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="parameters">Query parameters</param>
         /// <param name="identity">Primary Key or Oracle sequence</param>
         /// <returns>Primary Key After Insert</returns>
-        public async Task<string> ExecuteQueryAsync(string sql, Dictionary<string, object> parameters, string identity)
+        public async Task<string> ExecuteQueryAsync(string sql, Dictionary<string, object> parameters, string identity, CustomTransaction customTransaction)
         {
+            var isCustomTransaction = customTransaction != null;
+
             try
             {
                 StringBuilder sbSql = new StringBuilder();
@@ -579,7 +560,11 @@ namespace RepositoryHelpers.DataBaseRepository
                     sbSql.AppendLine($"BEGIN {sql} SELECT {identity}.currval FROM DUAL END; ");
                 }
 
-                DbCommand.Connection = DBConnection;
+                if (isCustomTransaction)
+                    DbCommand = customTransaction.DbCommand;
+                else
+                    DbCommand.Connection = DBConnection;
+
                 DbCommand.CommandType = CommandType.Text;
                 DbCommand.CommandTimeout = 120;
                 DbCommand.Parameters.Clear();
@@ -603,19 +588,9 @@ namespace RepositoryHelpers.DataBaseRepository
             }
             finally
             {
-                DisposeDB();
+                DisposeDB(isCustomTransaction);
             }
         }
-
-        /// <summary>
-        /// Executes a insert with parameters (Support transaction)
-        /// </summary>
-        /// <param name="sql">Query</param>
-        /// <param name="parameters">Query parameters</param>
-        /// <param name="identity">Primary Key or Oracle sequence</param>
-        /// <returns>Primary Key After Insert</returns>
-        public string ExecuteQuery(string sql, Dictionary<string, object> parameters, string identity)
-                  => ExecuteQueryAsync(sql, parameters, identity).Result;
 
 
         /// <summary>
@@ -624,11 +599,17 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
         /// <returns>Procedure return</returns>
-        public async Task<int> ExecuteProcedureAsync(string procedure, Dictionary<string, object> parameters)
+        public async Task<int> ExecuteProcedureAsync(string procedure, Dictionary<string, object> parameters, CustomTransaction customTransaction)
         {
+            var isCustomTransaction = customTransaction != null;
+
             try
             {
-                DbCommand.Connection = DBConnection;
+                if (isCustomTransaction)
+                    DbCommand = customTransaction.DbCommand;
+                else
+                    DbCommand.Connection = DBConnection;
+
                 DbCommand.CommandType = CommandType.StoredProcedure;
                 DbCommand.CommandText = procedure;
                 DbCommand.Parameters.Clear();
@@ -649,7 +630,7 @@ namespace RepositoryHelpers.DataBaseRepository
             }
             finally
             {
-                DisposeDB();
+                DisposeDB(isCustomTransaction);
             }
         }
 
@@ -659,8 +640,26 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
         /// <returns>Procedure return</returns>
+        public int ExecuteProcedure(string procedure, Dictionary<string, object> parameters, CustomTransaction customTransaction)
+                => ExecuteProcedureAsync(procedure, parameters,customTransaction).Result;
+
+        /// <summary>
+        /// Executes a Procedure with parameters (Support transaction)
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <returns>Procedure return</returns>
         public int ExecuteProcedure(string procedure, Dictionary<string, object> parameters)
-                => ExecuteProcedureAsync(procedure, parameters).Result;
+                => ExecuteProcedureAsync(procedure, parameters, null).Result;
+
+        /// <summary>
+        /// Executes a Procedure with parameters (Support transaction)
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <returns>Procedure return</returns>
+        public async Task<int> ExecuteProcedureAsync(string procedure, Dictionary<string, object> parameters)
+                => await ExecuteProcedureAsync(procedure, parameters, null);
 
         /// <summary>
         /// Get Procedure DataSet with parameters (Support transaction)
@@ -668,11 +667,17 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
         /// <returns>DataSet</returns>
-        public DataSet GetProcedureDataSet(string procedure, Dictionary<string, object> parameters)
+        public DataSet GetProcedureDataSet(string procedure, Dictionary<string, object> parameters, CustomTransaction customTransaction)
         {
+            var isCustomTransaction = customTransaction != null;
+
             try
             {
-                DbCommand.Connection = DBConnection;
+                if (isCustomTransaction)
+                    DbCommand = customTransaction.DbCommand;
+                else
+                    DbCommand.Connection = DBConnection;
+
                 DbCommand.CommandType = CommandType.StoredProcedure;
                 DbCommand.CommandText = procedure;
                 DbCommand.Parameters.Clear();
@@ -702,7 +707,7 @@ namespace RepositoryHelpers.DataBaseRepository
             }
             finally
             {
-                DisposeDB();
+                DisposeDB(isCustomTransaction);
             }
         }
 
@@ -712,8 +717,26 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
         /// <returns>Scalar result</returns>
+        public object ExecuteScalar(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction)
+          => ExecuteScalarAsync(sql, parameters, customTransaction).Result;
+
+        /// <summary>
+        /// Executes Scalar with parameters (Support transaction)
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <returns>Scalar result</returns>
         public object ExecuteScalar(string sql, Dictionary<string, object> parameters)
-          => ExecuteScalarAsync(sql, parameters).Result;
+          => ExecuteScalarAsync(sql, parameters, null).Result;
+
+        /// <summary>
+        /// Executes Scalar with parameters (Support transaction)
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <returns>Scalar result</returns>
+        public async Task<object> ExecuteScalarAsync(string sql, Dictionary<string, object> parameters) 
+          => await ExecuteScalarAsync(sql, parameters, null);
 
 
         /// <summary>
@@ -722,11 +745,17 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
         /// <returns>Scalar result</returns>
-        public async Task<object> ExecuteScalarAsync(string sql, Dictionary<string, object> parameters)
+        public async Task<object> ExecuteScalarAsync(string sql, Dictionary<string, object> parameters,CustomTransaction customTransaction)
         {
+            var isCustomTransaction = customTransaction != null;
+
             try
             {
-                DbCommand.Connection = DBConnection;
+                if (isCustomTransaction)
+                    DbCommand = customTransaction.DbCommand;
+                else
+                    DbCommand.Connection = DBConnection;
+
                 DbCommand.CommandType = CommandType.Text;
                 DbCommand.Parameters.Clear();
 
@@ -746,8 +775,13 @@ namespace RepositoryHelpers.DataBaseRepository
             }
             finally
             {
-                DisposeDB();
+                DisposeDB(isCustomTransaction);
             }
+        }
+
+        public string GetConnectionString()
+        {
+            return this._connection.ConnectionString;
         }
 
         #endregion

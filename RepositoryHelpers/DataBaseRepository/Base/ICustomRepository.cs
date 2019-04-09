@@ -4,12 +4,15 @@ using System.Threading.Tasks;
 
 namespace RepositoryHelpers.DataBaseRepository.Base
 {
-    internal interface ICustomRepository <T>
+    internal interface ICustomRepository<T>
     {
+        //Objects
+        string GetConnectionString();
+
         //Generic Objects for Using Dapper
         IEnumerable<T> Get();
         Task<IEnumerable<T>> GetAsync();
-        IEnumerable<T> Get(string sql, Dictionary<string,object> parameters);
+        IEnumerable<T> Get(string sql, Dictionary<string, object> parameters);
         Task<IEnumerable<T>> GetAsync(string sql, Dictionary<string, object> parameters);
         T GetById(object id);
         Task<T> GetByIdAsync(object id);
@@ -23,8 +26,12 @@ namespace RepositoryHelpers.DataBaseRepository.Base
         Task<object> ExecuteScalarAsync(string sql, Dictionary<string, object> parameters);
 
         //ADO.net default Dataset
+        DataSet GetDataSet(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction);
         DataSet GetDataSet(string sql, Dictionary<string, object> parameters);
+        int ExecuteQuery(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction);
         int ExecuteQuery(string sql, Dictionary<string, object> parameters);
+        Task<int> ExecuteQueryAsync(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction);
         Task<int> ExecuteQueryAsync(string sql, Dictionary<string, object> parameters);
+
     }
 }

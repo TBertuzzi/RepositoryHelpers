@@ -4,18 +4,18 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>tbertuzzi</Authors>
     <Company>KBits</Company>
-    <Copyright>Copyright ©2018 KBits</Copyright>
+    <Copyright>Copyright ©2019 KBits</Copyright>
     <PackageLicenseUrl>http://opensource.org/licenses/MS-PL</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/TBertuzzi/RepositoryHelpers</PackageProjectUrl>
     <PackageTags>repository helpers dapper litedb ddd mvc httpclient rest pattern database db sql oracle sqlserver</PackageTags>
-    <PackageReleaseNotes>Added ADO transaction support. Added Execute Procedure</PackageReleaseNotes>
+    <PackageReleaseNotes>Added CustomTransaction. Updated dependencies.</PackageReleaseNotes>
     <Description>Extensions for HttpClient and Custom Repository based on dapper</Description>
     <PackageIconUrl>https://github.com/TBertuzzi/RepositoryHelpers/blob/master/Resource/RepositoryHelpersIcon.png?raw=true</PackageIconUrl>
     <RepositoryUrl>https://github.com/TBertuzzi/RepositoryHelpers</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.2.1</Version>
-    <AssemblyVersion>1.2.1.0</AssemblyVersion>
-    <FileVersion>1.2.1.0</FileVersion>
+    <Version>1.3.0</Version>
+    <AssemblyVersion>1.3.0.0</AssemblyVersion>
+    <FileVersion>1.3.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,7 +25,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.5.1" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
     <PackageReference Include="LiteDB" Version="4.1.4" />
     <PackageReference Include="System.Data.OracleClient" Version="1.0.8" />
     <PackageReference Include="Dapper.Contrib" Version="1.50.4" />
