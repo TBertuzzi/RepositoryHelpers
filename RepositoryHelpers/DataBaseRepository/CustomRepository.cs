@@ -34,14 +34,8 @@ namespace RepositoryHelpers.DataBaseRepository
             {
                 if (_DBConnection == null)
                 {
-                    try
-                    {
-                        _DBConnection = _connection.DataBaseConnection;
-                    }
-                    catch (Exception exception)
-                    {
-                        throw new Exception(exception.Message);
-                    }
+
+                    _DBConnection = _connection.DataBaseConnection;
                 }
 
                 return _DBConnection;
@@ -202,7 +196,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="item"> item to update</param>
         /// <returns></returns>
         public async Task UpdateAsync(T item)
-            => await UpdateAsync(item, null);
+            => await UpdateAsync(item, null).ConfigureAwait(false);
 
 
         /// <summary>
@@ -286,7 +280,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="identity">  Return primary key</param>
         /// <returns>Table Primary key or number of rows affected</returns>
         public async Task<int> InsertAsync(T item, bool identity) =>
-           await InsertAsync(item, identity, null);
+           await InsertAsync(item, identity, null).ConfigureAwait(false);
 
         /// <summary>
         /// Get all rows in the table asynchronously (does not support transaction)
@@ -766,7 +760,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="parameters">Query parameters</param>
         /// <returns>Procedure return</returns>
         public async Task<int> ExecuteProcedureAsync(string procedure, Dictionary<string, object> parameters)
-                => await ExecuteProcedureAsync(procedure, parameters, null);
+                => await ExecuteProcedureAsync(procedure, parameters, null).ConfigureAwait(false);
 
         /// <summary>
         /// Get Procedure DataSet with parameters (Support transaction)
@@ -843,7 +837,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="parameters">Query parameters</param>
         /// <returns>Scalar result</returns>
         public async Task<object> ExecuteScalarAsync(string sql, Dictionary<string, object> parameters) 
-          => await ExecuteScalarAsync(sql, parameters, null);
+          => await ExecuteScalarAsync(sql, parameters, null).ConfigureAwait(false);
 
 
         /// <summary>
