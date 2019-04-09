@@ -6,10 +6,9 @@ Extensions for HttpClient and Custom Repository based on dapper
 
 **NuGet**
 
-|Name|Info|
-| ------------------- | :------------------: |
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ea9b954b18e942d4800825dccd6ef77c)](https://app.codacy.com/app/TBertuzzi/RepositoryHelpers?utm_source=github.com&utm_medium=referral&utm_content=TBertuzzi/RepositoryHelpers&utm_campaign=Badge_Grade_Dashboard)
-|RepositoryHelpers|[![NuGet](https://img.shields.io/badge/nuget-1.1.0-blue.svg)](https://www.nuget.org/packages/RepositoryHelpers/)|
+|Name|Nuget|Code Quality
+| ------------------- | :------------------: |:------------------: |
+|RepositoryHelpers|[![NuGet](https://img.shields.io/badge/nuget-1.1.0-blue.svg)](https://www.nuget.org/packages/RepositoryHelpers/)|[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ea9b954b18e942d4800825dccd6ef77c)](https://app.codacy.com/app/TBertuzzi/RepositoryHelpers?utm_source=github.com&utm_medium=referral&utm_content=TBertuzzi/RepositoryHelpers&utm_campaign=Badge_Grade_Dashboard)|
 
 **Platform Support**
 
