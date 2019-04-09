@@ -84,18 +84,6 @@ namespace RepositoryHelpers.DataBaseRepository
             }
         }
 
-        private void DisposeDB()
-        {
-            if (DbCommand.Transaction == null)
-            {
-                DBConnection.Close();
-                _DBConnection.Dispose();
-                _DBConnection = null;
-                DbCommand.Dispose();
-                DbCommand = null;
-            }
-        }
-
         /// <summary>
         /// Start transaction
         /// </summary>
@@ -135,18 +123,6 @@ namespace RepositoryHelpers.DataBaseRepository
                 _transaction = null;
             }
         }
-
      
-        //public void Dispose()
-        //{
-        //    if (DbCommand.Transaction == null)
-        //    {
-        //        DBConnection.Close();
-        //        _DBConnection.Dispose();
-        //        _DBConnection = null;
-        //        DbCommand.Dispose();
-        //        DbCommand = null;
-        //    }
-        //}
     }
 }

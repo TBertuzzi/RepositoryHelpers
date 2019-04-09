@@ -330,7 +330,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// </summary>
         /// <returns>All rows in the table</returns>
         public async Task<IEnumerable<T>> GetAsync()
-            => await GetAsync(null);
+            => await GetAsync(null).ConfigureAwait(false);
 
 
         /// <summary>
@@ -385,7 +385,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="parameters">Query parameters</param>
         /// <returns>List of results</returns>
         public async Task<IEnumerable<T>> GetAsync(string sql, Dictionary<string, object> parameters)
-            => await GetAsync(sql, parameters, null);
+            => await GetAsync(sql, parameters, null).ConfigureAwait(false);
 
 
         /// <summary>
@@ -442,7 +442,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="id">Primary Key</param>
         /// <returns>Item</returns>
         public async Task<T> GetByIdAsync(object id)
-            => await GetByIdAsync(id, null);
+            => await GetByIdAsync(id, null).ConfigureAwait(false);
 
         /// <summary>
         /// Delete an item by id asynchronously (does not support transaction)
@@ -503,7 +503,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// </summary>
         /// <param name="id">Primary Key</param>
         public async Task DeleteAsync(object id)
-            => await DeleteAsync(id, null);
+            => await DeleteAsync(id, null).ConfigureAwait(false);
 
 
 
@@ -639,7 +639,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="parameters">Query parameters</param>
         /// <returns>Number of rows affected</returns>
         public async Task<int> ExecuteQueryAsync(string sql, Dictionary<string, object> parameters)
-            => await ExecuteQueryAsync(sql, parameters, null);
+            => await ExecuteQueryAsync(sql, parameters, null).ConfigureAwait(false);
 
 
         /// <summary>
