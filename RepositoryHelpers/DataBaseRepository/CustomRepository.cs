@@ -125,19 +125,18 @@ namespace RepositoryHelpers.DataBaseRepository
         /// </summary>
         /// <param name="item"> item to update</param>
         /// <returns></returns>
-        public async Task UpdateAsync(T item)
+        public async Task UpdateAsync(T item, CustomTransaction customTransaction)
         {
             if (_connection.Database == DataBaseType.Oracle)
                 throw new NotImplementedDatabaseException();
 
-            if (DbCommand?.Transaction != null)
-                throw new CustomRepositoryException("This method does not support transaction.Use ExecuteQuery");
+            var isCustomTransaction = customTransaction != null;
 
             try
             {
-                using (var connection = _connection.DataBaseConnection)
-                {
-                    var sql = new StringBuilder();
+                var connection = isCustomTransaction ? customTransaction.DbCommand.Connection : _connection.DataBaseConnection;
+
+                var sql = new StringBuilder();
                     var primaryKey = "";
                     var parameters = new Dictionary<string, object>();
 
@@ -169,8 +168,11 @@ namespace RepositoryHelpers.DataBaseRepository
 
                     sql.AppendLine($" where {primaryKey} = @{primaryKey}");
 
+                if(isCustomTransaction)
+                    await connection.ExecuteAsync(sql.ToString(), parameters, customTransaction.DbCommand.Transaction);
+                else
                     await connection.ExecuteAsync(sql.ToString(), parameters);
-                }
+              //  }
             }
             catch (Exception ex)
             {
@@ -183,8 +185,24 @@ namespace RepositoryHelpers.DataBaseRepository
         /// </summary>
         /// <param name="item"> item to update</param>
         /// <returns></returns>
+        public void Update(T item, CustomTransaction customTransaction)
+            => UpdateAsync(item, customTransaction).Wait();
+
+        /// <summary>
+        /// Update an item(does not support transaction)
+        /// </summary>
+        /// <param name="item"> item to update</param>
+        /// <returns></returns>
         public void Update(T item)
-            => UpdateAsync(item).Wait();
+            => UpdateAsync(item, null).Wait();
+
+        /// <summary>
+        /// Update an item(does not support transaction)
+        /// </summary>
+        /// <param name="item"> item to update</param>
+        /// <returns></returns>
+        public async Task UpdateAsync(T item)
+            => await UpdateAsync(item, null);
 
 
         /// <summary>
@@ -193,46 +211,47 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="item"> item to insert</param>
         /// <param name="identity">  Return primary key</param>
         /// <returns>Table Primary key or number of rows affected</returns>
-        public async Task<int> InsertAsync(T item, bool identity)
+        public async Task<int> InsertAsync(T item, bool identity, CustomTransaction customTransaction)
         {
 
             if (_connection.Database == DataBaseType.Oracle)
                 throw new NotImplementedDatabaseException();
 
-            if (DbCommand?.Transaction != null)
-                throw new CustomRepositoryException("This method does not support transaction.Use ExecuteQuery");
+            var isCustomTransaction = customTransaction != null;
 
             try
             {
-                using (var connection = _connection.DataBaseConnection)
+                var connection = isCustomTransaction ? customTransaction.DbCommand.Connection : _connection.DataBaseConnection;
+
+                var sql = new StringBuilder();
+                var sqlParameters = new StringBuilder();
+
+                var parameters = new Dictionary<string, object>();
+
+                foreach (var p in item.GetType().GetProperties())
                 {
-                    var sql = new StringBuilder();
-                    var sqlParameters = new StringBuilder();
+                    if (item.GetType().GetProperty(p.Name) == null) continue;
 
-                    var parameters = new Dictionary<string, object>();
+                    if (IgnoreAttribute(p.CustomAttributes)) continue;
 
-                    foreach (var p in item.GetType().GetProperties())
-                    {
-                        if (item.GetType().GetProperty(p.Name) == null) continue;
+                    sqlParameters.Append($"@{p.Name},");
+                    parameters.Add($"@{p.Name}", item.GetType().GetProperty(p.Name)?.GetValue(item));
+                }
 
-                        if (IgnoreAttribute(p.CustomAttributes)) continue;
+                sqlParameters.Remove(sqlParameters.Length - 1, 1);
 
-                        sqlParameters.Append($"@{p.Name},");
-                        parameters.Add($"@{p.Name}", item.GetType().GetProperty(p.Name)?.GetValue(item));
-                    }
-
-                    sqlParameters.Remove(sqlParameters.Length - 1, 1);
-
-                    sql.AppendLine($"insert into {typeof(T).Name} ({sqlParameters.ToString().Replace("@", "")}) values ({sqlParameters.ToString()}) ");
-                    if (identity)
-                    {
-                        sql.AppendLine("SELECT CAST(SCOPE_IDENTITY() as int);");
-                        return connection.QuerySingleOrDefault<int>(sql.ToString(), parameters);
-                    }
+                sql.AppendLine($"insert into {typeof(T).Name} ({sqlParameters.ToString().Replace("@", "")}) values ({sqlParameters.ToString()}) ");
+                if (identity)
+                {
+                    sql.AppendLine("SELECT CAST(SCOPE_IDENTITY() as int);");
+                    return connection.QuerySingleOrDefault<int>(sql.ToString(), parameters);
+                }
+                else
+                {
+                    if (isCustomTransaction)
+                        return await connection.ExecuteAsync(sql.ToString(), parameters, customTransaction.DbCommand.Transaction);
                     else
-                    {
                         return await connection.ExecuteAsync(sql.ToString(), parameters);
-                    }
                 }
             }
             catch (Exception ex)
@@ -248,24 +267,43 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="item"> item to insert</param>
         /// <param name="identity">  Return primary key</param>
         /// <returns>Table Primary key or number of rows affected</returns>
+        public int Insert(T item, bool identity, CustomTransaction customTransaction) =>
+            InsertAsync(item, identity, customTransaction).Result;
+
+        /// <summary>
+        /// Insert an item (does not support transaction)
+        /// </summary>
+        /// <param name="item"> item to insert</param>
+        /// <param name="identity">  Return primary key</param>
+        /// <returns>Table Primary key or number of rows affected</returns>
         public int Insert(T item, bool identity) =>
-            InsertAsync(item, identity).Result;
+            InsertAsync(item, identity, null).Result;
+
+        /// <summary>
+        /// Insert an item (does not support transaction)
+        /// </summary>
+        /// <param name="item"> item to insert</param>
+        /// <param name="identity">  Return primary key</param>
+        /// <returns>Table Primary key or number of rows affected</returns>
+        public async Task<int> InsertAsync(T item, bool identity) =>
+           await InsertAsync(item, identity, null);
 
         /// <summary>
         /// Get all rows in the table asynchronously (does not support transaction)
         /// </summary>
         /// <returns>All rows in the table</returns>
-        public async Task<IEnumerable<T>> GetAsync()
+        public async Task<IEnumerable<T>> GetAsync(CustomTransaction customTransaction)
         {
             try
             {
-                if (DbCommand?.Transaction != null)
-                    throw new CustomRepositoryException("This method does not support transaction.Use GetDataSet");
+                var isCustomTransaction = customTransaction != null;
 
-                using (DbConnection connection = _connection.DataBaseConnection)
-                {
+                var connection = isCustomTransaction ? customTransaction.DbCommand.Connection : _connection.DataBaseConnection;
+
+                if(isCustomTransaction)
+                    return await connection.QueryAsync<T>($"Select * from {typeof(T).Name} ", customTransaction.DbCommand.Transaction);
+                else
                     return await connection.QueryAsync<T>($"Select * from {typeof(T).Name} ");
-                }
             }
             catch (Exception ex)
             {
@@ -277,8 +315,22 @@ namespace RepositoryHelpers.DataBaseRepository
         /// Get all rows in the table (does not support transaction)
         /// </summary>
         /// <returns>All rows in the table</returns>
+        public IEnumerable<T> Get(CustomTransaction customTransaction)
+            => GetAsync(customTransaction).Result;
+
+        /// <summary>
+        /// Get all rows in the table (does not support transaction)
+        /// </summary>
+        /// <returns>All rows in the table</returns>
         public IEnumerable<T> Get()
-            => GetAsync().Result;
+            => GetAsync(null).Result;
+
+        /// <summary>
+        /// Get all rows in the table (does not support transaction)
+        /// </summary>
+        /// <returns>All rows in the table</returns>
+        public async Task<IEnumerable<T>> GetAsync()
+            => await GetAsync(null);
 
 
         /// <summary>
@@ -287,17 +339,19 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
         /// <returns>List of results</returns>
-        public async Task<IEnumerable<T>> GetAsync(string sql, Dictionary<string, object> parameters)
+        public async Task<IEnumerable<T>> GetAsync(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction)
         {
             try
             {
-                if (DbCommand?.Transaction != null)
-                    throw new CustomRepositoryException("This method does not support transaction.Use GetDataSet");
+                var isCustomTransaction = customTransaction != null;
 
-                using (DbConnection connection = _connection.DataBaseConnection)
-                {
+                var connection = isCustomTransaction ? customTransaction.DbCommand.Connection : _connection.DataBaseConnection;
+
+                if(isCustomTransaction)
+                    return await connection.QueryAsync<T>(sql, parameters, customTransaction.DbCommand.Transaction);
+                else
                     return await connection.QueryAsync<T>(sql, parameters);
-                }
+
             }
             catch (Exception ex)
             {
@@ -312,8 +366,26 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
         /// <returns>List of results</returns>
+        public IEnumerable<T> Get(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction)
+            => GetAsync(sql, parameters, customTransaction).Result;
+
+        /// <summary>
+        /// Get the result of a query with parameters (does not support transaction)
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <returns>List of results</returns>
         public IEnumerable<T> Get(string sql, Dictionary<string, object> parameters)
-            => GetAsync(sql, parameters).Result;
+            => GetAsync(sql, parameters, null).Result;
+
+        /// <summary>
+        /// Get the result of a query with parameters (does not support transaction)
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <returns>List of results</returns>
+        public async Task<IEnumerable<T>> GetAsync(string sql, Dictionary<string, object> parameters)
+            => await GetAsync(sql, parameters, null);
 
 
         /// <summary>
@@ -321,12 +393,11 @@ namespace RepositoryHelpers.DataBaseRepository
         /// </summary>
         /// <param name="id">Primary Key</param>
         /// <returns>Item</returns>
-        public async Task<T> GetByIdAsync(object id)
+        public async Task<T> GetByIdAsync(object id, CustomTransaction customTransaction)
         {
             try
             {
-                if (DbCommand?.Transaction != null)
-                    throw new CustomRepositoryException("This method does not support transaction.Use GetDataSet");
+                var isCustomTransaction = customTransaction != null;
 
                 var primaryKey = "";
                 primaryKey = GetPrimaryKey(typeof(T));
@@ -334,10 +405,13 @@ namespace RepositoryHelpers.DataBaseRepository
                 if (string.IsNullOrEmpty(primaryKey))
                     throw new CustomRepositoryException("PrimaryKeyAttribute not defined");
 
-                using (var connection = _connection.DataBaseConnection)
-                {
+                var connection = isCustomTransaction ? customTransaction.DbCommand.Connection : _connection.DataBaseConnection;
+
+                if (isCustomTransaction)
+                    return await connection.QueryFirstOrDefaultAsync<T>($"Select * from {typeof(T).Name} where {primaryKey} = @ID ", new { ID = id }, customTransaction.DbCommand.Transaction);
+                else
                     return await connection.QueryFirstOrDefaultAsync<T>($"Select * from {typeof(T).Name} where {primaryKey} = @ID ", new { ID = id });
-                }
+
             }
             catch (Exception ex)
             {
@@ -351,19 +425,34 @@ namespace RepositoryHelpers.DataBaseRepository
         /// </summary>
         /// <param name="id">Primary Key</param>
         /// <returns>Item</returns>
+        public T GetById(object id, CustomTransaction customTransaction)
+            => GetByIdAsync(id, customTransaction).Result;
+
+        /// <summary>
+        /// Get the item by id (does not support transaction)
+        /// </summary>
+        /// <param name="id">Primary Key</param>
+        /// <returns>Item</returns>
         public T GetById(object id)
-            => GetByIdAsync(id).Result;
+            => GetByIdAsync(id,null).Result;
+
+        /// <summary>
+        /// Get the item by id (does not support transaction)
+        /// </summary>
+        /// <param name="id">Primary Key</param>
+        /// <returns>Item</returns>
+        public async Task<T> GetByIdAsync(object id)
+            => await GetByIdAsync(id, null);
 
         /// <summary>
         /// Delete an item by id asynchronously (does not support transaction)
         /// </summary>
         /// <param name="id">Primary Key</param>
-        public async Task DeleteAsync(object id)
+        public async Task DeleteAsync(object id, CustomTransaction customTransaction)
         {
             try
             {
-                if (DbCommand?.Transaction != null)
-                    throw new CustomRepositoryException("This method does not support transaction.Use GetDataSet");
+                var isCustomTransaction = customTransaction != null;
 
                 var primaryKey = "";
                 primaryKey = GetPrimaryKey(typeof(T));
@@ -371,9 +460,8 @@ namespace RepositoryHelpers.DataBaseRepository
                 if (string.IsNullOrEmpty(primaryKey))
                     throw new CustomRepositoryException("PrimaryKeyAttribute not defined");
 
-                using (var connection = _connection.DataBaseConnection)
-                {
-                    var sql = new StringBuilder();
+                var connection = isCustomTransaction ? customTransaction.DbCommand.Connection : _connection.DataBaseConnection;
+                var sql = new StringBuilder();
 
                     var parameters = new Dictionary<string, object>
                 {
@@ -382,8 +470,12 @@ namespace RepositoryHelpers.DataBaseRepository
 
                     sql.AppendLine($"delete from {typeof(T).Name} where {primaryKey} = @ID");
 
+                if(isCustomTransaction)
+                    await connection.ExecuteAsync(sql.ToString(), parameters, customTransaction.DbCommand.Transaction);
+                else
+
                     await connection.ExecuteAsync(sql.ToString(), parameters);
-                }
+
             }
             catch (Exception ex)
             {
@@ -396,8 +488,23 @@ namespace RepositoryHelpers.DataBaseRepository
         /// Delete an item by id(does not support transaction)
         /// </summary>
         /// <param name="id">Primary Key</param>
+        public void Delete(object id, CustomTransaction customTransaction)
+            => DeleteAsync(id, customTransaction).Wait();
+
+        /// <summary>
+        /// Delete an item by id(does not support transaction)
+        /// </summary>
+        /// <param name="id">Primary Key</param>
         public void Delete(object id)
-            => DeleteAsync(id).Wait();
+            => DeleteAsync(id, null).Wait();
+
+        /// <summary>
+        /// Delete an item by id(does not support transaction)
+        /// </summary>
+        /// <param name="id">Primary Key</param>
+        public async Task DeleteAsync(object id)
+            => await DeleteAsync(id, null);
+
 
 
         #endregion

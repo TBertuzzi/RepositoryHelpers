@@ -2,7 +2,6 @@
 using System.Data;
 using System.Data.Common;
 using RepositoryHelpers.DataBase;
-using RepositoryHelpers.DataBaseRepository.Base;
 using RepositoryHelpers.Utils;
 
 namespace RepositoryHelpers.DataBaseRepository
@@ -138,16 +137,16 @@ namespace RepositoryHelpers.DataBaseRepository
         }
 
      
-        public void Dispose()
-        {
-            if (DbCommand.Transaction == null)
-            {
-                DBConnection.Close();
-                _DBConnection.Dispose();
-                _DBConnection = null;
-                DbCommand.Dispose();
-                DbCommand = null;
-            }
-        }
+        //public void Dispose()
+        //{
+        //    if (DbCommand.Transaction == null)
+        //    {
+        //        DBConnection.Close();
+        //        _DBConnection.Dispose();
+        //        _DBConnection = null;
+        //        DbCommand.Dispose();
+        //        DbCommand = null;
+        //    }
+        //}
     }
 }
