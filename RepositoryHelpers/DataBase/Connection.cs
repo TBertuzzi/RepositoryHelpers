@@ -64,8 +64,8 @@ namespace RepositoryHelpers.DataBase
                 case DataBaseType.SqlServer:
                     return new SqlDataAdapter();
                 case DataBaseType.Oracle:
+                default:
                     return null;
-                default: return null;
             }
         }
 
@@ -76,8 +76,8 @@ namespace RepositoryHelpers.DataBase
                 case DataBaseType.SqlServer:
                     return new SqlParameter($"@{parameter.Key}", parameter.Value);
                 case DataBaseType.Oracle:
+                default:
                     return null;
-                default: return null;
             }
         }
     }

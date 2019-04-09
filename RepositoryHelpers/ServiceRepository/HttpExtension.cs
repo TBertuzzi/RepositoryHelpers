@@ -46,7 +46,7 @@ public static class HttpExtension
         try
         {
             var response = await httpClient.GetAsync(address).ConfigureAwait(false);
-            return await GetResponse<T>(response);
+            return await GetResponse<T>(response).ConfigureAwait(false); ;
         }
         catch (Exception ex)
         {

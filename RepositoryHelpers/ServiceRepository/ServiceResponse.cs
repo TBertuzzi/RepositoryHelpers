@@ -53,4 +53,12 @@ public class ServiceResponse<T>
         this.StatusCode = statusCode;
         this.Error = error;
     }
+
+    public ServiceResponse(HttpStatusCode statusCode)
+    {
+        this.StatusCode = statusCode;
+        this.Error = null;
+    }
+
+
 }

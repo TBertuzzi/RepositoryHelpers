@@ -166,7 +166,6 @@ namespace RepositoryHelpers.DataBaseRepository
                     await connection.ExecuteAsync(sql.ToString(), parameters, customTransaction.DbCommand.Transaction);
                 else
                     await connection.ExecuteAsync(sql.ToString(), parameters);
-              //  }
             }
             catch (Exception ex)
             {
