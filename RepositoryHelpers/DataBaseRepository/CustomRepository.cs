@@ -115,9 +115,10 @@ namespace RepositoryHelpers.DataBaseRepository
         }
 
         /// <summary>
-        /// Update an item asynchronously (does not support transaction)
+        /// Update an item asynchronously 
         /// </summary>
         /// <param name="item"> item to update</param>
+        /// <param name="customTransaction"> has a transaction object</param>
         /// <returns></returns>
         public async Task UpdateAsync(T item, CustomTransaction customTransaction)
         {
@@ -174,15 +175,16 @@ namespace RepositoryHelpers.DataBaseRepository
         }
 
         /// <summary>
-        /// Update an item(does not support transaction)
+        /// Update an item
         /// </summary>
         /// <param name="item"> item to update</param>
+        /// <param name="customTransaction"> has a transaction object</param>
         /// <returns></returns>
         public void Update(T item, CustomTransaction customTransaction)
             => UpdateAsync(item, customTransaction).Wait();
 
         /// <summary>
-        /// Update an item(does not support transaction)
+        /// Update an item
         /// </summary>
         /// <param name="item"> item to update</param>
         /// <returns></returns>
@@ -190,7 +192,7 @@ namespace RepositoryHelpers.DataBaseRepository
             => UpdateAsync(item, null).Wait();
 
         /// <summary>
-        /// Update an item(does not support transaction)
+        /// Update an item
         /// </summary>
         /// <param name="item"> item to update</param>
         /// <returns></returns>
@@ -199,10 +201,11 @@ namespace RepositoryHelpers.DataBaseRepository
 
 
         /// <summary>
-        /// Insert an item asynchronously (does not support transaction)
+        /// Insert an item asynchronously 
         /// </summary>
         /// <param name="item"> item to insert</param>
         /// <param name="identity">  Return primary key</param>
+        /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>Table Primary key or number of rows affected</returns>
         public async Task<int> InsertAsync(T item, bool identity, CustomTransaction customTransaction)
         {
@@ -255,16 +258,17 @@ namespace RepositoryHelpers.DataBaseRepository
 
 
         /// <summary>
-        /// Insert an item (does not support transaction)
+        /// Insert an item 
         /// </summary>
         /// <param name="item"> item to insert</param>
         /// <param name="identity">  Return primary key</param>
+        /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>Table Primary key or number of rows affected</returns>
         public int Insert(T item, bool identity, CustomTransaction customTransaction) =>
             InsertAsync(item, identity, customTransaction).Result;
 
         /// <summary>
-        /// Insert an item (does not support transaction)
+        /// Insert an item 
         /// </summary>
         /// <param name="item"> item to insert</param>
         /// <param name="identity">  Return primary key</param>
@@ -273,7 +277,7 @@ namespace RepositoryHelpers.DataBaseRepository
             InsertAsync(item, identity, null).Result;
 
         /// <summary>
-        /// Insert an item (does not support transaction)
+        /// Insert an item 
         /// </summary>
         /// <param name="item"> item to insert</param>
         /// <param name="identity">  Return primary key</param>
@@ -282,8 +286,9 @@ namespace RepositoryHelpers.DataBaseRepository
            await InsertAsync(item, identity, null).ConfigureAwait(false);
 
         /// <summary>
-        /// Get all rows in the table asynchronously (does not support transaction)
+        /// Get all rows in the table asynchronously 
         /// </summary>
+        /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>All rows in the table</returns>
         public async Task<IEnumerable<T>> GetAsync(CustomTransaction customTransaction)
         {
@@ -305,21 +310,22 @@ namespace RepositoryHelpers.DataBaseRepository
         }
 
         /// <summary>
-        /// Get all rows in the table (does not support transaction)
+        /// Get all rows in the table 
         /// </summary>
+        /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>All rows in the table</returns>
         public IEnumerable<T> Get(CustomTransaction customTransaction)
             => GetAsync(customTransaction).Result;
 
         /// <summary>
-        /// Get all rows in the table (does not support transaction)
+        /// Get all rows in the table 
         /// </summary>
         /// <returns>All rows in the table</returns>
         public IEnumerable<T> Get()
             => GetAsync(null).Result;
 
         /// <summary>
-        /// Get all rows in the table (does not support transaction)
+        /// Get all rows in the table 
         /// </summary>
         /// <returns>All rows in the table</returns>
         public async Task<IEnumerable<T>> GetAsync()
@@ -327,10 +333,11 @@ namespace RepositoryHelpers.DataBaseRepository
 
 
         /// <summary>
-        /// Get the result of a query with parameters asynchronously (does not support transaction)
+        /// Get the result of a query with parameters asynchronously 
         /// </summary>
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>List of results</returns>
         public async Task<IEnumerable<T>> GetAsync(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction)
         {
@@ -354,16 +361,17 @@ namespace RepositoryHelpers.DataBaseRepository
         }
 
         /// <summary>
-        /// Get the result of a query with parameters (does not support transaction)
+        /// Get the result of a query with parameters 
         /// </summary>
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>List of results</returns>
         public IEnumerable<T> Get(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction)
             => GetAsync(sql, parameters, customTransaction).Result;
 
         /// <summary>
-        /// Get the result of a query with parameters (does not support transaction)
+        /// Get the result of a query with parameters 
         /// </summary>
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
@@ -372,7 +380,7 @@ namespace RepositoryHelpers.DataBaseRepository
             => GetAsync(sql, parameters, null).Result;
 
         /// <summary>
-        /// Get the result of a query with parameters (does not support transaction)
+        /// Get the result of a query with parameters 
         /// </summary>
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
@@ -382,9 +390,10 @@ namespace RepositoryHelpers.DataBaseRepository
 
 
         /// <summary>
-        /// Get the item by id asynchronously (does not support transaction)
+        /// Get the item by id asynchronously 
         /// </summary>
         /// <param name="id">Primary Key</param>
+        /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>Item</returns>
         public async Task<T> GetByIdAsync(object id, CustomTransaction customTransaction)
         {
@@ -414,15 +423,16 @@ namespace RepositoryHelpers.DataBaseRepository
 
 
         /// <summary>
-        /// Get the item by id (does not support transaction)
+        /// Get the item by id 
         /// </summary>
         /// <param name="id">Primary Key</param>
+        /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>Item</returns>
         public T GetById(object id, CustomTransaction customTransaction)
             => GetByIdAsync(id, customTransaction).Result;
 
         /// <summary>
-        /// Get the item by id (does not support transaction)
+        /// Get the item by id 
         /// </summary>
         /// <param name="id">Primary Key</param>
         /// <returns>Item</returns>
@@ -430,7 +440,7 @@ namespace RepositoryHelpers.DataBaseRepository
             => GetByIdAsync(id,null).Result;
 
         /// <summary>
-        /// Get the item by id (does not support transaction)
+        /// Get the item by id 
         /// </summary>
         /// <param name="id">Primary Key</param>
         /// <returns>Item</returns>
@@ -438,9 +448,10 @@ namespace RepositoryHelpers.DataBaseRepository
             => await GetByIdAsync(id, null).ConfigureAwait(false);
 
         /// <summary>
-        /// Delete an item by id asynchronously (does not support transaction)
+        /// Delete an item by id asynchronously 
         /// </summary>
         /// <param name="id">Primary Key</param>
+        /// <param name="customTransaction"> has a transaction object</param>
         public async Task DeleteAsync(object id, CustomTransaction customTransaction)
         {
             try
@@ -478,21 +489,22 @@ namespace RepositoryHelpers.DataBaseRepository
         }
 
         /// <summary>
-        /// Delete an item by id(does not support transaction)
+        /// Delete an item by id
         /// </summary>
         /// <param name="id">Primary Key</param>
+        /// <param name="customTransaction"> has a transaction object</param>
         public void Delete(object id, CustomTransaction customTransaction)
             => DeleteAsync(id, customTransaction).Wait();
 
         /// <summary>
-        /// Delete an item by id(does not support transaction)
+        /// Delete an item by id
         /// </summary>
         /// <param name="id">Primary Key</param>
         public void Delete(object id)
             => DeleteAsync(id, null).Wait();
 
         /// <summary>
-        /// Delete an item by id(does not support transaction)
+        /// Delete an item by id
         /// </summary>
         /// <param name="id">Primary Key</param>
         public async Task DeleteAsync(object id)
@@ -505,7 +517,7 @@ namespace RepositoryHelpers.DataBaseRepository
         #region ADO
 
         /// <summary>
-        /// Get DataSet result with parameters (Support transaction)
+        /// Get DataSet result with parameters 
         /// </summary>
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
@@ -515,10 +527,11 @@ namespace RepositoryHelpers.DataBaseRepository
 
 
         /// <summary>
-        /// Get DataSet result with parameters (Support transaction)
+        /// Get DataSet result with parameters 
         /// </summary>
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>DataSet of results</returns>
         public DataSet GetDataSet(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction)
         {
@@ -567,10 +580,11 @@ namespace RepositoryHelpers.DataBaseRepository
         }
 
         /// <summary>
-        /// Executes a query with parameters asynchronously (Support transaction)
+        /// Executes a query with parameters asynchronously 
         /// </summary>
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>Number of rows affected</returns>
         public async Task<int> ExecuteQueryAsync(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction)
         {
@@ -608,16 +622,17 @@ namespace RepositoryHelpers.DataBaseRepository
         }
 
         /// <summary>
-        /// Executes a query with parameters (Support transaction)
+        /// Executes a query with parameters 
         /// </summary>
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>Number of rows affected</returns>
         public int ExecuteQuery(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction)
             => ExecuteQueryAsync(sql, parameters, customTransaction).Result;
 
         /// <summary>
-        /// Executes a query with parameters (Support transaction)
+        /// Executes a query with parameters 
         /// </summary>
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
@@ -626,7 +641,7 @@ namespace RepositoryHelpers.DataBaseRepository
             => ExecuteQueryAsync(sql, parameters, null).Result;
 
         /// <summary>
-        /// Executes a query with parameters (Support transaction)
+        /// Executes a query with parameters 
         /// </summary>
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
@@ -636,11 +651,12 @@ namespace RepositoryHelpers.DataBaseRepository
 
 
         /// <summary>
-        /// Executes a insert with parameters asynchronously (Support transaction)
+        /// Executes a insert with parameters asynchronously 
         /// </summary>
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
         /// <param name="identity">Primary Key or Oracle sequence</param>
+        /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>Primary Key After Insert</returns>
         public async Task<string> ExecuteQueryAsync(string sql, Dictionary<string, object> parameters, string identity, CustomTransaction customTransaction)
         {
@@ -694,10 +710,11 @@ namespace RepositoryHelpers.DataBaseRepository
 
 
         /// <summary>
-        /// Executes a Procedure with parameters asynchronously (Support transaction)
+        /// Executes a Procedure with parameters asynchronously 
         /// </summary>
-        /// <param name="sql">Query</param>
+        /// <param name="procedure">Query</param>
         /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>Procedure return</returns>
         public async Task<int> ExecuteProcedureAsync(string procedure, Dictionary<string, object> parameters, CustomTransaction customTransaction)
         {
@@ -735,37 +752,39 @@ namespace RepositoryHelpers.DataBaseRepository
         }
 
         /// <summary>
-        /// Executes a Procedure with parameters (Support transaction)
+        /// Executes a Procedure with parameters 
         /// </summary>
-        /// <param name="sql">Query</param>
+        /// <param name="procedure">Query</param>
         /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>Procedure return</returns>
         public int ExecuteProcedure(string procedure, Dictionary<string, object> parameters, CustomTransaction customTransaction)
                 => ExecuteProcedureAsync(procedure, parameters,customTransaction).Result;
 
         /// <summary>
-        /// Executes a Procedure with parameters (Support transaction)
+        /// Executes a Procedure with parameters 
         /// </summary>
-        /// <param name="sql">Query</param>
+        /// <param name="procedure">Query</param>
         /// <param name="parameters">Query parameters</param>
         /// <returns>Procedure return</returns>
         public int ExecuteProcedure(string procedure, Dictionary<string, object> parameters)
                 => ExecuteProcedureAsync(procedure, parameters, null).Result;
 
         /// <summary>
-        /// Executes a Procedure with parameters (Support transaction)
+        /// Executes a Procedure with parameters 
         /// </summary>
-        /// <param name="sql">Query</param>
+        /// <param name="procedure">Query</param>
         /// <param name="parameters">Query parameters</param>
         /// <returns>Procedure return</returns>
         public async Task<int> ExecuteProcedureAsync(string procedure, Dictionary<string, object> parameters)
                 => await ExecuteProcedureAsync(procedure, parameters, null).ConfigureAwait(false);
 
         /// <summary>
-        /// Get Procedure DataSet with parameters (Support transaction)
+        /// Get Procedure DataSet with parameters 
         /// </summary>
-        /// <param name="sql">Query</param>
+        /// <param name="procedure">Query</param>
         /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>DataSet</returns>
         public DataSet GetProcedureDataSet(string procedure, Dictionary<string, object> parameters, CustomTransaction customTransaction)
         {
@@ -812,16 +831,17 @@ namespace RepositoryHelpers.DataBaseRepository
         }
 
         /// <summary>
-        /// Executes Scalar with parameters (Support transaction)
+        /// Executes Scalar with parameters 
         /// </summary>
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>Scalar result</returns>
         public object ExecuteScalar(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction)
           => ExecuteScalarAsync(sql, parameters, customTransaction).Result;
 
         /// <summary>
-        /// Executes Scalar with parameters (Support transaction)
+        /// Executes Scalar with parameters 
         /// </summary>
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
@@ -830,7 +850,7 @@ namespace RepositoryHelpers.DataBaseRepository
           => ExecuteScalarAsync(sql, parameters, null).Result;
 
         /// <summary>
-        /// Executes Scalar with parameters (Support transaction)
+        /// Executes Scalar with parameters 
         /// </summary>
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
@@ -840,10 +860,11 @@ namespace RepositoryHelpers.DataBaseRepository
 
 
         /// <summary>
-        /// Executes Scalar with parameters asynchronously (Support transaction)
+        /// Executes Scalar with parameters asynchronously 
         /// </summary>
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>Scalar result</returns>
         public async Task<object> ExecuteScalarAsync(string sql, Dictionary<string, object> parameters,CustomTransaction customTransaction)
         {
