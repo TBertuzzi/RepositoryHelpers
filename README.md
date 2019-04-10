@@ -4,11 +4,15 @@ Extensions for HttpClient and Custom Repository based on dapper
 
 ###### This is the component, works on .NET Core and.NET Framework
 
-**NuGet**
+**Info**
 
-|Name|Nuget|Code Quality
-| ------------------- | :------------------: |:------------------: |
-|RepositoryHelpers|[![NuGet](https://img.shields.io/badge/nuget-1.1.0-blue.svg)](https://www.nuget.org/packages/RepositoryHelpers/)|[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ea9b954b18e942d4800825dccd6ef77c)](https://app.codacy.com/app/TBertuzzi/RepositoryHelpers?utm_source=github.com&utm_medium=referral&utm_content=TBertuzzi/RepositoryHelpers&utm_campaign=Badge_Grade_Dashboard)|
+|Code Quality|Build|Nuget|
+| ------------------- | ------------------- | :------------------: |
+|[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ea9b954b18e942d4800825dccd6ef77c)](https://app.codacy.com/app/TBertuzzi/RepositoryHelpers?utm_source=github.com&utm_medium=referral&utm_content=TBertuzzi/RepositoryHelpers&utm_campaign=Badge_Grade_Dashboard)|[![Build status](https://ci.appveyor.com/api/projects/status/github/TBertuzzi/RepositoryHelpers?branch=master&svg=true)](https://ci.appveyor.com/project/ThiagoBertuzzi/repositoryhelpers)|[![NuGet](https://buildstats.info/nuget/RepositoryHelpers)](https://www.nuget.org/packages/RepositoryHelpers/)|
+
+**Build History**
+
+[![Build history](https://buildstats.info/appveyor/chart/ThiagoBertuzzi/repositoryhelpers?buildCount=7)](https://ci.appveyor.com/project/ThiagoBertuzzi/repositoryhelpers/history)
 
 **Platform Support**
 
