@@ -111,13 +111,19 @@ Repository.ExecuteProcedureAsync();
 Repository.ExecuteProcedure();
 ```
 
-If using ADO it is possible to use transaction
+CustomTransaction is possible to use transaction
 
 ```csharp
 
-Repository.BeginTransaction();
-Repository.CommitTransaction();
-Repository.RollbackTransaction();
+CustomTransaction customTransaction = new CustomTransaction(YourConnection);
+
+customTransaction.BeginTransaction();
+customTransaction.CommitTransaction();
+customTransaction.RollbackTransaction();
+
+//Sample
+Repository.ExecuteQuery("yourquery", parameters, customTransaction);
+
 
 ```
 
@@ -126,24 +132,47 @@ DapperIgnore : if you want some property of your object to be ignored by Dapper,
 PrimaryKey : Define your primary key. It is used for queries, updates, and deletes.
 IdentityIgnore: Determines that the field has identity, autoincrement ... Warns the repository to ignore it that the database will manage the field
 
-*TIP Create a BaseRepository to declare the connection only once :
+*TIP Create a ConnectionHelper for BaseRepository and BaseTransaction to declare the connection only once :
 
 ```csharp
-public class BaseRepository<T> 
+
+ public sealed class ConnectionHelper
+    {
+        static ConnectionHelper _instancia;
+        public static ConnectionHelper Instancia
+        {
+            get { return _instancia ?? (_instancia = new ConnectionHelper()); }
+        }
+        private ConnectionHelper() 
+        {
+            Connection = new Connection()
+            {
+                Database = RepositoryHelpers.Utils.DataBaseType.SqlServer,
+                ConnectionString = "YourString"
+            };
+        }
+        public Connection Connection { get; }
+    }
+    
+ public class BaseRepository<T>
     {
         protected readonly CustomRepository<T> Repository;
 
         protected BaseRepository()
         {
-           var connection = new Connection()
-        {
-           Database = RepositoryHelpers.Utils.DataBaseType.SqlServer, 
-           ConnectionString = "Your string"
-        };
-
-            Repository = new CustomRepository<T>(connection);
+            Repository = new CustomRepository<T>(ConnectionHelper.Instancia.Connection);
         }
     }
+    
+     public class BaseTransaction : CustomTransaction
+    {
+        public BaseTransaction() :
+             base(ConnectionHelper.Instancia.Connection)
+        {
+           
+        }
+    }
+    
 ```
 
 **LiteDB Extensions**
