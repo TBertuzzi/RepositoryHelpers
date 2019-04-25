@@ -138,10 +138,10 @@ IdentityIgnore: Determines that the field has identity, autoincrement ... Warns 
 
  public sealed class ConnectionHelper
     {
-        static ConnectionHelper _instancia;
-        public static ConnectionHelper Instancia
+        static ConnectionHelper _instance;
+        public static ConnectionHelper Instance
         {
-            get { return _instancia ?? (_instancia = new ConnectionHelper()); }
+            get { return _instance ?? (_instance = new ConnectionHelper()); }
         }
         private ConnectionHelper() 
         {
@@ -160,14 +160,14 @@ IdentityIgnore: Determines that the field has identity, autoincrement ... Warns 
 
         protected BaseRepository()
         {
-            Repository = new CustomRepository<T>(ConnectionHelper.Instancia.Connection);
+            Repository = new CustomRepository<T>(ConnectionHelper.Instance.Connection);
         }
     }
     
      public class BaseTransaction : CustomTransaction
     {
         public BaseTransaction() :
-             base(ConnectionHelper.Instancia.Connection)
+             base(ConnectionHelper.Instance.Connection)
         {
            
         }
