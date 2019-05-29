@@ -41,12 +41,75 @@ public static class HttpExtension
         }
     }
 
+    public static async Task<HttpResponseMessage> PutAsync(this HttpClient httpClient, string address, object dto)
+    {
+        var jsonRequest = JsonConvert.SerializeObject(dto);
+        var content = new StringContent(jsonRequest, Encoding.UTF8, "text/json");
+
+        return await httpClient.PutAsync(address, content);
+    }
+
+
+    public static async Task<ServiceResponse<T>> PutAsync<T>(this HttpClient httpClient, string address,
+        object dto)
+    {
+        try
+        {
+            var jsonRequest = JsonConvert.SerializeObject(dto);
+            var content = new StringContent(jsonRequest, Encoding.UTF8, "text/json");
+
+            var response = await httpClient.PutAsync(
+                address,
+                content);
+
+            return await GetResponse<T>(response);
+        }
+        catch (Exception ex)
+        {
+            return new ServiceResponse<T>(
+                HttpStatusCode.InternalServerError,
+                ex);
+        }
+    }
+
+    public static async Task<HttpResponseMessage> DeleteAsync(this HttpClient httpClient, string address, object dto)
+    {
+        var jsonRequest = JsonConvert.SerializeObject(dto);
+        var content = new StringContent(jsonRequest, Encoding.UTF8, "text/json");
+
+        return await httpClient.DeleteAsync(address, content);
+    }
+
+
+    public static async Task<ServiceResponse<T>> DeleteAsync<T>(this HttpClient httpClient, string address,
+        object dto)
+    {
+        try
+        {
+            var jsonRequest = JsonConvert.SerializeObject(dto);
+            var content = new StringContent(jsonRequest, Encoding.UTF8, "text/json");
+
+            var response = await httpClient.DeleteAsync(
+                address,
+                content);
+
+            return await GetResponse<T>(response);
+        }
+        catch (Exception ex)
+        {
+            return new ServiceResponse<T>(
+                HttpStatusCode.InternalServerError,
+                ex);
+        }
+    }
+
+
     public static async Task<ServiceResponse<T>> GetAsync<T>(this HttpClient httpClient, string address)
     {
         try
         {
             var response = await httpClient.GetAsync(address).ConfigureAwait(false);
-            return await GetResponse<T>(response).ConfigureAwait(false); ;
+            return await GetResponse<T>(response);
         }
         catch (Exception ex)
         {
