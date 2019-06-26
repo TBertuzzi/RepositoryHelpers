@@ -254,4 +254,5 @@ Samples coming soon ..
 Thanks users who reported bugs and helped improve the package :
 
 * Thiago Vieira
+* Luis Paulo Souza
 * Alexandre Harich
