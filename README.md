@@ -250,3 +250,8 @@ public async Task<List<Model.Todo>> GetTodos()
 ```
 
 Samples coming soon ..
+
+Thanks users who reported bugs and helped improve the package :
+
+* Thiago Vieira
+* Alexandre Harich
