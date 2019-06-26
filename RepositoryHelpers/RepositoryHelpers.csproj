@@ -8,14 +8,14 @@
     <PackageLicenseUrl>http://opensource.org/licenses/MS-PL</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/TBertuzzi/RepositoryHelpers</PackageProjectUrl>
     <PackageTags>repository helpers dapper litedb ddd mvc httpclient rest pattern database db sql oracle sqlserver</PackageTags>
-    <PackageReleaseNotes>Update Http Extensions</PackageReleaseNotes>
+    <PackageReleaseNotes>Fixed transaction bug in dapper insert</PackageReleaseNotes>
     <Description>Extensions for HttpClient and Custom Repository based on dapper</Description>
     <PackageIconUrl>https://github.com/TBertuzzi/RepositoryHelpers/blob/master/Resource/RepositoryHelpersIcon.png?raw=true</PackageIconUrl>
     <RepositoryUrl>https://github.com/TBertuzzi/RepositoryHelpers</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.4.1</Version>
-    <AssemblyVersion>1.4.1.0</AssemblyVersion>
-    <FileVersion>1.4.1.0</FileVersion>
+    <Version>1.4.2</Version>
+    <AssemblyVersion>1.4.2.0</AssemblyVersion>
+    <FileVersion>1.4.2.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
