@@ -240,7 +240,10 @@ namespace RepositoryHelpers.DataBaseRepository
                 if (identity)
                 {
                     sql.AppendLine("SELECT CAST(SCOPE_IDENTITY() as int);");
-                    return connection.QuerySingleOrDefault<int>(sql.ToString(), parameters);
+                    if (isCustomTransaction)
+                        return connection.QuerySingleOrDefault<int>(sql.ToString(), parameters, customTransaction.DbCommand.Transaction);
+                    else
+                        return connection.QuerySingleOrDefault<int>(sql.ToString(), parameters);
                 }
                 else
                 {
