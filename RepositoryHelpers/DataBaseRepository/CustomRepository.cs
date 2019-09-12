@@ -114,6 +114,23 @@ namespace RepositoryHelpers.DataBaseRepository
             return "";
         }
 
+        private Dictionary<string,Type> GetPrimaryKeyType(Type type)
+        {
+            foreach (var p in type.GetProperties())
+            {
+                var primaryKeyAttribute = p.CustomAttributes.ToList().Any(x => x.AttributeType.ToString().ToUpper() == PrimaryKey);
+
+                if (primaryKeyAttribute)
+                {
+                    Dictionary<string, Type> primary = new Dictionary<string, Type>();
+                    primary.Add(p.Name, p.GetType());
+                    return  primary;
+                }
+            }
+
+            return new Dictionary<string, Type>();
+        }
+
         /// <summary>
         /// Update an item asynchronously 
         /// </summary>
@@ -207,7 +224,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="identity">  Return primary key</param>
         /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>Table Primary key or number of rows affected</returns>
-        public async Task<int> InsertAsync(T item, bool identity, CustomTransaction customTransaction)
+        public async Task<object> InsertAsync(T item, bool identity, CustomTransaction customTransaction) 
         {
 
             if (_connection.Database == DataBaseType.Oracle)
@@ -236,17 +253,24 @@ namespace RepositoryHelpers.DataBaseRepository
 
                 sqlParameters.Remove(sqlParameters.Length - 1, 1);
 
-                sql.AppendLine($"insert into {typeof(T).Name} ({sqlParameters.ToString().Replace("@", "")}) values ({sqlParameters.ToString()}) ");
+                sql.AppendLine($"insert into {typeof(T).Name} ({sqlParameters.ToString().Replace("@", "")}) ");
+
                 if (identity)
                 {
-                    sql.AppendLine("SELECT CAST(SCOPE_IDENTITY() as int);");
+                    var primaryKey = "";
+                    primaryKey = GetPrimaryKey(typeof(T));
+
+                    sql.AppendLine($" OUTPUT inserted.{primaryKey} values ({sqlParameters.ToString()}) ");
+
                     if (isCustomTransaction)
-                        return connection.QuerySingleOrDefault<int>(sql.ToString(), parameters, customTransaction.DbCommand.Transaction);
+                        return connection.QuerySingleOrDefault<dynamic>(sql.ToString(), parameters, customTransaction.DbCommand.Transaction).Id;
                     else
-                        return connection.QuerySingleOrDefault<int>(sql.ToString(), parameters);
+                        return connection.QuerySingleOrDefault<dynamic>(sql.ToString(), parameters).Id;
                 }
                 else
                 {
+                    sql.AppendLine($" values ({sqlParameters.ToString()}) ");
+
                     if (isCustomTransaction)
                         return await connection.ExecuteAsync(sql.ToString(), parameters, customTransaction.DbCommand.Transaction);
                     else
@@ -267,7 +291,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="identity">  Return primary key</param>
         /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>Table Primary key or number of rows affected</returns>
-        public int Insert(T item, bool identity, CustomTransaction customTransaction) =>
+        public object Insert(T item, bool identity, CustomTransaction customTransaction) =>
             InsertAsync(item, identity, customTransaction).Result;
 
         /// <summary>
@@ -276,7 +300,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="item"> item to insert</param>
         /// <param name="identity">  Return primary key</param>
         /// <returns>Table Primary key or number of rows affected</returns>
-        public int Insert(T item, bool identity) =>
+        public object Insert(T item, bool identity) =>
             InsertAsync(item, identity, null).Result;
 
         /// <summary>
@@ -285,7 +309,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="item"> item to insert</param>
         /// <param name="identity">  Return primary key</param>
         /// <returns>Table Primary key or number of rows affected</returns>
-        public async Task<int> InsertAsync(T item, bool identity) =>
+        public async Task<object> InsertAsync(T item, bool identity) =>
            await InsertAsync(item, identity, null).ConfigureAwait(false);
 
         /// <summary>

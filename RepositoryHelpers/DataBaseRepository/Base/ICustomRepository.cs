@@ -16,8 +16,8 @@ namespace RepositoryHelpers.DataBaseRepository.Base
         Task<IEnumerable<T>> GetAsync(string sql, Dictionary<string, object> parameters);
         T GetById(object id);
         Task<T> GetByIdAsync(object id);
-        int Insert(T item, bool identity, CustomTransaction customTransaction);
-        Task<int> InsertAsync(T item, bool identity, CustomTransaction customTransaction);
+        object Insert(T item, bool identity, CustomTransaction customTransaction);
+        Task<object> InsertAsync(T item, bool identity, CustomTransaction customTransaction);
         void Update(T item);
         Task UpdateAsync(T item);
         void Delete(object id);
