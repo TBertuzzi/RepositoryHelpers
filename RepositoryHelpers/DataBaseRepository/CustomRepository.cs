@@ -453,7 +453,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="parameters">Query parameters</param>
         /// <returns>List of results</returns>
         public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TReturn>(string sql, Func<TFirst, TSecond, TReturn> map, Dictionary<string, object> parameters)
-            => await GetAsync<TFirst, TSecond, TReturn>(sql, map, parameters, null);
+            => await GetAsync<TFirst, TSecond, TReturn>(sql, map, parameters, null).ConfigureAwait(false);
 
         /// <summary>
         /// Get the asynchronously result of a multi-mapping query with 2 input types 
@@ -462,7 +462,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="map">The function to map row types to the return type</param>
         /// <returns>List of results</returns>
         public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TReturn>(string sql, Func<TFirst, TSecond, TReturn> map)
-            => await GetAsync<TFirst, TSecond, TReturn>(sql, map, null, null);
+            => await GetAsync<TFirst, TSecond, TReturn>(sql, map, null, null).ConfigureAwait(false);
 
         /// <summary>
         /// Get the result of a multi-mapping query with parameters and 2 input types 
@@ -530,7 +530,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="parameters">Query parameters</param>
         /// <returns>List of results</returns>
         public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TThird, TReturn>(string sql, Func<TFirst, TSecond, TThird, TReturn> map, Dictionary<string, object> parameters)
-            => await GetAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters, null);
+            => await GetAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters, null).ConfigureAwait(false);
 
         /// <summary>
         /// Get the asynchronously result of a multi-mapping query with 3 input types 
@@ -539,7 +539,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="map">The function to map row types to the return type</param>
         /// <returns>List of results</returns>
         public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TThird, TReturn>(string sql, Func<TFirst, TSecond, TThird, TReturn> map)
-            => await GetAsync<TFirst, TSecond, TThird, TReturn>(sql, map, null, null);
+            => await GetAsync<TFirst, TSecond, TThird, TReturn>(sql, map, null, null).ConfigureAwait(false);
 
         /// <summary>
         /// Get the result of a multi-mapping query with parameters and 3 input types 
@@ -609,7 +609,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="parameters">Query parameters</param>
         /// <returns>List of results</returns>
         public async Task<IEnumerable<TReturn>> GetAsync<TReturn>(string sql, Type[] types, Func<object[], TReturn> map, Dictionary<string, object> parameters)
-            => await GetAsync<TReturn>(sql, types, map, parameters, null);
+            => await GetAsync<TReturn>(sql, types, map, parameters, null).ConfigureAwait(false);
 
         /// <summary>
         /// Get the asynchronously result of a multi-mapping query with an arbitrary number of input types
@@ -619,7 +619,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="map">The function to map row types to the return type</param>
         /// <returns>List of results</returns>
         public async Task<IEnumerable<TReturn>> GetAsync<TReturn>(string sql, Type[] types, Func<object[], TReturn> map)
-            => await GetAsync<TReturn>(sql, types, map, null, null);
+            => await GetAsync<TReturn>(sql, types, map, null, null).ConfigureAwait(false);
 
         /// <summary>
         /// Get the result of a multi-mapping query with parameters and an arbitrary number of input types
