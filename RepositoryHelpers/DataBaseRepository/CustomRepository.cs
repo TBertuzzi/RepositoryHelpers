@@ -131,6 +131,9 @@ namespace RepositoryHelpers.DataBaseRepository
             return new Dictionary<string, Type>();
         }
 
+        private DbConnection GetConnection(CustomTransaction customTransaction)
+            => customTransaction?.DbCommand?.Connection ?? _connection.DataBaseConnection;
+
         /// <summary>
         /// Update an item asynchronously 
         /// </summary>
@@ -146,7 +149,7 @@ namespace RepositoryHelpers.DataBaseRepository
 
             try
             {
-                var connection = isCustomTransaction ? customTransaction.DbCommand.Connection : _connection.DataBaseConnection;
+                var connection = GetConnection(customTransaction);
 
                 var sql = new StringBuilder();
                     var primaryKey = "";
@@ -234,7 +237,7 @@ namespace RepositoryHelpers.DataBaseRepository
 
             try
             {
-                var connection = isCustomTransaction ? customTransaction.DbCommand.Connection : _connection.DataBaseConnection;
+                var connection = GetConnection(customTransaction);
 
                 var sql = new StringBuilder();
                 var sqlParameters = new StringBuilder();
@@ -323,7 +326,7 @@ namespace RepositoryHelpers.DataBaseRepository
             {
                 var isCustomTransaction = customTransaction != null;
 
-                var connection = isCustomTransaction ? customTransaction.DbCommand.Connection : _connection.DataBaseConnection;
+                var connection = GetConnection(customTransaction);
 
                 if(isCustomTransaction)
                     return await connection.QueryAsync<T>($"Select * from {typeof(T).Name} ", customTransaction.DbCommand.Transaction);
@@ -372,7 +375,7 @@ namespace RepositoryHelpers.DataBaseRepository
             {
                 var isCustomTransaction = customTransaction != null;
 
-                var connection = isCustomTransaction ? customTransaction.DbCommand.Connection : _connection.DataBaseConnection;
+                var connection = GetConnection(customTransaction);
 
                 if(isCustomTransaction)
                     return await connection.QueryAsync<T>(sql, parameters, customTransaction.DbCommand.Transaction);
@@ -415,6 +418,124 @@ namespace RepositoryHelpers.DataBaseRepository
         public async Task<IEnumerable<T>> GetAsync(string sql, Dictionary<string, object> parameters)
             => await GetAsync(sql, parameters, null).ConfigureAwait(false);
 
+        /// <summary>
+        /// Get the asynchronously result of a multi-mapping query with parameters and 2 input types 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="map">The function to map row types to the return type</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <returns>List of results</returns>
+        public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TReturn>(string sql, Func<TFirst, TSecond, TReturn> map, Dictionary<string, object> parameters = null, CustomTransaction customTransaction = null)
+        {
+            try
+            {
+                var isCustomTransaction = customTransaction != null;
+
+                var connection = GetConnection(customTransaction);
+
+                if(isCustomTransaction)
+                    return await connection.QueryAsync<TFirst, TSecond, TReturn>(sql, map, parameters, customTransaction.DbCommand.Transaction);
+                else
+                    return await connection.QueryAsync<TFirst, TSecond, TReturn>(sql, map, parameters);
+            }
+            catch (Exception ex)
+            {
+                throw new CustomRepositoryException(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Get the result of a multi-mapping query with parameters and 2 input types 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="map">The function to map row types to the return type</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <returns>List of results</returns>
+        public IEnumerable<TReturn> Get<TFirst, TSecond, TReturn>(string sql, Func<TFirst, TSecond, TReturn> map, Dictionary<string, object> parameters = null, CustomTransaction customTransaction = null)
+            => GetAsync<TFirst, TSecond, TReturn>(sql, map, parameters, customTransaction).Result;
+
+        /// <summary>
+        /// Get the asynchronously result of a multi-mapping query with parameters and 3 input types 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="map">The function to map row types to the return type</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <returns>List of results</returns>
+        public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TThird, TReturn>(string sql, Func<TFirst, TSecond, TThird, TReturn> map, Dictionary<string, object> parameters = null, CustomTransaction customTransaction = null)
+        {
+            try
+            {
+                var isCustomTransaction = customTransaction != null;
+
+                var connection = GetConnection(customTransaction);
+
+                if(isCustomTransaction)
+                    return await connection.QueryAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters, customTransaction.DbCommand.Transaction);
+                else
+                    return await connection.QueryAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters);
+
+            }
+            catch (Exception ex)
+            {
+                throw new CustomRepositoryException(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Get the result of a multi-mapping query with parameters and 3 input types 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="map">The function to map row types to the return type</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <returns>List of results</returns>
+        public IEnumerable<TReturn> Get<TFirst, TSecond, TThird, TReturn>(string sql, Func<TFirst, TSecond, TThird, TReturn> map, Dictionary<string, object> parameters = null, CustomTransaction customTransaction = null)
+            => GetAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters, customTransaction).Result;
+
+        /// <summary>
+        /// Get the asynchronously result of a multi-mapping query with parameters and an arbitrary number of input types
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="types">Array of types in the recordset.</param>
+        /// <param name="map">The function to map row types to the return type</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <returns>List of results</returns>
+        public async Task<IEnumerable<TReturn>> GetAsync<TReturn>(string sql, Type[] types, Func<object[], TReturn> map, Dictionary<string, object> parameters = null, CustomTransaction customTransaction = null)
+        {
+            try
+            {
+                var isCustomTransaction = customTransaction != null;
+
+                var connection = GetConnection(customTransaction);
+
+                if(isCustomTransaction)
+                    return await connection.QueryAsync<TReturn>(sql, types, map, parameters, customTransaction.DbCommand.Transaction);
+                else
+                    return await connection.QueryAsync<TReturn>(sql, types, map, parameters);
+
+            }
+            catch (Exception ex)
+            {
+                throw new CustomRepositoryException(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Get the result of a multi-mapping query with parameters and an arbitrary number of input types
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="types">Array of types in the recordset.</param>
+        /// <param name="map">The function to map row types to the return type</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <returns>List of results</returns>
+        public IEnumerable<TReturn> Get<TReturn>(string sql, Type[] types, Func<object[], TReturn> map, Dictionary<string, object> parameters = null, CustomTransaction customTransaction = null)
+            => GetAsync<TReturn>(sql, types, map, parameters, customTransaction).Result;
+
 
         /// <summary>
         /// Get the item by id asynchronously 
@@ -434,7 +555,7 @@ namespace RepositoryHelpers.DataBaseRepository
                 if (string.IsNullOrEmpty(primaryKey))
                     throw new CustomRepositoryException("PrimaryKeyAttribute not defined");
 
-                var connection = isCustomTransaction ? customTransaction.DbCommand.Connection : _connection.DataBaseConnection;
+                var connection = GetConnection(customTransaction);
 
                 if (isCustomTransaction)
                     return await connection.QueryFirstOrDefaultAsync<T>($"Select * from {typeof(T).Name} where {primaryKey} = @ID ", new { ID = id }, customTransaction.DbCommand.Transaction);
@@ -491,7 +612,7 @@ namespace RepositoryHelpers.DataBaseRepository
                 if (string.IsNullOrEmpty(primaryKey))
                     throw new CustomRepositoryException("PrimaryKeyAttribute not defined");
 
-                var connection = isCustomTransaction ? customTransaction.DbCommand.Connection : _connection.DataBaseConnection;
+                var connection = GetConnection(customTransaction);
                 var sql = new StringBuilder();
 
                     var parameters = new Dictionary<string, object>
