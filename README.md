@@ -65,7 +65,7 @@ public class ProductMap : DommelEntityMap<Product>
 
 ```
 
-After this , you must configure Dapper.FluentMap.Dommel in RepositoryHelpers:
+After that, you must configure Dapper.FluentMap.Dommel in RepositoryHelpers:
 
 ```csharp
 Mapper.Initialize(c =>
