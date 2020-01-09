@@ -308,7 +308,7 @@ Samples coming soon ..
 
 Special Thanks to project contributors
 
-[Andre Secco](https://github.com/andreluizsecco/) 
+* [Andre Secco](https://github.com/andreluizsecco/) 
 
 Special Thanks users who reported bugs and helped improve the package :
 
