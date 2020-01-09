@@ -9,7 +9,7 @@ using RepositoryHelpers.Utils;
 
 namespace RepositoryHelpers.Mapping
 {
-    internal class MappingHelper
+    internal static class MappingHelper
     {
         public static List<string> GetPrimaryKey(Type type)
         {
