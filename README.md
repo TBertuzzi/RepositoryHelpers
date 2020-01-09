@@ -36,7 +36,7 @@ Create a CustomRepository of the type of object you want to return
   var Repository = new CustomRepository<User>(conecction);
 ``````
 
-Attributes:
+Mapping with Attributes:
 
 ```csharp
 [DapperIgnore]
@@ -48,6 +48,33 @@ public int MyCustomId { get; set; }
 public int MyBdIdIndentity { get; set; }
 
 ``````
+
+Mapping with FluentMapper:
+
+Install and use the [**Dapper.FluentMap.Dommel**](https://github.com/henkmollema/Dapper-FluentMap#dommel) package to map your entities by creating the specific classes inherited from *DommelEntityMap*:
+
+```csharp
+public class ProductMap : DommelEntityMap<Product>
+{
+    public ProductMap()
+    {
+        Map(p => p.Id).IsKey().IsIdentity();
+        Map(p => p.Category).Ignore();
+    }
+}
+
+```
+
+After this , you must configure Dapper.FluentMap.Dommel in RepositoryHelpers:
+
+```csharp
+Mapper.Initialize(c =>
+{
+    c.AddMap(new ProductMap());
+});
+
+```
+
 Get Data:
 
 To get results just use the Get method. can be syncronous or asynchronous
@@ -66,6 +93,28 @@ var customQuery = "Select name from user where login = @userLogin";
 var parameters = new Dictionary<string, object> { { "userLogin", "bertuzzi" } };
 var resultASync = await Repository.GetAsync(customQuery, parameters);
 var result = Repository.Get(customQuery, parameters);
+
+//Get by multi-mapping custom query with 2 input types
+var customQuery = "Select * from user inner join category on user.categoryId = category.Id where login = @userLogin";
+var user = Repository.Get<User, Category, User>(
+    customQuery,
+    map: (user, category) => 
+    {
+        user.Category = category;
+        return user;
+    });
+
+//Get by multi-mapping custom query with an arbitrary number of input types
+var customQuery = "Select * from user inner join category on user.categoryId = category.Id where login = @userLogin";
+var user = Repository.Get(
+    customQuery,
+    new[] { typeof(User), typeof(Category) },
+    map: (types) => 
+    {
+        var user = (types[0] as User);
+        user.Category = (types[1] as Category);
+        return user;
+    });
 ```
 
 Insert Data :
