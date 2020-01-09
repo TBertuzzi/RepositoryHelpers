@@ -315,3 +315,5 @@ Special Thanks users who reported bugs and helped improve the package :
 * Thiago Vieira
 * Luis Paulo Souza
 * Alexandre Harich
+
+The RepositoryHelpers was developed by [Thiago Bertuzzi](http://bertuzzi.com.br) under the [MIT license](LICENSE).
