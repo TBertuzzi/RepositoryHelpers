@@ -3,23 +3,20 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using RepositoryHelpers.DataBase;
 using RepositoryHelpers.DataBaseRepository.Base;
+using RepositoryHelpers.Mapping;
 using RepositoryHelpers.Utils;
 
 namespace RepositoryHelpers.DataBaseRepository
 {
     public sealed class CustomRepository<T> : ICustomRepository<T>
     {
-        private const string DapperIgnore = "REPOSITORYHELPERS.DAPPERIGNORE";
-        private const string PrimaryKey = "REPOSITORYHELPERS.PRIMARYKEY";
-        private const string IdentityIgnore = "REPOSITORYHELPERS.IDENTITYIGNORE";
-
         private readonly Connection _connection;
+        
         public CustomRepository(Connection connection)
         {
             _connection = connection;
@@ -33,10 +30,7 @@ namespace RepositoryHelpers.DataBaseRepository
             get
             {
                 if (_DBConnection == null)
-                {
-
                     _DBConnection = _connection.DataBaseConnection;
-                }
 
                 return _DBConnection;
             }
@@ -83,54 +77,6 @@ namespace RepositoryHelpers.DataBaseRepository
 
         #region DAPPER
 
-        private bool IgnoreAttribute(IEnumerable<CustomAttributeData> customAttributes)
-        {
-            var customAttributeData = customAttributes.ToList();
-            if (customAttributeData.Any())
-            {
-                var containsAttributes = customAttributeData.Where(x => x.AttributeType.ToString().ToUpper() == DapperIgnore
-               || x.AttributeType.ToString().ToUpper() == IdentityIgnore);
-
-                return containsAttributes.Any();
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        private string GetPrimaryKey(Type type)
-        {
-            foreach (var p in type.GetProperties())
-            {
-                var primaryKeyAttribute = p.CustomAttributes.ToList().Any(x => x.AttributeType.ToString().ToUpper() == PrimaryKey);
-
-                if (primaryKeyAttribute)
-                {
-                    return p.Name;
-                }
-            }
-
-            return "";
-        }
-
-        private Dictionary<string,Type> GetPrimaryKeyType(Type type)
-        {
-            foreach (var p in type.GetProperties())
-            {
-                var primaryKeyAttribute = p.CustomAttributes.ToList().Any(x => x.AttributeType.ToString().ToUpper() == PrimaryKey);
-
-                if (primaryKeyAttribute)
-                {
-                    Dictionary<string, Type> primary = new Dictionary<string, Type>();
-                    primary.Add(p.Name, p.GetType());
-                    return  primary;
-                }
-            }
-
-            return new Dictionary<string, Type>();
-        }
-
         private DbConnection GetConnection(CustomTransaction customTransaction)
             => customTransaction?.DbCommand?.Connection ?? _connection.DataBaseConnection;
 
@@ -152,38 +98,38 @@ namespace RepositoryHelpers.DataBaseRepository
                 var connection = GetConnection(customTransaction);
 
                 var sql = new StringBuilder();
-                    var primaryKey = "";
-                    var parameters = new Dictionary<string, object>();
+                var parameters = new Dictionary<string, object>();
 
-                    sql.AppendLine($"update {typeof(T).Name} set ");
+                var primaryKey = MappingHelper.GetPrimaryKey(typeof(T));
 
-                    foreach (var p in item.GetType().GetProperties())
+                if (!primaryKey.Any())
+                    throw new CustomRepositoryException("Primary key is not defined");
+
+                sql.AppendLine($"update {typeof(T).Name} set ");
+
+                foreach (var p in item.GetType().GetProperties())
+                {
+                    if (item.GetType().GetProperty(p.Name) == null) continue;
+
+                    if (!MappingHelper.IsIgnored(typeof(T), p))
                     {
-                        if (item.GetType().GetProperty(p.Name) == null) continue;
-
-                        if (!IgnoreAttribute(p.CustomAttributes))
-                        {
-                            sql.Append($" {p.Name} = @{p.Name},");
-                            parameters.Add($"@{p.Name}", item.GetType().GetProperty(p.Name)?.GetValue(item));
-                        }
-
-                        var primaryKeyAttribute = p.CustomAttributes.ToList().Any(x => x.AttributeType.ToString().ToUpper() == PrimaryKey);
-
-                        if (primaryKeyAttribute)
-                        {
-                            primaryKey = p.Name;
-                            parameters.Add($"@{primaryKey}", item.GetType().GetProperty(p.Name)?.GetValue(item));
-                        }
+                        sql.Append($" {p.Name} = @{p.Name},");
+                        parameters.Add($"@{p.Name}", item.GetType().GetProperty(p.Name)?.GetValue(item));
                     }
+                    else if (primaryKey.Contains(p.Name))
+                        parameters.Add($"@{p.Name}", item.GetType().GetProperty(p.Name)?.GetValue(item));
+                }
+                sql.Remove(sql.Length - 1, 1);
 
-                    sql.Remove(sql.Length - 1, 1);
+                sql.Append($" where");
 
-                    if (string.IsNullOrEmpty(primaryKey))
-                        throw new CustomRepositoryException("PrimaryKeyAttribute not defined");
+                foreach(var pkcolumn in primaryKey)
+                {
+                    sql.Append($" {pkcolumn} = @{pkcolumn} AND");
+                }
+                sql.Remove(sql.Length - 4, 4);
 
-                    sql.AppendLine($" where {primaryKey} = @{primaryKey}");
-
-                if(isCustomTransaction)
+                if (isCustomTransaction)
                     await connection.ExecuteAsync(sql.ToString(), parameters, customTransaction.DbCommand.Transaction);
                 else
                     await connection.ExecuteAsync(sql.ToString(), parameters);
@@ -227,9 +173,8 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="identity">  Return primary key</param>
         /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>Table Primary key or number of rows affected</returns>
-        public async Task<object> InsertAsync(T item, bool identity, CustomTransaction customTransaction) 
+        public async Task<object> InsertAsync(T item, bool identity, CustomTransaction customTransaction)
         {
-
             if (_connection.Database == DataBaseType.Oracle)
                 throw new NotImplementedDatabaseException();
 
@@ -248,7 +193,7 @@ namespace RepositoryHelpers.DataBaseRepository
                 {
                     if (item.GetType().GetProperty(p.Name) == null) continue;
 
-                    if (IgnoreAttribute(p.CustomAttributes)) continue;
+                    if (MappingHelper.IsIgnored(typeof(T), p)) continue;
 
                     sqlParameters.Append($"@{p.Name},");
                     parameters.Add($"@{p.Name}", item.GetType().GetProperty(p.Name)?.GetValue(item));
@@ -260,10 +205,11 @@ namespace RepositoryHelpers.DataBaseRepository
 
                 if (identity)
                 {
-                    var primaryKey = "";
-                    primaryKey = GetPrimaryKey(typeof(T));
+                    var identityColumn = MappingHelper.GetIdentityColumn(typeof(T));
+                    if (string.IsNullOrEmpty(identityColumn))
+                        throw new CustomRepositoryException("Identity column is not defined");
 
-                    sql.AppendLine($" OUTPUT inserted.{primaryKey} values ({sqlParameters.ToString()}) ");
+                    sql.AppendLine($" OUTPUT inserted.{identityColumn} values ({sqlParameters.ToString()}) ");
 
                     if (isCustomTransaction)
                         return connection.QuerySingleOrDefault<dynamic>(sql.ToString(), parameters, customTransaction.DbCommand.Transaction).Id;
@@ -328,7 +274,7 @@ namespace RepositoryHelpers.DataBaseRepository
 
                 var connection = GetConnection(customTransaction);
 
-                if(isCustomTransaction)
+                if (isCustomTransaction)
                     return await connection.QueryAsync<T>($"Select * from {typeof(T).Name} ", customTransaction.DbCommand.Transaction);
                 else
                     return await connection.QueryAsync<T>($"Select * from {typeof(T).Name} ");
@@ -377,11 +323,10 @@ namespace RepositoryHelpers.DataBaseRepository
 
                 var connection = GetConnection(customTransaction);
 
-                if(isCustomTransaction)
+                if (isCustomTransaction)
                     return await connection.QueryAsync<T>(sql, parameters, customTransaction.DbCommand.Transaction);
                 else
                     return await connection.QueryAsync<T>(sql, parameters);
-
             }
             catch (Exception ex)
             {
@@ -434,7 +379,7 @@ namespace RepositoryHelpers.DataBaseRepository
 
                 var connection = GetConnection(customTransaction);
 
-                if(isCustomTransaction)
+                if (isCustomTransaction)
                     return await connection.QueryAsync<TFirst, TSecond, TReturn>(sql, map, parameters, customTransaction.DbCommand.Transaction);
                 else
                     return await connection.QueryAsync<TFirst, TSecond, TReturn>(sql, map, parameters);
@@ -510,11 +455,10 @@ namespace RepositoryHelpers.DataBaseRepository
 
                 var connection = GetConnection(customTransaction);
 
-                if(isCustomTransaction)
+                if (isCustomTransaction)
                     return await connection.QueryAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters, customTransaction.DbCommand.Transaction);
                 else
                     return await connection.QueryAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters);
-
             }
             catch (Exception ex)
             {
@@ -588,11 +532,10 @@ namespace RepositoryHelpers.DataBaseRepository
 
                 var connection = GetConnection(customTransaction);
 
-                if(isCustomTransaction)
+                if (isCustomTransaction)
                     return await connection.QueryAsync<TReturn>(sql, types, map, parameters, customTransaction.DbCommand.Transaction);
                 else
                     return await connection.QueryAsync<TReturn>(sql, types, map, parameters);
-
             }
             catch (Exception ex)
             {
@@ -667,19 +610,21 @@ namespace RepositoryHelpers.DataBaseRepository
             {
                 var isCustomTransaction = customTransaction != null;
 
-                var primaryKey = "";
-                primaryKey = GetPrimaryKey(typeof(T));
+                var primaryKey = MappingHelper.GetPrimaryKey(typeof(T));
 
-                if (string.IsNullOrEmpty(primaryKey))
-                    throw new CustomRepositoryException("PrimaryKeyAttribute not defined");
+                if (!primaryKey.Any())
+                    throw new CustomRepositoryException("Primary key is not defined");
 
+                if (primaryKey.Count > 1)
+                    throw new CustomRepositoryException("This method does not support a composite primary key");
+
+                var primaryKeyColumnName = primaryKey.FirstOrDefault();
                 var connection = GetConnection(customTransaction);
 
                 if (isCustomTransaction)
-                    return await connection.QueryFirstOrDefaultAsync<T>($"Select * from {typeof(T).Name} where {primaryKey} = @ID ", new { ID = id }, customTransaction.DbCommand.Transaction);
+                    return await connection.QueryFirstOrDefaultAsync<T>($"Select * from {typeof(T).Name} where {primaryKeyColumnName} = @ID ", new { ID = id }, customTransaction.DbCommand.Transaction);
                 else
-                    return await connection.QueryFirstOrDefaultAsync<T>($"Select * from {typeof(T).Name} where {primaryKey} = @ID ", new { ID = id });
-
+                    return await connection.QueryFirstOrDefaultAsync<T>($"Select * from {typeof(T).Name} where {primaryKeyColumnName} = @ID ", new { ID = id });
             }
             catch (Exception ex)
             {
@@ -703,7 +648,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="id">Primary Key</param>
         /// <returns>Item</returns>
         public T GetById(object id)
-            => GetByIdAsync(id,null).Result;
+            => GetByIdAsync(id, null).Result;
 
         /// <summary>
         /// Get the item by id 
@@ -724,28 +669,30 @@ namespace RepositoryHelpers.DataBaseRepository
             {
                 var isCustomTransaction = customTransaction != null;
 
-                var primaryKey = "";
-                primaryKey = GetPrimaryKey(typeof(T));
+                var primaryKey = MappingHelper.GetPrimaryKey(typeof(T));
 
-                if (string.IsNullOrEmpty(primaryKey))
-                    throw new CustomRepositoryException("PrimaryKeyAttribute not defined");
+                if (!primaryKey.Any())
+                    throw new CustomRepositoryException("Primary key is not defined");
+
+                if (primaryKey.Count > 1)
+                    throw new CustomRepositoryException("This method does not support a composite primary key");
+
+                var primaryKeyColumnName = primaryKey.FirstOrDefault();
 
                 var connection = GetConnection(customTransaction);
                 var sql = new StringBuilder();
 
-                    var parameters = new Dictionary<string, object>
+                var parameters = new Dictionary<string, object>
                 {
                     { "@ID", id }
                 };
 
-                    sql.AppendLine($"delete from {typeof(T).Name} where {primaryKey} = @ID");
+                sql.AppendLine($"delete from {typeof(T).Name} where {primaryKeyColumnName} = @ID");
 
-                if(isCustomTransaction)
+                if (isCustomTransaction)
                     await connection.ExecuteAsync(sql.ToString(), parameters, customTransaction.DbCommand.Transaction);
                 else
-
                     await connection.ExecuteAsync(sql.ToString(), parameters);
-
             }
             catch (Exception ex)
             {
@@ -810,7 +757,6 @@ namespace RepositoryHelpers.DataBaseRepository
                 else
                     DbCommand.Connection = DBConnection;
 
-
                 DbCommand.CommandType = CommandType.Text;
                 DbCommand.Parameters.Clear();
                 DbCommand.CommandTimeout = 120;
@@ -862,7 +808,6 @@ namespace RepositoryHelpers.DataBaseRepository
                     DbCommand = customTransaction.DbCommand;
                 else
                     DbCommand.Connection = DBConnection;
-
 
                 DbCommand.CommandType = CommandType.Text;
                 DbCommand.Parameters.Clear();
@@ -1025,7 +970,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>Procedure return</returns>
         public int ExecuteProcedure(string procedure, Dictionary<string, object> parameters, CustomTransaction customTransaction)
-                => ExecuteProcedureAsync(procedure, parameters,customTransaction).Result;
+            => ExecuteProcedureAsync(procedure, parameters, customTransaction).Result;
 
         /// <summary>
         /// Executes a Procedure with parameters 
@@ -1034,7 +979,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="parameters">Query parameters</param>
         /// <returns>Procedure return</returns>
         public int ExecuteProcedure(string procedure, Dictionary<string, object> parameters)
-                => ExecuteProcedureAsync(procedure, parameters, null).Result;
+            => ExecuteProcedureAsync(procedure, parameters, null).Result;
 
         /// <summary>
         /// Executes a Procedure with parameters 
@@ -1043,7 +988,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="parameters">Query parameters</param>
         /// <returns>Procedure return</returns>
         public async Task<int> ExecuteProcedureAsync(string procedure, Dictionary<string, object> parameters)
-                => await ExecuteProcedureAsync(procedure, parameters, null).ConfigureAwait(false);
+            => await ExecuteProcedureAsync(procedure, parameters, null).ConfigureAwait(false);
 
         /// <summary>
         /// Get Procedure DataSet with parameters 
@@ -1104,7 +1049,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>Scalar result</returns>
         public object ExecuteScalar(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction)
-          => ExecuteScalarAsync(sql, parameters, customTransaction).Result;
+            => ExecuteScalarAsync(sql, parameters, customTransaction).Result;
 
         /// <summary>
         /// Executes Scalar with parameters 
@@ -1113,7 +1058,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="parameters">Query parameters</param>
         /// <returns>Scalar result</returns>
         public object ExecuteScalar(string sql, Dictionary<string, object> parameters)
-          => ExecuteScalarAsync(sql, parameters, null).Result;
+            => ExecuteScalarAsync(sql, parameters, null).Result;
 
         /// <summary>
         /// Executes Scalar with parameters 
@@ -1121,8 +1066,8 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
         /// <returns>Scalar result</returns>
-        public async Task<object> ExecuteScalarAsync(string sql, Dictionary<string, object> parameters) 
-          => await ExecuteScalarAsync(sql, parameters, null).ConfigureAwait(false);
+        public async Task<object> ExecuteScalarAsync(string sql, Dictionary<string, object> parameters)
+            => await ExecuteScalarAsync(sql, parameters, null).ConfigureAwait(false);
 
 
         /// <summary>
@@ -1132,7 +1077,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="parameters">Query parameters</param>
         /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>Scalar result</returns>
-        public async Task<object> ExecuteScalarAsync(string sql, Dictionary<string, object> parameters,CustomTransaction customTransaction)
+        public async Task<object> ExecuteScalarAsync(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction)
         {
             var isCustomTransaction = customTransaction != null;
 
@@ -1167,9 +1112,7 @@ namespace RepositoryHelpers.DataBaseRepository
         }
 
         public string GetConnectionString()
-        {
-            return this._connection.ConnectionString;
-        }
+            => this._connection.ConnectionString;
 
         #endregion
 
