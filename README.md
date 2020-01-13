@@ -306,8 +306,14 @@ public async Task<List<Model.Todo>> GetTodos()
 
 Samples coming soon ..
 
-Thanks users who reported bugs and helped improve the package :
+Special Thanks to project contributors
+
+* [Andre Secco](https://github.com/andreluizsecco/) 
+
+Special Thanks users who reported bugs and helped improve the package :
 
 * Thiago Vieira
 * Luis Paulo Souza
 * Alexandre Harich
+
+The RepositoryHelpers was developed by [Thiago Bertuzzi](http://bertuzzi.com.br) under the [MIT license](LICENSE).
