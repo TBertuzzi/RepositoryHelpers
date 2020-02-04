@@ -2,5 +2,6 @@
 
 namespace RepositoryHelpers
 {
-    public class PrimaryKey : Attribute { }
+    [AttributeUsage(AttributeTargets.Property)]
+    public sealed class PrimaryKey : Attribute { }
 }

@@ -50,6 +50,20 @@ namespace RepositoryHelpers.Mapping
             return null;
         }
 
+        public static string GetTableName(Type type)
+        {
+            var table = type.GetCustomAttributes(typeof(Table), true).FirstOrDefault() as Table;
+            var tableNameFluent = GetFluentEntityMap(type)?.TableName;
+
+            if (table != null)
+                return table.TableName;
+            
+            if (!string.IsNullOrWhiteSpace(tableNameFluent))
+                return tableNameFluent;
+
+            return type.Name;
+        }
+
         public static bool IsIgnored(Type entityType, PropertyInfo property)
         {
             var customAttributeData = property.CustomAttributes.ToList();
@@ -68,8 +82,8 @@ namespace RepositoryHelpers.Mapping
             return false;
         }
 
-        private static IEntityMap GetFluentEntityMap(Type entityType) =>
-            FluentMapper.EntityMaps.FirstOrDefault(map => map.Key == entityType).Value;
+        private static IDommelEntityMap GetFluentEntityMap(Type entityType) =>
+            (IDommelEntityMap)FluentMapper.EntityMaps.FirstOrDefault(map => map.Key == entityType).Value;
 
         private static DommelPropertyMap GetFluentPropertyMap(Type entityType, PropertyInfo property)
         {
