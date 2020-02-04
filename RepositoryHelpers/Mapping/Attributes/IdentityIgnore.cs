@@ -2,5 +2,6 @@
 
 namespace RepositoryHelpers
 {
-    public class IdentityIgnore : Attribute { }
+    [AttributeUsage(AttributeTargets.Property)]
+    public sealed class IdentityIgnore : Attribute { }
 }
