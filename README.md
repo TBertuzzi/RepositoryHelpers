@@ -40,13 +40,20 @@ Create a CustomRepository of the type of object you want to return
 Mapping with Attributes:
 
 ```csharp
-[DapperIgnore]
+[DapperIgnore] // Property will be ignored in select, insert and update
 public string InternalControl { get; set; }
-[PrimaryKey]
+[PrimaryKey] // Primary key
 public int MyCustomId { get; set; }
 [PrimaryKey]
-[IdentityIgnore]
+[IdentityIgnore] //Primary key ignoring Identity
 public int MyBdIdIndentity { get; set; }
+
+//You can optionally map the name of the Database table that refers to the entity
+[Table("Product")] 
+public class Products
+{
+    public int Id { get; set; }
+}
 
 ``````
 
@@ -65,6 +72,22 @@ public class ProductMap : DommelEntityMap<Product>
 }
 
 ```
+
+You can define the name of the table that will be mapped
+
+```csharp
+public class ProductMap : DommelEntityMap<Product>
+{
+    public ProductMap()
+    {
+        ToTable("Product");
+        Map(p => p.Id).IsKey().IsIdentity();
+        Map(p => p.Category).Ignore();
+    }
+}
+
+```
+
 
 After that, you must configure Dapper.FluentMap.Dommel in RepositoryHelpers:
 
