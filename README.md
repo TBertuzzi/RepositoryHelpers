@@ -112,11 +112,16 @@ var users = Repository.Get();
 var userAsync = await Repository.GetByIdAsync(1);
 var user = Repository.GetById(1);
 
-//Get by CustomQuery
+//Get by CustomQuery with parameters
 var customQuery = "Select name from user where login = @userLogin";
 var parameters = new Dictionary<string, object> { { "userLogin", "bertuzzi" } };
 var resultASync = await Repository.GetAsync(customQuery, parameters);
 var result = Repository.Get(customQuery, parameters);
+
+//Get by CustomQuery without parameters
+var customQuery = "Select * from user";
+var resultASync = await Repository.GetAsync(customQuery);
+var result = Repository.Get(customQuery);
 
 //Get by multi-mapping custom query with 2 input types
 var customQuery = "Select * from user inner join category on user.categoryId = category.Id where login = @userLogin";
@@ -332,7 +337,7 @@ Samples coming soon ..
 
 Special Thanks to project contributors
 
-* [Andre Secco](https://github.com/andreluizsecco/) 
+* [André Secco](https://github.com/andreluizsecco/) 
 
 Special Thanks users who reported bugs and helped improve the package :
 

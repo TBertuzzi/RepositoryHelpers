@@ -355,6 +355,15 @@ namespace RepositoryHelpers.DataBaseRepository
             => GetAsync(sql, parameters, null).Result;
 
         /// <summary>
+        /// Get the result of a query without parameters
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <returns>List of results</returns>
+        public IEnumerable<T> Get(string sql)
+            => GetAsync(sql).Result;
+
+        /// <summary>
         /// Get the result of a query with parameters 
         /// </summary>
         /// <param name="sql">Query</param>
