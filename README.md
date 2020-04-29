@@ -6,9 +6,10 @@ Extensions for HttpClient and Custom Repository based on dapper
 
 **Info**
 
-|Code Quality|Build|Nuget|
-| ------------------- | ------------------- | :------------------: |
-|[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ea9b954b18e942d4800825dccd6ef77c)](https://app.codacy.com/app/TBertuzzi/RepositoryHelpers?utm_source=github.com&utm_medium=referral&utm_content=TBertuzzi/RepositoryHelpers&utm_campaign=Badge_Grade_Dashboard)|[![Build status](https://ci.appveyor.com/api/projects/status/github/TBertuzzi/RepositoryHelpers?branch=master&svg=true)](https://ci.appveyor.com/project/ThiagoBertuzzi/repositoryhelpers)|[![NuGet](https://buildstats.info/nuget/RepositoryHelpers)](https://www.nuget.org/packages/RepositoryHelpers/)|
+|Code Quality|Build|Nuget|Contributors|
+| ------------------- | ------------------- | ------------------- | ------------------- |
+|[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ea9b954b18e942d4800825dccd6ef77c)](https://app.codacy.com/app/TBertuzzi/RepositoryHelpers?utm_source=github.com&utm_medium=referral&utm_content=TBertuzzi/RepositoryHelpers&utm_campaign=Badge_Grade_Dashboard)|[![Build status](https://ci.appveyor.com/api/projects/status/github/TBertuzzi/RepositoryHelpers?branch=master&svg=true)](https://ci.appveyor.com/project/ThiagoBertuzzi/repositoryhelpers)|[![NuGet](https://buildstats.info/nuget/RepositoryHelpers)](https://www.nuget.org/packages/RepositoryHelpers/)|[![GitHub contributors](https://img.shields.io/github/contributors/TBertuzzi/RepositoryHelpers.svg)](https://github.com/TBertuzzi/RepositoryHelpers/graphs/contributors)|
+
 
 **Build History**
 
@@ -39,13 +40,20 @@ Create a CustomRepository of the type of object you want to return
 Mapping with Attributes:
 
 ```csharp
-[DapperIgnore]
+[DapperIgnore] // Property will be ignored in select, insert and update
 public string InternalControl { get; set; }
-[PrimaryKey]
+[PrimaryKey] // Primary key
 public int MyCustomId { get; set; }
 [PrimaryKey]
-[IdentityIgnore]
+[IdentityIgnore] //Primary key ignoring Identity
 public int MyBdIdIndentity { get; set; }
+
+//You can optionally map the name of the Database table that refers to the entity
+[Table("Product")] 
+public class Products
+{
+    public int Id { get; set; }
+}
 
 ``````
 
@@ -64,6 +72,22 @@ public class ProductMap : DommelEntityMap<Product>
 }
 
 ```
+
+You can define the name of the table that will be mapped
+
+```csharp
+public class ProductMap : DommelEntityMap<Product>
+{
+    public ProductMap()
+    {
+        ToTable("Product");
+        Map(p => p.Id).IsKey().IsIdentity();
+        Map(p => p.Category).Ignore();
+    }
+}
+
+```
+
 
 After that, you must configure Dapper.FluentMap.Dommel in RepositoryHelpers:
 
