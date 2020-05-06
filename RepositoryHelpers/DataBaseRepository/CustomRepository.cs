@@ -298,14 +298,14 @@ namespace RepositoryHelpers.DataBaseRepository
         /// </summary>
         /// <returns>All rows in the table</returns>
         public IEnumerable<T> Get()
-            => GetAsync(null).Result;
+            => GetAsync(customTransaction: null).Result;
 
         /// <summary>
         /// Get all rows in the table 
         /// </summary>
         /// <returns>All rows in the table</returns>
         public async Task<IEnumerable<T>> GetAsync()
-            => await GetAsync(null).ConfigureAwait(false);
+            => await GetAsync(customTransaction: null).ConfigureAwait(false);
 
 
         /// <summary>
@@ -355,6 +355,15 @@ namespace RepositoryHelpers.DataBaseRepository
             => GetAsync(sql, parameters, null).Result;
 
         /// <summary>
+        /// Get the result of a query without parameters
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <returns>List of results</returns>
+        public IEnumerable<T> Get(string sql)
+            => GetAsync(sql).Result;
+
+        /// <summary>
         /// Get the result of a query with parameters 
         /// </summary>
         /// <param name="sql">Query</param>
@@ -362,6 +371,14 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <returns>List of results</returns>
         public async Task<IEnumerable<T>> GetAsync(string sql, Dictionary<string, object> parameters)
             => await GetAsync(sql, parameters, null).ConfigureAwait(false);
+
+        /// <summary>
+        /// Get the result of a query without parameters 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <returns>List of results</returns>
+        public async Task<IEnumerable<T>> GetAsync(string sql)
+            => await GetAsync(sql, null, null).ConfigureAwait(false);
 
         /// <summary>
         /// Get the asynchronously result of a multi-mapping query with parameters and 2 input types 
