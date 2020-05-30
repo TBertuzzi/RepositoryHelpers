@@ -60,7 +60,7 @@ namespace RepositoryHelpers.DataBaseRepository
             }
         }
 
-        private void DisposeDB(bool dispose)
+        public void DisposeDB(bool dispose)
         {
             if (dispose)
             {
@@ -84,9 +84,10 @@ namespace RepositoryHelpers.DataBaseRepository
         /// Update an item asynchronously 
         /// </summary>
         /// <param name="item"> item to update</param>
-        /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="customTransaction">Has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
         /// <returns></returns>
-        public async Task UpdateAsync(T item, CustomTransaction customTransaction)
+        public async Task UpdateAsync(T item, CustomTransaction customTransaction, int? commandTimeout)
         {
             if (_connection.Database == DataBaseType.Oracle)
                 throw new NotImplementedDatabaseException();
@@ -130,9 +131,9 @@ namespace RepositoryHelpers.DataBaseRepository
                 sql.Remove(sql.Length - 4, 4);
 
                 if (isCustomTransaction)
-                    await connection.ExecuteAsync(sql.ToString(), parameters, customTransaction.DbCommand.Transaction);
+                    await connection.ExecuteAsync(sql.ToString(), parameters, customTransaction.DbCommand.Transaction, commandTimeout);
                 else
-                    await connection.ExecuteAsync(sql.ToString(), parameters);
+                    await connection.ExecuteAsync(sql.ToString(), parameters, commandTimeout: commandTimeout);
             }
             catch (Exception ex)
             {
@@ -141,21 +142,13 @@ namespace RepositoryHelpers.DataBaseRepository
         }
 
         /// <summary>
-        /// Update an item
+        /// Update an item asynchronously 
         /// </summary>
         /// <param name="item"> item to update</param>
-        /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="customTransaction">Has a transaction object</param>
         /// <returns></returns>
-        public void Update(T item, CustomTransaction customTransaction)
-            => UpdateAsync(item, customTransaction).Wait();
-
-        /// <summary>
-        /// Update an item
-        /// </summary>
-        /// <param name="item"> item to update</param>
-        /// <returns></returns>
-        public void Update(T item)
-            => UpdateAsync(item, null).Wait();
+        public async Task UpdateAsync(T item, CustomTransaction customTransaction)
+            => await UpdateAsync(item, customTransaction, null).ConfigureAwait(false);
 
         /// <summary>
         /// Update an item
@@ -163,7 +156,34 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="item"> item to update</param>
         /// <returns></returns>
         public async Task UpdateAsync(T item)
-            => await UpdateAsync(item, null).ConfigureAwait(false);
+            => await UpdateAsync(item, null, null).ConfigureAwait(false);
+
+        /// <summary>
+        /// Update an item
+        /// </summary>
+        /// <param name="item"> item to update</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
+        /// <returns></returns>
+        public void Update(T item, CustomTransaction customTransaction, int? commandTimeout)
+            => UpdateAsync(item, customTransaction, commandTimeout).Wait();
+        
+        /// <summary>
+        /// Update an item
+        /// </summary>
+        /// <param name="item"> item to update</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <returns></returns>
+        public void Update(T item, CustomTransaction customTransaction)
+            => UpdateAsync(item, customTransaction, null).Wait();
+
+        /// <summary>
+        /// Update an item
+        /// </summary>
+        /// <param name="item"> item to update</param>
+        /// <returns></returns>
+        public void Update(T item)
+            => UpdateAsync(item, null, null).Wait();
 
 
         /// <summary>
@@ -172,8 +192,9 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="item"> item to insert</param>
         /// <param name="identity">  Return primary key</param>
         /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
         /// <returns>Table Primary key or number of rows affected</returns>
-        public async Task<object> InsertAsync(T item, bool identity, CustomTransaction customTransaction)
+        public async Task<object> InsertAsync(T item, bool identity, CustomTransaction customTransaction, int? commandTimeout)
         {
             if (_connection.Database == DataBaseType.Oracle)
                 throw new NotImplementedDatabaseException();
@@ -212,18 +233,18 @@ namespace RepositoryHelpers.DataBaseRepository
                     sql.AppendLine($" OUTPUT inserted.{identityColumn} values ({sqlParameters.ToString()}) ");
 
                     if (isCustomTransaction)
-                        return connection.QuerySingleOrDefault<dynamic>(sql.ToString(), parameters, customTransaction.DbCommand.Transaction).Id;
+                        return connection.QuerySingleOrDefault<dynamic>(sql.ToString(), parameters, customTransaction.DbCommand.Transaction, commandTimeout).Id;
                     else
-                        return connection.QuerySingleOrDefault<dynamic>(sql.ToString(), parameters).Id;
+                        return connection.QuerySingleOrDefault<dynamic>(sql.ToString(), parameters, commandTimeout: commandTimeout).Id;
                 }
                 else
                 {
                     sql.AppendLine($" values ({sqlParameters.ToString()}) ");
 
                     if (isCustomTransaction)
-                        return await connection.ExecuteAsync(sql.ToString(), parameters, customTransaction.DbCommand.Transaction);
+                        return await connection.ExecuteAsync(sql.ToString(), parameters, customTransaction.DbCommand.Transaction, commandTimeout);
                     else
-                        return await connection.ExecuteAsync(sql.ToString(), parameters);
+                        return await connection.ExecuteAsync(sql.ToString(), parameters, commandTimeout: commandTimeout);
                 }
             }
             catch (Exception ex)
@@ -232,7 +253,6 @@ namespace RepositoryHelpers.DataBaseRepository
             }
         }
 
-
         /// <summary>
         /// Insert an item 
         /// </summary>
@@ -240,8 +260,8 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="identity">  Return primary key</param>
         /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>Table Primary key or number of rows affected</returns>
-        public object Insert(T item, bool identity, CustomTransaction customTransaction) =>
-            InsertAsync(item, identity, customTransaction).Result;
+        public async Task<object> InsertAsync(T item, bool identity, CustomTransaction customTransaction)
+            => await InsertAsync(item, identity, customTransaction, null).ConfigureAwait(false);
 
         /// <summary>
         /// Insert an item 
@@ -249,8 +269,29 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="item"> item to insert</param>
         /// <param name="identity">  Return primary key</param>
         /// <returns>Table Primary key or number of rows affected</returns>
-        public object Insert(T item, bool identity) =>
-            InsertAsync(item, identity, null).Result;
+        public async Task<object> InsertAsync(T item, bool identity)
+            => await InsertAsync(item, identity, null, null).ConfigureAwait(false);
+
+        /// <summary>
+        /// Insert an item 
+        /// </summary>
+        /// <param name="item"> item to insert</param>
+        /// <param name="identity">  Return primary key</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
+        /// <returns>Table Primary key or number of rows affected</returns>
+        public object Insert(T item, bool identity, CustomTransaction customTransaction, int? commandTimeout)
+            => InsertAsync(item, identity, customTransaction, commandTimeout).Result;
+        
+        /// <summary>
+        /// Insert an item 
+        /// </summary>
+        /// <param name="item"> item to insert</param>
+        /// <param name="identity">  Return primary key</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <returns>Table Primary key or number of rows affected</returns>
+        public object Insert(T item, bool identity, CustomTransaction customTransaction)
+            => InsertAsync(item, identity, customTransaction).Result;
 
         /// <summary>
         /// Insert an item 
@@ -258,15 +299,16 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="item"> item to insert</param>
         /// <param name="identity">  Return primary key</param>
         /// <returns>Table Primary key or number of rows affected</returns>
-        public async Task<object> InsertAsync(T item, bool identity) =>
-           await InsertAsync(item, identity, null).ConfigureAwait(false);
+        public object Insert(T item, bool identity)
+            => InsertAsync(item, identity).Result;
 
         /// <summary>
         /// Get all rows in the table asynchronously 
         /// </summary>
         /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
         /// <returns>All rows in the table</returns>
-        public async Task<IEnumerable<T>> GetAsync(CustomTransaction customTransaction)
+        public async Task<IEnumerable<T>> GetAsync(CustomTransaction customTransaction, int? commandTimeout)
         {
             try
             {
@@ -275,9 +317,9 @@ namespace RepositoryHelpers.DataBaseRepository
                 var connection = GetConnection(customTransaction);
 
                 if (isCustomTransaction)
-                    return await connection.QueryAsync<T>($"Select * from {MappingHelper.GetTableName(typeof(T))} ", customTransaction.DbCommand.Transaction);
+                    return await connection.QueryAsync<T>($"Select * from {MappingHelper.GetTableName(typeof(T))} ", transaction: customTransaction.DbCommand.Transaction, commandTimeout: commandTimeout);
                 else
-                    return await connection.QueryAsync<T>($"Select * from {MappingHelper.GetTableName(typeof(T))} ");
+                    return await connection.QueryAsync<T>($"Select * from {MappingHelper.GetTableName(typeof(T))} ", commandTimeout: commandTimeout);
             }
             catch (Exception ex)
             {
@@ -285,6 +327,30 @@ namespace RepositoryHelpers.DataBaseRepository
             }
         }
 
+        /// <summary>
+        /// Get all rows in the table 
+        /// </summary>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <returns>All rows in the table</returns>
+        public async Task<IEnumerable<T>> GetAsync(CustomTransaction customTransaction)
+            => await GetAsync(customTransaction, null).ConfigureAwait(false);
+
+        /// <summary>
+        /// Get all rows in the table 
+        /// </summary>
+        /// <returns>All rows in the table</returns>
+        public async Task<IEnumerable<T>> GetAsync()
+            => await GetAsync(customTransaction: null, commandTimeout: null).ConfigureAwait(false);
+
+        /// <summary>
+        /// Get all rows in the table 
+        /// </summary>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
+        /// <returns>All rows in the table</returns>
+        public IEnumerable<T> Get(CustomTransaction customTransaction, int? commandTimeout)
+            => GetAsync(customTransaction, commandTimeout).Result;
+        
         /// <summary>
         /// Get all rows in the table 
         /// </summary>
@@ -298,14 +364,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// </summary>
         /// <returns>All rows in the table</returns>
         public IEnumerable<T> Get()
-            => GetAsync(customTransaction: null).Result;
-
-        /// <summary>
-        /// Get all rows in the table 
-        /// </summary>
-        /// <returns>All rows in the table</returns>
-        public async Task<IEnumerable<T>> GetAsync()
-            => await GetAsync(customTransaction: null).ConfigureAwait(false);
+            => GetAsync().Result;
 
 
         /// <summary>
@@ -314,8 +373,9 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
         /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
         /// <returns>List of results</returns>
-        public async Task<IEnumerable<T>> GetAsync(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction)
+        public async Task<IEnumerable<T>> GetAsync(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction, int? commandTimeout)
         {
             try
             {
@@ -324,9 +384,9 @@ namespace RepositoryHelpers.DataBaseRepository
                 var connection = GetConnection(customTransaction);
 
                 if (isCustomTransaction)
-                    return await connection.QueryAsync<T>(sql, parameters, customTransaction.DbCommand.Transaction);
+                    return await connection.QueryAsync<T>(sql, parameters, customTransaction.DbCommand.Transaction, commandTimeout);
                 else
-                    return await connection.QueryAsync<T>(sql, parameters);
+                    return await connection.QueryAsync<T>(sql, parameters, commandTimeout: commandTimeout);
             }
             catch (Exception ex)
             {
@@ -335,6 +395,44 @@ namespace RepositoryHelpers.DataBaseRepository
 
         }
 
+        /// <summary>
+        /// Get the result of a query with parameters 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <returns>List of results</returns>
+        public async Task<IEnumerable<T>> GetAsync(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction)
+            => await GetAsync(sql, parameters, customTransaction, null).ConfigureAwait(false);
+
+        /// <summary>
+        /// Get the result of a query with parameters 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <returns>List of results</returns>
+        public async Task<IEnumerable<T>> GetAsync(string sql, Dictionary<string, object> parameters)
+            => await GetAsync(sql, parameters, null, null).ConfigureAwait(false);
+
+        /// <summary>
+        /// Get the result of a query without parameters 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <returns>List of results</returns>
+        public async Task<IEnumerable<T>> GetAsync(string sql)
+            => await GetAsync(sql, null, null, null).ConfigureAwait(false);
+
+        /// <summary>
+        /// Get the result of a query with parameters 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
+        /// <returns>List of results</returns>
+        public IEnumerable<T> Get(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction, int? commandTimeout)
+            => GetAsync(sql, parameters, customTransaction, commandTimeout).Result;
+        
         /// <summary>
         /// Get the result of a query with parameters 
         /// </summary>
@@ -352,7 +450,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="parameters">Query parameters</param>
         /// <returns>List of results</returns>
         public IEnumerable<T> Get(string sql, Dictionary<string, object> parameters)
-            => GetAsync(sql, parameters, null).Result;
+            => GetAsync(sql, parameters).Result;
 
         /// <summary>
         /// Get the result of a query without parameters
@@ -364,31 +462,15 @@ namespace RepositoryHelpers.DataBaseRepository
             => GetAsync(sql).Result;
 
         /// <summary>
-        /// Get the result of a query with parameters 
-        /// </summary>
-        /// <param name="sql">Query</param>
-        /// <param name="parameters">Query parameters</param>
-        /// <returns>List of results</returns>
-        public async Task<IEnumerable<T>> GetAsync(string sql, Dictionary<string, object> parameters)
-            => await GetAsync(sql, parameters, null).ConfigureAwait(false);
-
-        /// <summary>
-        /// Get the result of a query without parameters 
-        /// </summary>
-        /// <param name="sql">Query</param>
-        /// <returns>List of results</returns>
-        public async Task<IEnumerable<T>> GetAsync(string sql)
-            => await GetAsync(sql, null, null).ConfigureAwait(false);
-
-        /// <summary>
         /// Get the asynchronously result of a multi-mapping query with parameters and 2 input types 
         /// </summary>
         /// <param name="sql">Query</param>
         /// <param name="map">The function to map row types to the return type</param>
         /// <param name="parameters">Query parameters</param>
         /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
         /// <returns>List of results</returns>
-        public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TReturn>(string sql, Func<TFirst, TSecond, TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction)
+        public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TReturn>(string sql, Func<TFirst, TSecond, TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction, int? commandTimeout)
         {
             try
             {
@@ -397,9 +479,9 @@ namespace RepositoryHelpers.DataBaseRepository
                 var connection = GetConnection(customTransaction);
 
                 if (isCustomTransaction)
-                    return await connection.QueryAsync<TFirst, TSecond, TReturn>(sql, map, parameters, customTransaction.DbCommand.Transaction);
+                    return await connection.QueryAsync<TFirst, TSecond, TReturn>(sql, map, parameters, customTransaction.DbCommand.Transaction, commandTimeout: commandTimeout);
                 else
-                    return await connection.QueryAsync<TFirst, TSecond, TReturn>(sql, map, parameters);
+                    return await connection.QueryAsync<TFirst, TSecond, TReturn>(sql, map, parameters, commandTimeout: commandTimeout);
             }
             catch (Exception ex)
             {
@@ -414,8 +496,18 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="map">The function to map row types to the return type</param>
         /// <param name="parameters">Query parameters</param>
         /// <returns>List of results</returns>
+        public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TReturn>(string sql, Func<TFirst, TSecond, TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction)
+            => await GetAsync<TFirst, TSecond, TReturn>(sql, map, parameters, customTransaction, null).ConfigureAwait(false);
+
+        /// <summary>
+        /// Get the asynchronously result of a multi-mapping query with parameters and 2 input types 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="map">The function to map row types to the return type</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <returns>List of results</returns>
         public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TReturn>(string sql, Func<TFirst, TSecond, TReturn> map, Dictionary<string, object> parameters)
-            => await GetAsync<TFirst, TSecond, TReturn>(sql, map, parameters, null).ConfigureAwait(false);
+            => await GetAsync<TFirst, TSecond, TReturn>(sql, map, parameters, null, null).ConfigureAwait(false);
 
         /// <summary>
         /// Get the asynchronously result of a multi-mapping query with 2 input types 
@@ -424,8 +516,20 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="map">The function to map row types to the return type</param>
         /// <returns>List of results</returns>
         public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TReturn>(string sql, Func<TFirst, TSecond, TReturn> map)
-            => await GetAsync<TFirst, TSecond, TReturn>(sql, map, null, null).ConfigureAwait(false);
+            => await GetAsync<TFirst, TSecond, TReturn>(sql, map, null, null, null).ConfigureAwait(false);
 
+        /// <summary>
+        /// Get the result of a multi-mapping query with parameters and 2 input types 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="map">The function to map row types to the return type</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
+        /// <returns>List of results</returns>
+        public IEnumerable<TReturn> Get<TFirst, TSecond, TReturn>(string sql, Func<TFirst, TSecond, TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction, int? commandTimeout)
+            => GetAsync<TFirst, TSecond, TReturn>(sql, map, parameters, customTransaction, commandTimeout).Result;
+        
         /// <summary>
         /// Get the result of a multi-mapping query with parameters and 2 input types 
         /// </summary>
@@ -445,7 +549,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="parameters">Query parameters</param>
         /// <returns>List of results</returns>
         public IEnumerable<TReturn> Get<TFirst, TSecond, TReturn>(string sql, Func<TFirst, TSecond, TReturn> map, Dictionary<string, object> parameters)
-            => GetAsync<TFirst, TSecond, TReturn>(sql, map, parameters, null).Result;
+            => GetAsync<TFirst, TSecond, TReturn>(sql, map, parameters).Result;
 
         /// <summary>
         /// Get the result of a multi-mapping query with 2 input types 
@@ -454,7 +558,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="map">The function to map row types to the return type</param>
         /// <returns>List of results</returns>
         public IEnumerable<TReturn> Get<TFirst, TSecond, TReturn>(string sql, Func<TFirst, TSecond, TReturn> map)
-            => GetAsync<TFirst, TSecond, TReturn>(sql, map, null, null).Result;
+            => GetAsync<TFirst, TSecond, TReturn>(sql, map).Result;
 
         /// <summary>
         /// Get the asynchronously result of a multi-mapping query with parameters and 3 input types 
@@ -463,8 +567,9 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="map">The function to map row types to the return type</param>
         /// <param name="parameters">Query parameters</param>
         /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
         /// <returns>List of results</returns>
-        public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TThird, TReturn>(string sql, Func<TFirst, TSecond, TThird, TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction)
+        public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TThird, TReturn>(string sql, Func<TFirst, TSecond, TThird, TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction, int? commandTimeout)
         {
             try
             {
@@ -473,9 +578,9 @@ namespace RepositoryHelpers.DataBaseRepository
                 var connection = GetConnection(customTransaction);
 
                 if (isCustomTransaction)
-                    return await connection.QueryAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters, customTransaction.DbCommand.Transaction);
+                    return await connection.QueryAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters, customTransaction.DbCommand.Transaction, commandTimeout: commandTimeout);
                 else
-                    return await connection.QueryAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters);
+                    return await connection.QueryAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters, commandTimeout: commandTimeout);
             }
             catch (Exception ex)
             {
@@ -489,9 +594,20 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="sql">Query</param>
         /// <param name="map">The function to map row types to the return type</param>
         /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <returns>List of results</returns>
+        public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TThird, TReturn>(string sql, Func<TFirst, TSecond, TThird, TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction)
+            => await GetAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters, customTransaction, null).ConfigureAwait(false);
+
+        /// <summary>
+        /// Get the asynchronously result of a multi-mapping query with parameters and 3 input types 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="map">The function to map row types to the return type</param>
+        /// <param name="parameters">Query parameters</param>
         /// <returns>List of results</returns>
         public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TThird, TReturn>(string sql, Func<TFirst, TSecond, TThird, TReturn> map, Dictionary<string, object> parameters)
-            => await GetAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters, null).ConfigureAwait(false);
+            => await GetAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters, null, null).ConfigureAwait(false);
 
         /// <summary>
         /// Get the asynchronously result of a multi-mapping query with 3 input types 
@@ -500,8 +616,20 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="map">The function to map row types to the return type</param>
         /// <returns>List of results</returns>
         public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TThird, TReturn>(string sql, Func<TFirst, TSecond, TThird, TReturn> map)
-            => await GetAsync<TFirst, TSecond, TThird, TReturn>(sql, map, null, null).ConfigureAwait(false);
+            => await GetAsync<TFirst, TSecond, TThird, TReturn>(sql, map, null, null, null).ConfigureAwait(false);
 
+        /// <summary>
+        /// Get the result of a multi-mapping query with parameters and 3 input types 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="map">The function to map row types to the return type</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
+        /// <returns>List of results</returns>
+        public IEnumerable<TReturn> Get<TFirst, TSecond, TThird, TReturn>(string sql, Func<TFirst, TSecond, TThird, TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction, int? commandTimeout)
+            => GetAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters, customTransaction, commandTimeout).Result;
+        
         /// <summary>
         /// Get the result of a multi-mapping query with parameters and 3 input types 
         /// </summary>
@@ -521,7 +649,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="parameters">Query parameters</param>
         /// <returns>List of results</returns>
         public IEnumerable<TReturn> Get<TFirst, TSecond, TThird, TReturn>(string sql, Func<TFirst, TSecond, TThird, TReturn> map, Dictionary<string, object> parameters)
-            => GetAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters, null).Result;
+            => GetAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters).Result;
 
         /// <summary>
         /// Get the result of a multi-mapping query with 3 input types 
@@ -530,7 +658,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="map">The function to map row types to the return type</param>
         /// <returns>List of results</returns>
         public IEnumerable<TReturn> Get<TFirst, TSecond, TThird, TReturn>(string sql, Func<TFirst, TSecond, TThird, TReturn> map)
-            => GetAsync<TFirst, TSecond, TThird, TReturn>(sql, map, null, null).Result;
+            => GetAsync<TFirst, TSecond, TThird, TReturn>(sql, map).Result;
 
         /// <summary>
         /// Get the asynchronously result of a multi-mapping query with parameters and an arbitrary number of input types
@@ -540,8 +668,9 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="map">The function to map row types to the return type</param>
         /// <param name="parameters">Query parameters</param>
         /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
         /// <returns>List of results</returns>
-        public async Task<IEnumerable<TReturn>> GetAsync<TReturn>(string sql, Type[] types, Func<object[], TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction)
+        public async Task<IEnumerable<TReturn>> GetAsync<TReturn>(string sql, Type[] types, Func<object[], TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction, int? commandTimeout)
         {
             try
             {
@@ -550,9 +679,9 @@ namespace RepositoryHelpers.DataBaseRepository
                 var connection = GetConnection(customTransaction);
 
                 if (isCustomTransaction)
-                    return await connection.QueryAsync<TReturn>(sql, types, map, parameters, customTransaction.DbCommand.Transaction);
+                    return await connection.QueryAsync<TReturn>(sql, types, map, parameters, customTransaction.DbCommand.Transaction, commandTimeout: commandTimeout);
                 else
-                    return await connection.QueryAsync<TReturn>(sql, types, map, parameters);
+                    return await connection.QueryAsync<TReturn>(sql, types, map, parameters, commandTimeout: commandTimeout);
             }
             catch (Exception ex)
             {
@@ -567,9 +696,21 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="types">Array of types in the recordset.</param>
         /// <param name="map">The function to map row types to the return type</param>
         /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <returns>List of results</returns>
+        public async Task<IEnumerable<TReturn>> GetAsync<TReturn>(string sql, Type[] types, Func<object[], TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction)
+            => await GetAsync<TReturn>(sql, types, map, parameters, customTransaction, null).ConfigureAwait(false);
+
+        /// <summary>
+        /// Get the asynchronously result of a multi-mapping query with parameters and an arbitrary number of input types
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="types">Array of types in the recordset.</param>
+        /// <param name="map">The function to map row types to the return type</param>
+        /// <param name="parameters">Query parameters</param>
         /// <returns>List of results</returns>
         public async Task<IEnumerable<TReturn>> GetAsync<TReturn>(string sql, Type[] types, Func<object[], TReturn> map, Dictionary<string, object> parameters)
-            => await GetAsync<TReturn>(sql, types, map, parameters, null).ConfigureAwait(false);
+            => await GetAsync<TReturn>(sql, types, map, parameters, null, null).ConfigureAwait(false);
 
         /// <summary>
         /// Get the asynchronously result of a multi-mapping query with an arbitrary number of input types
@@ -579,8 +720,21 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="map">The function to map row types to the return type</param>
         /// <returns>List of results</returns>
         public async Task<IEnumerable<TReturn>> GetAsync<TReturn>(string sql, Type[] types, Func<object[], TReturn> map)
-            => await GetAsync<TReturn>(sql, types, map, null, null).ConfigureAwait(false);
+            => await GetAsync<TReturn>(sql, types, map, null, null, null).ConfigureAwait(false);
 
+        /// <summary>
+        /// Get the result of a multi-mapping query with parameters and an arbitrary number of input types
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="types">Array of types in the recordset.</param>
+        /// <param name="map">The function to map row types to the return type</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
+        /// <returns>List of results</returns>
+        public IEnumerable<TReturn> Get<TReturn>(string sql, Type[] types, Func<object[], TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction, int? commandTimeout)
+            => GetAsync<TReturn>(sql, types, map, parameters, customTransaction, commandTimeout).Result;
+        
         /// <summary>
         /// Get the result of a multi-mapping query with parameters and an arbitrary number of input types
         /// </summary>
@@ -602,7 +756,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="parameters">Query parameters</param>
         /// <returns>List of results</returns>
         public IEnumerable<TReturn> Get<TReturn>(string sql, Type[] types, Func<object[], TReturn> map, Dictionary<string, object> parameters)
-            => GetAsync<TReturn>(sql, types, map, parameters, null).Result;
+            => GetAsync<TReturn>(sql, types, map, parameters).Result;
 
         /// <summary>
         /// Get the result of a multi-mapping query with an arbitrary number of input types
@@ -612,7 +766,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="map">The function to map row types to the return type</param>
         /// <returns>List of results</returns>
         public IEnumerable<TReturn> Get<TReturn>(string sql, Type[] types, Func<object[], TReturn> map)
-            => GetAsync<TReturn>(sql, types, map, null, null).Result;
+            => GetAsync<TReturn>(sql, types, map).Result;
 
 
         /// <summary>
@@ -620,8 +774,9 @@ namespace RepositoryHelpers.DataBaseRepository
         /// </summary>
         /// <param name="id">Primary Key</param>
         /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
         /// <returns>Item</returns>
-        public async Task<T> GetByIdAsync(object id, CustomTransaction customTransaction)
+        public async Task<T> GetByIdAsync(object id, CustomTransaction customTransaction, int? commandTimeout)
         {
             try
             {
@@ -639,16 +794,42 @@ namespace RepositoryHelpers.DataBaseRepository
                 var connection = GetConnection(customTransaction);
 
                 if (isCustomTransaction)
-                    return await connection.QueryFirstOrDefaultAsync<T>($"Select * from {MappingHelper.GetTableName(typeof(T))} where {primaryKeyColumnName} = @ID ", new { ID = id }, customTransaction.DbCommand.Transaction);
+                    return await connection.QueryFirstOrDefaultAsync<T>($"Select * from {MappingHelper.GetTableName(typeof(T))} where {primaryKeyColumnName} = @ID ", new { ID = id }, customTransaction.DbCommand.Transaction, commandTimeout);
                 else
-                    return await connection.QueryFirstOrDefaultAsync<T>($"Select * from {MappingHelper.GetTableName(typeof(T))} where {primaryKeyColumnName} = @ID ", new { ID = id });
+                    return await connection.QueryFirstOrDefaultAsync<T>($"Select * from {MappingHelper.GetTableName(typeof(T))} where {primaryKeyColumnName} = @ID ", new { ID = id }, commandTimeout: commandTimeout);
             }
             catch (Exception ex)
             {
                 throw new CustomRepositoryException(ex.Message);
             }
         }
+        
+        /// <summary>
+        /// Get the item by id 
+        /// </summary>
+        /// <param name="id">Primary Key</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <returns>Item</returns>
+        public async Task<T> GetByIdAsync(object id, CustomTransaction customTransaction)
+            => await GetByIdAsync(id, customTransaction, null).ConfigureAwait(false);
 
+        /// <summary>
+        /// Get the item by id 
+        /// </summary>
+        /// <param name="id">Primary Key</param>
+        /// <returns>Item</returns>
+        public async Task<T> GetByIdAsync(object id)
+            => await GetByIdAsync(id, null, null).ConfigureAwait(false);
+
+        /// <summary>
+        /// Get the item by id 
+        /// </summary>
+        /// <param name="id">Primary Key</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
+        /// <returns>Item</returns>
+        public T GetById(object id, CustomTransaction customTransaction, int? commandTimeout)
+            => GetByIdAsync(id, customTransaction, commandTimeout).Result;
 
         /// <summary>
         /// Get the item by id 
@@ -665,22 +846,15 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="id">Primary Key</param>
         /// <returns>Item</returns>
         public T GetById(object id)
-            => GetByIdAsync(id, null).Result;
-
-        /// <summary>
-        /// Get the item by id 
-        /// </summary>
-        /// <param name="id">Primary Key</param>
-        /// <returns>Item</returns>
-        public async Task<T> GetByIdAsync(object id)
-            => await GetByIdAsync(id, null).ConfigureAwait(false);
+            => GetByIdAsync(id).Result;
 
         /// <summary>
         /// Delete an item by id asynchronously 
         /// </summary>
         /// <param name="id">Primary Key</param>
         /// <param name="customTransaction"> has a transaction object</param>
-        public async Task DeleteAsync(object id, CustomTransaction customTransaction)
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
+        public async Task DeleteAsync(object id, CustomTransaction customTransaction, int? commandTimeout)
         {
             try
             {
@@ -707,9 +881,9 @@ namespace RepositoryHelpers.DataBaseRepository
                 sql.AppendLine($"delete from {MappingHelper.GetTableName(typeof(T))} where {primaryKeyColumnName} = @ID");
 
                 if (isCustomTransaction)
-                    await connection.ExecuteAsync(sql.ToString(), parameters, customTransaction.DbCommand.Transaction);
+                    await connection.ExecuteAsync(sql.ToString(), parameters, customTransaction.DbCommand.Transaction, commandTimeout);
                 else
-                    await connection.ExecuteAsync(sql.ToString(), parameters);
+                    await connection.ExecuteAsync(sql.ToString(), parameters, commandTimeout: commandTimeout);
             }
             catch (Exception ex)
             {
@@ -723,6 +897,30 @@ namespace RepositoryHelpers.DataBaseRepository
         /// </summary>
         /// <param name="id">Primary Key</param>
         /// <param name="customTransaction"> has a transaction object</param>
+        public async Task DeleteAsync(object id, CustomTransaction customTransaction)
+            => await DeleteAsync(id, customTransaction, null).ConfigureAwait(false);
+
+        /// <summary>
+        /// Delete an item by id
+        /// </summary>
+        /// <param name="id">Primary Key</param>
+        public async Task DeleteAsync(object id)
+            => await DeleteAsync(id, null, null).ConfigureAwait(false);
+
+        /// <summary>
+        /// Delete an item by id
+        /// </summary>
+        /// <param name="id">Primary Key</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
+        public void Delete(object id, CustomTransaction customTransaction, int? commandTimeout)
+            => DeleteAsync(id, customTransaction, commandTimeout).Wait();
+        
+        /// <summary>
+        /// Delete an item by id
+        /// </summary>
+        /// <param name="id">Primary Key</param>
+        /// <param name="customTransaction"> has a transaction object</param>
         public void Delete(object id, CustomTransaction customTransaction)
             => DeleteAsync(id, customTransaction).Wait();
 
@@ -731,14 +929,7 @@ namespace RepositoryHelpers.DataBaseRepository
         /// </summary>
         /// <param name="id">Primary Key</param>
         public void Delete(object id)
-            => DeleteAsync(id, null).Wait();
-
-        /// <summary>
-        /// Delete an item by id
-        /// </summary>
-        /// <param name="id">Primary Key</param>
-        public async Task DeleteAsync(object id)
-            => await DeleteAsync(id, null).ConfigureAwait(false);
+            => DeleteAsync(id).Wait();
 
 
 
@@ -751,19 +942,10 @@ namespace RepositoryHelpers.DataBaseRepository
         /// </summary>
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
-        /// <returns>DataSet of results</returns>
-        public DataSet GetDataSet(string sql, Dictionary<string, object> parameters)
-           => GetDataSet(sql, parameters, null);
-
-
-        /// <summary>
-        /// Get DataSet result with parameters 
-        /// </summary>
-        /// <param name="sql">Query</param>
-        /// <param name="parameters">Query parameters</param>
         /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
         /// <returns>DataSet of results</returns>
-        public DataSet GetDataSet(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction)
+        public DataSet GetDataSet(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction, int? commandTimeout)
         {
             var isCustomTransaction = customTransaction != null;
 
@@ -774,9 +956,11 @@ namespace RepositoryHelpers.DataBaseRepository
                 else
                     DbCommand.Connection = DBConnection;
 
+                if (commandTimeout.HasValue)
+                    DbCommand.CommandTimeout = commandTimeout.Value;
+
                 DbCommand.CommandType = CommandType.Text;
                 DbCommand.Parameters.Clear();
-                DbCommand.CommandTimeout = 120;
                 DbCommand.CommandText = sql;
 
                 if (DBConnection.State == ConnectionState.Closed)
@@ -809,13 +993,33 @@ namespace RepositoryHelpers.DataBaseRepository
         }
 
         /// <summary>
+        /// Get DataSet result with parameters 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <returns>DataSet of results</returns>
+        public DataSet GetDataSet(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction)
+            => GetDataSet(sql, parameters, customTransaction, null);
+
+        /// <summary>
+        /// Get DataSet result with parameters 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <returns>DataSet of results</returns>
+        public DataSet GetDataSet(string sql, Dictionary<string, object> parameters)
+           => GetDataSet(sql, parameters, null, null);
+
+        /// <summary>
         /// Executes a query with parameters asynchronously 
         /// </summary>
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
         /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
         /// <returns>Number of rows affected</returns>
-        public async Task<int> ExecuteQueryAsync(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction)
+        public async Task<int> ExecuteQueryAsync(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction, int? commandTimeout)
         {
             var isCustomTransaction = customTransaction != null;
 
@@ -826,14 +1030,19 @@ namespace RepositoryHelpers.DataBaseRepository
                 else
                     DbCommand.Connection = DBConnection;
 
+                if (commandTimeout.HasValue)
+                    DbCommand.CommandTimeout = commandTimeout.Value;
+
                 DbCommand.CommandType = CommandType.Text;
                 DbCommand.Parameters.Clear();
 
                 if (DBConnection.State == ConnectionState.Closed)
                     DBConnection.Open();
-                foreach (var parameter in parameters)
+
+                if (parameters != null)
                 {
-                    DbCommand.Parameters.Add(_connection.GetParameter(parameter));
+                    foreach (var parameter in parameters)
+                        DbCommand.Parameters.Add(_connection.GetParameter(parameter));
                 }
 
                 DbCommand.CommandText = sql;
@@ -856,6 +1065,44 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="parameters">Query parameters</param>
         /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>Number of rows affected</returns>
+        public async Task<int> ExecuteQueryAsync(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction)
+            => await ExecuteQueryAsync(sql, parameters, customTransaction, null).ConfigureAwait(false);
+
+        /// <summary>
+        /// Executes a query with parameters 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <returns>Number of rows affected</returns>
+        public async Task<int> ExecuteQueryAsync(string sql, Dictionary<string, object> parameters)
+            => await ExecuteQueryAsync(sql, parameters, customTransaction: null, commandTimeout: null).ConfigureAwait(false);
+
+        /// <summary>
+        /// Executes a query without parameters 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <returns>Number of rows affected</returns>
+        public async Task<int> ExecuteQueryAsync(string sql)
+            => await ExecuteQueryAsync(sql, parameters: null, customTransaction: null, commandTimeout: null).ConfigureAwait(false);
+
+        /// <summary>
+        /// Executes a query with parameters 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
+        /// <returns>Number of rows affected</returns>
+        public int ExecuteQuery(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction, int? commandTimeout)
+            => ExecuteQueryAsync(sql, parameters, customTransaction, commandTimeout).Result;
+        
+        /// <summary>
+        /// Executes a query with parameters 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <returns>Number of rows affected</returns>
         public int ExecuteQuery(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction)
             => ExecuteQueryAsync(sql, parameters, customTransaction).Result;
 
@@ -866,16 +1113,15 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="parameters">Query parameters</param>
         /// <returns>Number of rows affected</returns>
         public int ExecuteQuery(string sql, Dictionary<string, object> parameters)
-            => ExecuteQueryAsync(sql, parameters, null).Result;
+            => ExecuteQueryAsync(sql, parameters).Result;
 
         /// <summary>
-        /// Executes a query with parameters 
+        /// Executes a query without parameters 
         /// </summary>
         /// <param name="sql">Query</param>
-        /// <param name="parameters">Query parameters</param>
         /// <returns>Number of rows affected</returns>
-        public async Task<int> ExecuteQueryAsync(string sql, Dictionary<string, object> parameters)
-            => await ExecuteQueryAsync(sql, parameters, null).ConfigureAwait(false);
+        public int ExecuteQuery(string sql)
+            => ExecuteQueryAsync(sql).Result;
 
 
         /// <summary>
@@ -885,8 +1131,9 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="parameters">Query parameters</param>
         /// <param name="identity">Primary Key or Oracle sequence</param>
         /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
         /// <returns>Primary Key After Insert</returns>
-        public async Task<string> ExecuteQueryAsync(string sql, Dictionary<string, object> parameters, string identity, CustomTransaction customTransaction)
+        public async Task<string> ExecuteQueryAsync(string sql, Dictionary<string, object> parameters, string identity, CustomTransaction customTransaction, int? commandTimeout)
         {
             var isCustomTransaction = customTransaction != null;
 
@@ -909,8 +1156,10 @@ namespace RepositoryHelpers.DataBaseRepository
                 else
                     DbCommand.Connection = DBConnection;
 
+                if (commandTimeout.HasValue)
+                    DbCommand.CommandTimeout = commandTimeout.Value;
+
                 DbCommand.CommandType = CommandType.Text;
-                DbCommand.CommandTimeout = 120;
                 DbCommand.Parameters.Clear();
                 foreach (var parameter in parameters)
                 {
@@ -936,6 +1185,17 @@ namespace RepositoryHelpers.DataBaseRepository
             }
         }
 
+        /// <summary>
+        /// Executes a insert with parameters asynchronously 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="identity">Primary Key or Oracle sequence</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <returns>Primary Key After Insert</returns>
+        public async Task<string> ExecuteQueryAsync(string sql, Dictionary<string, object> parameters, string identity, CustomTransaction customTransaction)
+            => await ExecuteQueryAsync(sql, parameters, identity, customTransaction, null).ConfigureAwait(false);
+
 
         /// <summary>
         /// Executes a Procedure with parameters asynchronously 
@@ -943,8 +1203,9 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="procedure">Query</param>
         /// <param name="parameters">Query parameters</param>
         /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
         /// <returns>Procedure return</returns>
-        public async Task<int> ExecuteProcedureAsync(string procedure, Dictionary<string, object> parameters, CustomTransaction customTransaction)
+        public async Task<int> ExecuteProcedureAsync(string procedure, Dictionary<string, object> parameters, CustomTransaction customTransaction, int? commandTimeout)
         {
             var isCustomTransaction = customTransaction != null;
 
@@ -955,16 +1216,20 @@ namespace RepositoryHelpers.DataBaseRepository
                 else
                     DbCommand.Connection = DBConnection;
 
+                if (commandTimeout.HasValue)
+                    DbCommand.CommandTimeout = commandTimeout.Value;
+
                 DbCommand.CommandType = CommandType.StoredProcedure;
                 DbCommand.CommandText = procedure;
                 DbCommand.Parameters.Clear();
 
                 if (DBConnection.State == ConnectionState.Closed)
                     DBConnection.Open();
-
-                foreach (var parameter in parameters)
+                    
+                if (parameters != null)
                 {
-                    DbCommand.Parameters.Add(_connection.GetParameter(parameter));
+                    foreach (var parameter in parameters)
+                        DbCommand.Parameters.Add(_connection.GetParameter(parameter));
                 }
 
                 return await DbCommand.ExecuteNonQueryAsync();
@@ -986,6 +1251,44 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="parameters">Query parameters</param>
         /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>Procedure return</returns>
+        public async Task<int> ExecuteProcedureAsync(string procedure, Dictionary<string, object> parameters, CustomTransaction customTransaction)
+            => await ExecuteProcedureAsync(procedure, parameters, customTransaction, null).ConfigureAwait(false);
+
+        /// <summary>
+        /// Executes a Procedure with parameters 
+        /// </summary>
+        /// <param name="procedure">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <returns>Procedure return</returns>
+        public async Task<int> ExecuteProcedureAsync(string procedure, Dictionary<string, object> parameters)
+            => await ExecuteProcedureAsync(procedure, parameters, null, null).ConfigureAwait(false);
+
+        /// <summary>
+        /// Executes a Procedure without parameters 
+        /// </summary>
+        /// <param name="procedure">Query</param>
+        /// <returns>Procedure return</returns>
+        public async Task<int> ExecuteProcedureAsync(string procedure)
+            => await ExecuteProcedureAsync(procedure, null, null, null).ConfigureAwait(false);
+
+        /// <summary>
+        /// Executes a Procedure with parameters 
+        /// </summary>
+        /// <param name="procedure">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
+        /// <returns>Procedure return</returns>
+        public int ExecuteProcedure(string procedure, Dictionary<string, object> parameters, CustomTransaction customTransaction, int? commandTimeout)
+            => ExecuteProcedureAsync(procedure, parameters, customTransaction, commandTimeout).Result;
+        
+        /// <summary>
+        /// Executes a Procedure with parameters 
+        /// </summary>
+        /// <param name="procedure">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <returns>Procedure return</returns>
         public int ExecuteProcedure(string procedure, Dictionary<string, object> parameters, CustomTransaction customTransaction)
             => ExecuteProcedureAsync(procedure, parameters, customTransaction).Result;
 
@@ -996,16 +1299,15 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="parameters">Query parameters</param>
         /// <returns>Procedure return</returns>
         public int ExecuteProcedure(string procedure, Dictionary<string, object> parameters)
-            => ExecuteProcedureAsync(procedure, parameters, null).Result;
+            => ExecuteProcedureAsync(procedure, parameters).Result;
 
         /// <summary>
-        /// Executes a Procedure with parameters 
+        /// Executes a Procedure without parameters 
         /// </summary>
         /// <param name="procedure">Query</param>
-        /// <param name="parameters">Query parameters</param>
         /// <returns>Procedure return</returns>
-        public async Task<int> ExecuteProcedureAsync(string procedure, Dictionary<string, object> parameters)
-            => await ExecuteProcedureAsync(procedure, parameters, null).ConfigureAwait(false);
+        public int ExecuteProcedure(string procedure)
+            => ExecuteProcedureAsync(procedure).Result;
 
         /// <summary>
         /// Get Procedure DataSet with parameters 
@@ -1013,8 +1315,9 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="procedure">Query</param>
         /// <param name="parameters">Query parameters</param>
         /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
         /// <returns>DataSet</returns>
-        public DataSet GetProcedureDataSet(string procedure, Dictionary<string, object> parameters, CustomTransaction customTransaction)
+        public DataSet GetProcedureDataSet(string procedure, Dictionary<string, object> parameters, CustomTransaction customTransaction, int? commandTimeout)
         {
             var isCustomTransaction = customTransaction != null;
 
@@ -1024,6 +1327,9 @@ namespace RepositoryHelpers.DataBaseRepository
                     DbCommand = customTransaction.DbCommand;
                 else
                     DbCommand.Connection = DBConnection;
+
+                if (commandTimeout.HasValue)
+                    DbCommand.CommandTimeout = commandTimeout.Value;
 
                 DbCommand.CommandType = CommandType.StoredProcedure;
                 DbCommand.CommandText = procedure;
@@ -1059,33 +1365,23 @@ namespace RepositoryHelpers.DataBaseRepository
         }
 
         /// <summary>
-        /// Executes Scalar with parameters 
+        /// Get Procedure DataSet with parameters 
         /// </summary>
-        /// <param name="sql">Query</param>
+        /// <param name="procedure">Query</param>
         /// <param name="parameters">Query parameters</param>
         /// <param name="customTransaction"> has a transaction object</param>
-        /// <returns>Scalar result</returns>
-        public object ExecuteScalar(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction)
-            => ExecuteScalarAsync(sql, parameters, customTransaction).Result;
+        /// <returns>DataSet</returns>
+        public DataSet GetProcedureDataSet(string procedure, Dictionary<string, object> parameters, CustomTransaction customTransaction)
+            => GetProcedureDataSet(procedure, parameters, customTransaction, null);
 
         /// <summary>
-        /// Executes Scalar with parameters 
+        /// Get Procedure DataSet with parameters 
         /// </summary>
-        /// <param name="sql">Query</param>
+        /// <param name="procedure">Query</param>
         /// <param name="parameters">Query parameters</param>
-        /// <returns>Scalar result</returns>
-        public object ExecuteScalar(string sql, Dictionary<string, object> parameters)
-            => ExecuteScalarAsync(sql, parameters, null).Result;
-
-        /// <summary>
-        /// Executes Scalar with parameters 
-        /// </summary>
-        /// <param name="sql">Query</param>
-        /// <param name="parameters">Query parameters</param>
-        /// <returns>Scalar result</returns>
-        public async Task<object> ExecuteScalarAsync(string sql, Dictionary<string, object> parameters)
-            => await ExecuteScalarAsync(sql, parameters, null).ConfigureAwait(false);
-
+        /// <returns>DataSet</returns>
+        public DataSet GetProcedureDataSet(string procedure, Dictionary<string, object> parameters)
+            => GetProcedureDataSet(procedure, parameters, null, null);
 
         /// <summary>
         /// Executes Scalar with parameters asynchronously 
@@ -1093,8 +1389,9 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="sql">Query</param>
         /// <param name="parameters">Query parameters</param>
         /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
         /// <returns>Scalar result</returns>
-        public async Task<object> ExecuteScalarAsync(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction)
+        public async Task<object> ExecuteScalarAsync(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction, int? commandTimeout)
         {
             var isCustomTransaction = customTransaction != null;
 
@@ -1104,6 +1401,9 @@ namespace RepositoryHelpers.DataBaseRepository
                     DbCommand = customTransaction.DbCommand;
                 else
                     DbCommand.Connection = DBConnection;
+
+                if (commandTimeout.HasValue)
+                    DbCommand.CommandTimeout = commandTimeout.Value;
 
                 DbCommand.CommandType = CommandType.Text;
                 DbCommand.Parameters.Clear();
@@ -1127,6 +1427,55 @@ namespace RepositoryHelpers.DataBaseRepository
                 DisposeDB(isCustomTransaction);
             }
         }
+
+        /// <summary>
+        /// Executes Scalar with parameters 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <returns>Scalar result</returns>
+        public async Task<object> ExecuteScalarAsync(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction)
+            => await ExecuteScalarAsync(sql, parameters, customTransaction, null).ConfigureAwait(false);
+
+        /// <summary>
+        /// Executes Scalar with parameters 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <returns>Scalar result</returns>
+        public async Task<object> ExecuteScalarAsync(string sql, Dictionary<string, object> parameters)
+            => await ExecuteScalarAsync(sql, parameters, null, null).ConfigureAwait(false);
+
+        /// <summary>
+        /// Executes Scalar with parameters 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
+        /// <returns>Scalar result</returns>
+        public object ExecuteScalar(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction, int? commandTimeout)
+            => ExecuteScalarAsync(sql, parameters, customTransaction, commandTimeout).Result;
+        
+        /// <summary>
+        /// Executes Scalar with parameters 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <returns>Scalar result</returns>
+        public object ExecuteScalar(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction)
+            => ExecuteScalarAsync(sql, parameters, customTransaction).Result;
+
+        /// <summary>
+        /// Executes Scalar with parameters 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <returns>Scalar result</returns>
+        public object ExecuteScalar(string sql, Dictionary<string, object> parameters)
+            => ExecuteScalarAsync(sql, parameters).Result;
 
         public string GetConnectionString()
             => this._connection.ConnectionString;
