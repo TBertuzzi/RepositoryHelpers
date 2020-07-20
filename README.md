@@ -261,77 +261,8 @@ coming soon ..
 
 Extensions to make using HttpClient easy.
 
-To enable :
+To enable and use Follow the doc : https://github.com/TBertuzzi/HttpExtension
 
-```csharp
-using HttpExtension;
-```
-
-* GetAsync<T> : Gets the return of a Get Rest and converts to the object or collection of pre-defined objects.
-You can use only the path of the rest method, or pass a parameter dictionary. In case the url has parameters.
-
-```csharp
- public static async Task<ServiceResponse<T>> GetAsync<T>(this HttpClient httpClient, string address);
- public static async Task<ServiceResponse<T>> GetAsync<T>(this HttpClient httpClient, string address,
-        Dictionary<string, string> values);
-```
-
-
-* PostAsync<T>,PutAsync<T> and DeleteAsync<T> : Use post, put and delete service methods rest asynchronously and return objects if necessary. 
- 
-```csharp
- public static async Task<HttpResponseMessage> PostAsync(this HttpClient httpClient,string address, object dto);
- public static async Task<ServiceResponse<T>> PostAsync<T>(this HttpClient httpClient, string address, object dto);
- 
- public static async Task<HttpResponseMessage> PutAsync(this HttpClient httpClient,string address, object dto);
- public static async Task<ServiceResponse<T>> PutAsync<T>(this HttpClient httpClient, string address, object dto);
- 
- public static async Task<HttpResponseMessage> DeleteAsync(this HttpClient httpClient,string address, object dto);
- public static async Task<ServiceResponse<T>> DeleteAsync<T>(this HttpClient httpClient, string address, object dto);
-```
-
-* ServiceResponse<T> : Object that facilitates the return of requests Rest. It returns the Http code of the request, already converted object and the contents in case of errors.
-
-```csharp
-public class ServiceResponse<T>
-{
-  public HttpStatusCode StatusCode { get; private set; }
-
-  public T Value { get; set; }
-
-  public string Content { get; set; }
-
-  public Exception Error { get; set; }
-}
-```
-
-Example of use :
-
-```csharp
-public async Task<List<Model.Todo>> GetTodos()
- {
-    try
-    {
-
-        //GetAsync Return with Object
-        var response = await _httpClient.GetAsync<List<Model.Todo>>("todos");
-           
-        if (response.StatusCode == HttpStatusCode.OK)
-        {
-              return response.Value;
-        }
-        else
-        {
-            throw new Exception(
-                   $"HttpStatusCode: {response.StatusCode.ToString()} Message: {response.Content}");
-        }
-    }
-    catch (Exception ex)
-    {
-        throw new Exception(ex.Message);
-    }
- }
-```
 
 Samples coming soon ..
 
