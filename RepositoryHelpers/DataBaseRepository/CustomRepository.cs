@@ -106,7 +106,7 @@ namespace RepositoryHelpers.DataBaseRepository
                 if (!primaryKey.Any())
                     throw new CustomRepositoryException("Primary key is not defined");
 
-                sql.AppendLine($"update {MappingHelper.GetTableName(typeof(T))} set ");
+                sql.AppendLine($"update [{MappingHelper.GetTableName(typeof(T))}] set ");
 
                 foreach (var p in item.GetType().GetProperties())
                 {
@@ -222,7 +222,7 @@ namespace RepositoryHelpers.DataBaseRepository
 
                 sqlParameters.Remove(sqlParameters.Length - 1, 1);
 
-                sql.AppendLine($"insert into {MappingHelper.GetTableName(typeof(T))} ({sqlParameters.ToString().Replace("@", "")}) ");
+                sql.AppendLine($"insert into [{MappingHelper.GetTableName(typeof(T))}] ({sqlParameters.ToString().Replace("@", "")}) ");
 
                 if (identity)
                 {
@@ -317,9 +317,9 @@ namespace RepositoryHelpers.DataBaseRepository
                 var connection = GetConnection(customTransaction);
 
                 if (isCustomTransaction)
-                    return await connection.QueryAsync<T>($"Select * from {MappingHelper.GetTableName(typeof(T))} ", transaction: customTransaction.DbCommand.Transaction, commandTimeout: commandTimeout);
+                    return await connection.QueryAsync<T>($"Select * from [{MappingHelper.GetTableName(typeof(T))}] ", transaction: customTransaction.DbCommand.Transaction, commandTimeout: commandTimeout);
                 else
-                    return await connection.QueryAsync<T>($"Select * from {MappingHelper.GetTableName(typeof(T))} ", commandTimeout: commandTimeout);
+                    return await connection.QueryAsync<T>($"Select * from [{MappingHelper.GetTableName(typeof(T))}] ", commandTimeout: commandTimeout);
             }
             catch (Exception ex)
             {
@@ -794,9 +794,9 @@ namespace RepositoryHelpers.DataBaseRepository
                 var connection = GetConnection(customTransaction);
 
                 if (isCustomTransaction)
-                    return await connection.QueryFirstOrDefaultAsync<T>($"Select * from {MappingHelper.GetTableName(typeof(T))} where {primaryKeyColumnName} = @ID ", new { ID = id }, customTransaction.DbCommand.Transaction, commandTimeout);
+                    return await connection.QueryFirstOrDefaultAsync<T>($"Select * from [{MappingHelper.GetTableName(typeof(T))}] where {primaryKeyColumnName} = @ID ", new { ID = id }, customTransaction.DbCommand.Transaction, commandTimeout);
                 else
-                    return await connection.QueryFirstOrDefaultAsync<T>($"Select * from {MappingHelper.GetTableName(typeof(T))} where {primaryKeyColumnName} = @ID ", new { ID = id }, commandTimeout: commandTimeout);
+                    return await connection.QueryFirstOrDefaultAsync<T>($"Select * from [{MappingHelper.GetTableName(typeof(T))}] where {primaryKeyColumnName} = @ID ", new { ID = id }, commandTimeout: commandTimeout);
             }
             catch (Exception ex)
             {
@@ -878,7 +878,7 @@ namespace RepositoryHelpers.DataBaseRepository
                     { "@ID", id }
                 };
 
-                sql.AppendLine($"delete from {MappingHelper.GetTableName(typeof(T))} where {primaryKeyColumnName} = @ID");
+                sql.AppendLine($"delete from [{MappingHelper.GetTableName(typeof(T))}] where {primaryKeyColumnName} = @ID");
 
                 if (isCustomTransaction)
                     await connection.ExecuteAsync(sql.ToString(), parameters, customTransaction.DbCommand.Transaction, commandTimeout);
