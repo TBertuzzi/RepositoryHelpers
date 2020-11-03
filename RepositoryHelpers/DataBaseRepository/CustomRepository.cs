@@ -74,7 +74,6 @@ namespace RepositoryHelpers.DataBaseRepository
 
         #endregion
 
-
         #region DAPPER
 
         private DbConnection GetConnection(CustomTransaction customTransaction)
