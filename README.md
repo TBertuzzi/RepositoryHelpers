@@ -133,6 +133,19 @@ var user = Repository.Get<User, Category, User>(
         return user;
     });
 
+//Get by multi-mapping custom query with 2 input types (When the field that we should split and read the second object is different from "Id")
+var customQuery = "Select * from user inner join state on user.stateCode = state.Code where login = @userLogin";
+var user = Repository.Get<User, State, User>(
+    customQuery,
+    map: (user, state) => 
+    {
+        user.State = state;
+        return user;
+    },
+    parameters,
+    splitOn: "Code"
+);
+
 //Get by multi-mapping custom query with an arbitrary number of input types
 var customQuery = "Select * from user inner join category on user.categoryId = category.Id where login = @userLogin";
 var user = Repository.Get(
