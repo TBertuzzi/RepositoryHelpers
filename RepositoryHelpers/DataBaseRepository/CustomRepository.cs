@@ -467,9 +467,10 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="map">The function to map row types to the return type</param>
         /// <param name="parameters">Query parameters</param>
         /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="splitOn">The field we should split and read the second object from (default: "Id")</param>
         /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
         /// <returns>List of results</returns>
-        public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TReturn>(string sql, Func<TFirst, TSecond, TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction, int? commandTimeout)
+        public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TReturn>(string sql, Func<TFirst, TSecond, TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction, string splitOn, int? commandTimeout)
         {
             try
             {
@@ -478,9 +479,9 @@ namespace RepositoryHelpers.DataBaseRepository
                 var connection = GetConnection(customTransaction);
 
                 if (isCustomTransaction)
-                    return await connection.QueryAsync<TFirst, TSecond, TReturn>(sql, map, parameters, customTransaction.DbCommand.Transaction, commandTimeout: commandTimeout);
+                    return await connection.QueryAsync<TFirst, TSecond, TReturn>(sql, map, parameters, customTransaction.DbCommand.Transaction, splitOn: splitOn, commandTimeout: commandTimeout);
                 else
-                    return await connection.QueryAsync<TFirst, TSecond, TReturn>(sql, map, parameters, commandTimeout: commandTimeout);
+                    return await connection.QueryAsync<TFirst, TSecond, TReturn>(sql, map, parameters, splitOn: splitOn, commandTimeout: commandTimeout);
             }
             catch (Exception ex)
             {
@@ -494,9 +495,33 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="sql">Query</param>
         /// <param name="map">The function to map row types to the return type</param>
         /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
+        /// <returns>List of results</returns>
+        public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TReturn>(string sql, Func<TFirst, TSecond, TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction, int? commandTimeout)
+            => await GetAsync<TFirst, TSecond, TReturn>(sql, map, parameters, customTransaction, "Id", commandTimeout).ConfigureAwait(false);
+        
+        /// <summary>
+        /// Get the asynchronously result of a multi-mapping query with parameters and 2 input types 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="map">The function to map row types to the return type</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>List of results</returns>
         public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TReturn>(string sql, Func<TFirst, TSecond, TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction)
             => await GetAsync<TFirst, TSecond, TReturn>(sql, map, parameters, customTransaction, null).ConfigureAwait(false);
+
+        /// <summary>
+        /// Get the asynchronously result of a multi-mapping query with parameters and 2 input types 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="map">The function to map row types to the return type</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="splitOn">The field we should split and read the second object from (default: "Id")</param>
+        /// <returns>List of results</returns>
+        public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TReturn>(string sql, Func<TFirst, TSecond, TReturn> map, Dictionary<string, object> parameters, string splitOn)
+            => await GetAsync<TFirst, TSecond, TReturn>(sql, map, parameters, null, splitOn, null).ConfigureAwait(false);
 
         /// <summary>
         /// Get the asynchronously result of a multi-mapping query with parameters and 2 input types 
@@ -517,6 +542,19 @@ namespace RepositoryHelpers.DataBaseRepository
         public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TReturn>(string sql, Func<TFirst, TSecond, TReturn> map)
             => await GetAsync<TFirst, TSecond, TReturn>(sql, map, null, null, null).ConfigureAwait(false);
 
+        /// <summary>
+        /// Get the result of a multi-mapping query with parameters and 2 input types 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="map">The function to map row types to the return type</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="splitOn">The field we should split and read the second object from (default: "Id")</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
+        /// <returns>List of results</returns>
+        public IEnumerable<TReturn> Get<TFirst, TSecond, TReturn>(string sql, Func<TFirst, TSecond, TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction, string splitOn, int? commandTimeout)
+            => GetAsync<TFirst, TSecond, TReturn>(sql, map, parameters, customTransaction, splitOn, commandTimeout).Result;        
+        
         /// <summary>
         /// Get the result of a multi-mapping query with parameters and 2 input types 
         /// </summary>
@@ -546,6 +584,17 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="sql">Query</param>
         /// <param name="map">The function to map row types to the return type</param>
         /// <param name="parameters">Query parameters</param>
+        /// <param name="splitOn">The field we should split and read the second object from (default: "Id")</param>
+        /// <returns>List of results</returns>
+        public IEnumerable<TReturn> Get<TFirst, TSecond, TReturn>(string sql, Func<TFirst, TSecond, TReturn> map, Dictionary<string, object> parameters, string splitOn)
+            => GetAsync<TFirst, TSecond, TReturn>(sql, map, parameters, splitOn).Result;
+        
+        /// <summary>
+        /// Get the result of a multi-mapping query with parameters and 2 input types 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="map">The function to map row types to the return type</param>
+        /// <param name="parameters">Query parameters</param>
         /// <returns>List of results</returns>
         public IEnumerable<TReturn> Get<TFirst, TSecond, TReturn>(string sql, Func<TFirst, TSecond, TReturn> map, Dictionary<string, object> parameters)
             => GetAsync<TFirst, TSecond, TReturn>(sql, map, parameters).Result;
@@ -566,9 +615,10 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="map">The function to map row types to the return type</param>
         /// <param name="parameters">Query parameters</param>
         /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="splitOn">The field we should split and read the second object from (default: "Id")</param>
         /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
         /// <returns>List of results</returns>
-        public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TThird, TReturn>(string sql, Func<TFirst, TSecond, TThird, TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction, int? commandTimeout)
+        public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TThird, TReturn>(string sql, Func<TFirst, TSecond, TThird, TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction, string splitOn, int? commandTimeout)
         {
             try
             {
@@ -577,15 +627,27 @@ namespace RepositoryHelpers.DataBaseRepository
                 var connection = GetConnection(customTransaction);
 
                 if (isCustomTransaction)
-                    return await connection.QueryAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters, customTransaction.DbCommand.Transaction, commandTimeout: commandTimeout);
+                    return await connection.QueryAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters, customTransaction.DbCommand.Transaction, splitOn: splitOn, commandTimeout: commandTimeout);
                 else
-                    return await connection.QueryAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters, commandTimeout: commandTimeout);
+                    return await connection.QueryAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters, splitOn: splitOn, commandTimeout: commandTimeout);
             }
             catch (Exception ex)
             {
                 throw new CustomRepositoryException(ex.Message);
             }
         }
+        
+        /// <summary>
+        /// Get the asynchronously result of a multi-mapping query with parameters and 3 input types 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="map">The function to map row types to the return type</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
+        /// <returns>List of results</returns>
+        public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TThird, TReturn>(string sql, Func<TFirst, TSecond, TThird, TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction, int? commandTimeout)
+            => await GetAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters, customTransaction, "Id", null).ConfigureAwait(false);
 
         /// <summary>
         /// Get the asynchronously result of a multi-mapping query with parameters and 3 input types 
@@ -598,6 +660,17 @@ namespace RepositoryHelpers.DataBaseRepository
         public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TThird, TReturn>(string sql, Func<TFirst, TSecond, TThird, TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction)
             => await GetAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters, customTransaction, null).ConfigureAwait(false);
 
+        /// <summary>
+        /// Get the asynchronously result of a multi-mapping query with parameters and 3 input types 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="map">The function to map row types to the return type</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="splitOn">The field we should split and read the second object from (default: "Id")</param>
+        /// <returns>List of results</returns>
+        public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TThird, TReturn>(string sql, Func<TFirst, TSecond, TThird, TReturn> map, Dictionary<string, object> parameters, string splitOn)
+            => await GetAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters, null, splitOn, null).ConfigureAwait(false);
+        
         /// <summary>
         /// Get the asynchronously result of a multi-mapping query with parameters and 3 input types 
         /// </summary>
@@ -617,6 +690,19 @@ namespace RepositoryHelpers.DataBaseRepository
         public async Task<IEnumerable<TReturn>> GetAsync<TFirst, TSecond, TThird, TReturn>(string sql, Func<TFirst, TSecond, TThird, TReturn> map)
             => await GetAsync<TFirst, TSecond, TThird, TReturn>(sql, map, null, null, null).ConfigureAwait(false);
 
+        /// <summary>
+        /// Get the result of a multi-mapping query with parameters and 3 input types 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="map">The function to map row types to the return type</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="splitOn">The field we should split and read the second object from (default: "Id")</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
+        /// <returns>List of results</returns>
+        public IEnumerable<TReturn> Get<TFirst, TSecond, TThird, TReturn>(string sql, Func<TFirst, TSecond, TThird, TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction, string splitOn, int? commandTimeout)
+            => GetAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters, customTransaction, splitOn, commandTimeout).Result;
+        
         /// <summary>
         /// Get the result of a multi-mapping query with parameters and 3 input types 
         /// </summary>
@@ -646,6 +732,17 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="sql">Query</param>
         /// <param name="map">The function to map row types to the return type</param>
         /// <param name="parameters">Query parameters</param>
+        /// <param name="splitOn">The field we should split and read the second object from (default: "Id")</param>
+        /// <returns>List of results</returns>
+        public IEnumerable<TReturn> Get<TFirst, TSecond, TThird, TReturn>(string sql, Func<TFirst, TSecond, TThird, TReturn> map, Dictionary<string, object> parameters, string splitOn)
+            => GetAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters, splitOn).Result;
+        
+        /// <summary>
+        /// Get the result of a multi-mapping query with parameters and 3 input types 
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="map">The function to map row types to the return type</param>
+        /// <param name="parameters">Query parameters</param>
         /// <returns>List of results</returns>
         public IEnumerable<TReturn> Get<TFirst, TSecond, TThird, TReturn>(string sql, Func<TFirst, TSecond, TThird, TReturn> map, Dictionary<string, object> parameters)
             => GetAsync<TFirst, TSecond, TThird, TReturn>(sql, map, parameters).Result;
@@ -667,9 +764,10 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="map">The function to map row types to the return type</param>
         /// <param name="parameters">Query parameters</param>
         /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="splitOn">The field we should split and read the second object from (default: "Id")</param>
         /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
         /// <returns>List of results</returns>
-        public async Task<IEnumerable<TReturn>> GetAsync<TReturn>(string sql, Type[] types, Func<object[], TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction, int? commandTimeout)
+        public async Task<IEnumerable<TReturn>> GetAsync<TReturn>(string sql, Type[] types, Func<object[], TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction, string splitOn, int? commandTimeout)
         {
             try
             {
@@ -678,9 +776,9 @@ namespace RepositoryHelpers.DataBaseRepository
                 var connection = GetConnection(customTransaction);
 
                 if (isCustomTransaction)
-                    return await connection.QueryAsync<TReturn>(sql, types, map, parameters, customTransaction.DbCommand.Transaction, commandTimeout: commandTimeout);
+                    return await connection.QueryAsync<TReturn>(sql, types, map, parameters, customTransaction.DbCommand.Transaction, splitOn: splitOn, commandTimeout: commandTimeout);
                 else
-                    return await connection.QueryAsync<TReturn>(sql, types, map, parameters, commandTimeout: commandTimeout);
+                    return await connection.QueryAsync<TReturn>(sql, types, map, parameters, splitOn: splitOn, commandTimeout: commandTimeout);
             }
             catch (Exception ex)
             {
@@ -696,10 +794,35 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="map">The function to map row types to the return type</param>
         /// <param name="parameters">Query parameters</param>
         /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
+        /// <returns>List of results</returns>
+        public async Task<IEnumerable<TReturn>> GetAsync<TReturn>(string sql, Type[] types, Func<object[], TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction, int? commandTimeout)
+            => await GetAsync<TReturn>(sql, types, map, parameters, customTransaction, "Id", null).ConfigureAwait(false);
+
+        /// <summary>
+        /// Get the asynchronously result of a multi-mapping query with parameters and an arbitrary number of input types
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="types">Array of types in the recordset.</param>
+        /// <param name="map">The function to map row types to the return type</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
         /// <returns>List of results</returns>
         public async Task<IEnumerable<TReturn>> GetAsync<TReturn>(string sql, Type[] types, Func<object[], TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction)
             => await GetAsync<TReturn>(sql, types, map, parameters, customTransaction, null).ConfigureAwait(false);
 
+        /// <summary>
+        /// Get the asynchronously result of a multi-mapping query with parameters and an arbitrary number of input types
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="types">Array of types in the recordset.</param>
+        /// <param name="map">The function to map row types to the return type</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="splitOn">The field we should split and read the second object from (default: "Id")</param>
+        /// <returns>List of results</returns>
+        public async Task<IEnumerable<TReturn>> GetAsync<TReturn>(string sql, Type[] types, Func<object[], TReturn> map, Dictionary<string, object> parameters, string splitOn)
+            => await GetAsync<TReturn>(sql, types, map, parameters, null, splitOn, null).ConfigureAwait(false);
+        
         /// <summary>
         /// Get the asynchronously result of a multi-mapping query with parameters and an arbitrary number of input types
         /// </summary>
@@ -729,6 +852,20 @@ namespace RepositoryHelpers.DataBaseRepository
         /// <param name="map">The function to map row types to the return type</param>
         /// <param name="parameters">Query parameters</param>
         /// <param name="customTransaction"> has a transaction object</param>
+        /// <param name="splitOn">The field we should split and read the second object from (default: "Id")</param>
+        /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
+        /// <returns>List of results</returns>
+        public IEnumerable<TReturn> Get<TReturn>(string sql, Type[] types, Func<object[], TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction, string splitOn, int? commandTimeout)
+            => GetAsync<TReturn>(sql, types, map, parameters, customTransaction, splitOn, commandTimeout).Result;
+
+        /// <summary>
+        /// Get the result of a multi-mapping query with parameters and an arbitrary number of input types
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="types">Array of types in the recordset.</param>
+        /// <param name="map">The function to map row types to the return type</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="customTransaction"> has a transaction object</param>
         /// <param name="commandTimeout">Number of seconds before command execution timeout</param>
         /// <returns>List of results</returns>
         public IEnumerable<TReturn> Get<TReturn>(string sql, Type[] types, Func<object[], TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction, int? commandTimeout)
@@ -746,6 +883,18 @@ namespace RepositoryHelpers.DataBaseRepository
         public IEnumerable<TReturn> Get<TReturn>(string sql, Type[] types, Func<object[], TReturn> map, Dictionary<string, object> parameters, CustomTransaction customTransaction)
             => GetAsync<TReturn>(sql, types, map, parameters, customTransaction).Result;
 
+        /// <summary>
+        /// Get the result of a multi-mapping query with parameters and an arbitrary number of input types
+        /// </summary>
+        /// <param name="sql">Query</param>
+        /// <param name="types">Array of types in the recordset.</param>
+        /// <param name="map">The function to map row types to the return type</param>
+        /// <param name="parameters">Query parameters</param>
+        /// <param name="splitOn">The field we should split and read the second object from (default: "Id")</param>
+        /// <returns>List of results</returns>
+        public IEnumerable<TReturn> Get<TReturn>(string sql, Type[] types, Func<object[], TReturn> map, Dictionary<string, object> parameters, string splitOn)
+            => GetAsync<TReturn>(sql, types, map, parameters, splitOn).Result;
+        
         /// <summary>
         /// Get the result of a multi-mapping query with parameters and an arbitrary number of input types
         /// </summary>
