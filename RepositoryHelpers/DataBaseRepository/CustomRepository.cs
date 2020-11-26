@@ -1491,6 +1491,7 @@ namespace RepositoryHelpers.DataBaseRepository
                     DbCommand.Parameters.Add(_connection.GetParameter(parameter));
                 }
 
+             
                 using (var da = _connection.GetDataAdapter())
                 {
                     da.SelectCommand = DbCommand;
@@ -1629,6 +1630,80 @@ namespace RepositoryHelpers.DataBaseRepository
             => this._connection.ConnectionString;
 
         #endregion
+
+
+        public async Task<DataTable> GetProcedureDataTableAsync(string procedure, Dictionary<string, object> parameters, 
+            CustomTransaction customTransaction, int? commandTimeout)
+        {
+
+            if (_connection.Database == DataBaseType.Oracle)
+                throw new NotImplementedDatabaseException();
+
+            var isCustomTransaction = customTransaction != null;
+
+            try
+            {
+                var connection = GetConnection(customTransaction);
+
+                DbDataReader reader;
+                if (isCustomTransaction)
+                    reader = await connection.ExecuteReaderAsync(procedure, parameters, customTransaction.DbCommand.Transaction, commandTimeout);
+                else
+                    reader = await connection.ExecuteReaderAsync(procedure, parameters, commandTimeout: commandTimeout);
+
+                DataTable dtReturn = new DataTable();
+                dtReturn.Load(reader);
+
+                return dtReturn;
+            }
+            catch (Exception ex)
+            {
+                throw new CustomRepositoryException(ex.Message);
+            }
+        }
+
+        public async Task<DataTable> GetProcedureDataTableAsync(string procedure, Dictionary<string, object> parameters, CustomTransaction customTransaction) => 
+            await GetProcedureDataTableAsync(procedure, parameters, customTransaction, null).ConfigureAwait(false);
+
+        public async Task<DataTable> GetProcedureDataTableAsync(string procedure, Dictionary<string, object> parameters) => 
+            await GetProcedureDataTableAsync(procedure, parameters, null, null).ConfigureAwait(false);
+
+        public DataTable GetProcedureDataTable(string procedure, Dictionary<string, object> parameters,
+           CustomTransaction customTransaction, int? commandTimeout)
+        {
+
+            if (_connection.Database == DataBaseType.Oracle)
+                throw new NotImplementedDatabaseException();
+
+            var isCustomTransaction = customTransaction != null;
+
+            try
+            {
+                var connection = GetConnection(customTransaction);
+
+                IDataReader reader;
+                if (isCustomTransaction)
+                    reader =  connection.ExecuteReader(procedure, parameters, customTransaction.DbCommand.Transaction, commandTimeout);
+                else
+                    reader =  connection.ExecuteReader(procedure, parameters, commandTimeout: commandTimeout);
+
+                DataTable dtReturn = new DataTable();
+                dtReturn.Load(reader);
+
+                return dtReturn;
+            }
+            catch (Exception ex)
+            {
+                throw new CustomRepositoryException(ex.Message);
+            }
+        }
+
+        public DataTable GetProcedureDataTable(string procedure, Dictionary<string, object> parameters, CustomTransaction customTransaction) =>
+             GetProcedureDataTable(procedure, parameters, customTransaction, null);
+
+        public DataTable GetProcedureDataTable(string procedure, Dictionary<string, object> parameters) =>
+             GetProcedureDataTable(procedure, parameters, null, null);
+
 
     }
 }

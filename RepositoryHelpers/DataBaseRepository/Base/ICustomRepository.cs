@@ -120,6 +120,14 @@ namespace RepositoryHelpers.DataBaseRepository.Base
         DataSet GetProcedureDataSet(string procedure, Dictionary<string, object> parameters, CustomTransaction customTransaction);
         DataSet GetProcedureDataSet(string procedure, Dictionary<string, object> parameters);
 
+        Task<DataTable> GetProcedureDataTableAsync(string procedure, Dictionary<string, object> parameters, CustomTransaction customTransaction, int? commandTimeout);
+        Task<DataTable> GetProcedureDataTableAsync(string procedure, Dictionary<string, object> parameters, CustomTransaction customTransaction);
+        Task<DataTable> GetProcedureDataTableAsync(string procedure, Dictionary<string, object> parameters);
+
+        DataTable GetProcedureDataTable(string procedure, Dictionary<string, object> parameters, CustomTransaction customTransaction, int? commandTimeout);
+        DataTable GetProcedureDataTable(string procedure, Dictionary<string, object> parameters, CustomTransaction customTransaction);
+        DataTable GetProcedureDataTable(string procedure, Dictionary<string, object> parameters);
+
         Task<object> ExecuteScalarAsync(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction, int? commandTimeout);
         Task<object> ExecuteScalarAsync(string sql, Dictionary<string, object> parameters, CustomTransaction customTransaction);
         Task<object> ExecuteScalarAsync(string sql, Dictionary<string, object> parameters);
