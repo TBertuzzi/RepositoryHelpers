@@ -1668,6 +1668,9 @@ namespace RepositoryHelpers.DataBaseRepository
         public async Task<DataTable> GetProcedureDataTableAsync(string procedure, Dictionary<string, object> parameters) => 
             await GetProcedureDataTableAsync(procedure, parameters, null, null).ConfigureAwait(false);
 
+        public async Task<DataTable> GetProcedureDataTableAsync(string procedure, Dictionary<string, object> parameters, int? commandTimeout) =>
+          await GetProcedureDataTableAsync(procedure, parameters, null, commandTimeout).ConfigureAwait(false);
+
         public DataTable GetProcedureDataTable(string procedure, Dictionary<string, object> parameters,
            CustomTransaction customTransaction, int? commandTimeout)
         {
@@ -1703,6 +1706,9 @@ namespace RepositoryHelpers.DataBaseRepository
 
         public DataTable GetProcedureDataTable(string procedure, Dictionary<string, object> parameters) =>
              GetProcedureDataTable(procedure, parameters, null, null);
+
+        public DataTable GetProcedureDataTable(string procedure, Dictionary<string, object> parameters, int? commandTimeout) =>
+            GetProcedureDataTable(procedure, parameters, null, commandTimeout);
 
 
     }
