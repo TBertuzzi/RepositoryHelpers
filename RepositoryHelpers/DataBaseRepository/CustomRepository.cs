@@ -1099,10 +1099,8 @@ namespace RepositoryHelpers.DataBaseRepository
 
             try
             {
-                if (isCustomTransaction)
-                    DbCommand = customTransaction.DbCommand;
-                else
-                    DbCommand.Connection = DBConnection;
+
+                DbCommand.Connection = GetConnection(customTransaction);
 
                 if (commandTimeout.HasValue)
                     DbCommand.CommandTimeout = commandTimeout.Value;
