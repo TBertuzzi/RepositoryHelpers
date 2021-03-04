@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.OracleClient;
 using System.Data.SqlClient;
+using Npgsql;
 using RepositoryHelpers.Utils;
 
 namespace RepositoryHelpers.DataBase
@@ -28,6 +29,8 @@ namespace RepositoryHelpers.DataBase
                         return new SqlConnection(this.ConnectionString);
                     case DataBaseType.Oracle:
                         return new OracleConnection(this.ConnectionString);
+                    case DataBaseType.PostgreSQL:
+                        return new NpgsqlConnection(this.ConnectionString);
                     default: return null;
                 }
             }
