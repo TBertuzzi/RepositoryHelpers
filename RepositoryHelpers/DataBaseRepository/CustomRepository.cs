@@ -229,7 +229,10 @@ namespace RepositoryHelpers.DataBaseRepository
                     if (string.IsNullOrEmpty(identityColumn))
                         throw new CustomRepositoryException("Identity column is not defined");
 
-                    sql.AppendLine($" OUTPUT inserted.{identityColumn} values ({sqlParameters.ToString()}) ");
+                    if (_connection.Database == DataBaseType.SqlServer)
+                        sql.AppendLine($" OUTPUT inserted.{identityColumn} values ({sqlParameters.ToString()}) ");
+                    else if (_connection.Database == DataBaseType.PostgreSQL)
+                        sql.AppendLine($"  values ({sqlParameters.ToString()}) RETURNING {identity} ");
 
                     if (isCustomTransaction)
                         return connection.QuerySingleOrDefault<dynamic>(sql.ToString(), parameters, customTransaction.DbCommand.Transaction, commandTimeout).Id;
@@ -1287,14 +1290,19 @@ namespace RepositoryHelpers.DataBaseRepository
             {
                 StringBuilder sbSql = new StringBuilder();
 
-                if (_connection.Database == DataBaseType.SqlServer)
+                switch (_connection.Database)
                 {
-                    sbSql.AppendLine(sql);
-                    sbSql.AppendLine("SELECT CAST(SCOPE_IDENTITY() as int);");
-                }
-                else
-                {
-                    sbSql.AppendLine($"BEGIN {sql} SELECT {identity}.currval FROM DUAL END; ");
+                    case DataBaseType.SqlServer:
+                        sbSql.AppendLine(sql);
+                        sbSql.AppendLine("SELECT CAST(SCOPE_IDENTITY() as int);");
+                        break;
+                    case DataBaseType.Oracle:
+                        sbSql.AppendLine($"BEGIN {sql} SELECT {identity}.currval FROM DUAL END; ");
+                        break;
+                    case DataBaseType.PostgreSQL:
+                        break;
+                    default:
+                        break;
                 }
 
                 if (isCustomTransaction)
@@ -1311,6 +1319,9 @@ namespace RepositoryHelpers.DataBaseRepository
                 {
                     DbCommand.Parameters.Add(_connection.GetParameter(parameter));
                 }
+
+                if (_connection.Database == DataBaseType.PostgreSQL)
+                    sbSql.AppendLine($" RETURNING {identity} ; ");
 
                 DbCommand.CommandText = sbSql.ToString();
 

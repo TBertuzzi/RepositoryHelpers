@@ -44,6 +44,8 @@ namespace RepositoryHelpers.DataBase
                     return new SqlCommand();
                 case DataBaseType.Oracle:
                     return new OracleCommand();
+                case DataBaseType.PostgreSQL:
+                    return new NpgsqlCommand();
                 default: return null;
             }
         }
@@ -56,6 +58,8 @@ namespace RepositoryHelpers.DataBase
                     return new SqlCommand(sql, (SqlConnection)dbConnection);
                 case DataBaseType.Oracle:
                     return new OracleCommand(sql, (OracleConnection)dbConnection);
+                case DataBaseType.PostgreSQL:
+                    return new NpgsqlCommand(sql, (NpgsqlConnection)dbConnection);
                 default: return null;
             }
         }
@@ -67,6 +71,9 @@ namespace RepositoryHelpers.DataBase
                 case DataBaseType.SqlServer:
                     return new SqlDataAdapter();
                 case DataBaseType.Oracle:
+                    return new OracleDataAdapter();
+                case DataBaseType.PostgreSQL:
+                    return new NpgsqlDataAdapter();
                 default:
                     return null;
             }
@@ -79,6 +86,9 @@ namespace RepositoryHelpers.DataBase
                 case DataBaseType.SqlServer:
                     return new SqlParameter($"@{parameter.Key}", parameter.Value);
                 case DataBaseType.Oracle:
+                    return new OracleParameter($"@{parameter.Key}", parameter.Value);
+                case  DataBaseType.PostgreSQL:
+                    return new NpgsqlParameter($"@{parameter.Key}", parameter.Value);
                 default:
                     return null;
             }
