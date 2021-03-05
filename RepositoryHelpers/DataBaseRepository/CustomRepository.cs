@@ -232,12 +232,15 @@ namespace RepositoryHelpers.DataBaseRepository
                     if (_connection.Database == DataBaseType.SqlServer)
                         sql.AppendLine($" OUTPUT inserted.{identityColumn} values ({sqlParameters.ToString()}) ");
                     else if (_connection.Database == DataBaseType.PostgreSQL)
-                        sql.AppendLine($"  values ({sqlParameters.ToString()}) RETURNING {identity} ");
+                        sql.AppendLine($"  values ({sqlParameters.ToString()}) RETURNING {identityColumn} ");
 
+                    object identityObject;
                     if (isCustomTransaction)
-                        return connection.QuerySingleOrDefault<dynamic>(sql.ToString(), parameters, customTransaction.DbCommand.Transaction, commandTimeout).Id;
+                        identityObject = connection.ExecuteScalar(sql.ToString(), parameters, customTransaction.DbCommand.Transaction, commandTimeout);
                     else
-                        return connection.QuerySingleOrDefault<dynamic>(sql.ToString(), parameters, commandTimeout: commandTimeout).Id;
+                        identityObject = connection.ExecuteScalar(sql.ToString(), parameters, commandTimeout: commandTimeout);
+ 
+                    return identityObject;
                 }
                 else
                 {

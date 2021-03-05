@@ -6,7 +6,8 @@ namespace RepositoryHelpers
     {
         public const string DapperIgnore = "REPOSITORYHELPERS.DAPPERIGNORE";
         public const string PrimaryKey = "REPOSITORYHELPERS.PRIMARYKEY";
-        public const string IdentityIgnore = "REPOSITORYHELPERS.IDENTITYIGNORE";
+        // public const string IdentityIgnore = "REPOSITORYHELPERS.IDENTITYIGNORE";
+        public const string Identity = "REPOSITORYHELPERS.IDENTITY";
 
         public bool Equals(Attributes other) =>
             base.Equals(other);

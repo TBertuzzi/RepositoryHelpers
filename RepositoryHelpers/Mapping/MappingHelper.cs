@@ -35,8 +35,10 @@ namespace RepositoryHelpers.Mapping
         {
             foreach (var property in type.GetProperties())
             {
-                var isIdentity = property.CustomAttributes.ToList().Any(x => x.GetAttributeName() == Attributes.IdentityIgnore);
+                
+                var isIdentity = property.CustomAttributes.ToList().Any(x => x.GetAttributeName() == Attributes.Identity);
 
+                // if is not attribute identity, search Fluent
                 if (!isIdentity)
                 {
                     var propertyMap = GetFluentPropertyMap(type, property);
@@ -81,7 +83,7 @@ namespace RepositoryHelpers.Mapping
             if (customAttributeData.Any())
             {
                 if (customAttributeData.Any(x => x.GetAttributeName() == Attributes.DapperIgnore ||
-                                                 x.GetAttributeName() == Attributes.IdentityIgnore))
+                                                 x.GetAttributeName() == Attributes.Identity))
                     return true;
             }
             else
