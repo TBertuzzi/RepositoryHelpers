@@ -50,18 +50,29 @@ namespace RepositoryHelpers.Mapping
             return null;
         }
 
-        public static string GetTableName(Type type)
+        public static string GetTableName(Type type,DataBaseType dataBaseType)
         {
             var table = type.GetCustomAttributes(typeof(Table), true).FirstOrDefault() as Table;
             var tableNameFluent = GetFluentEntityMap(type)?.TableName;
+            var tableName = string.Empty;
 
             if (table != null)
-                return table.TableName;
-            
-            if (!string.IsNullOrWhiteSpace(tableNameFluent))
-                return tableNameFluent;
+                tableName = table.TableName;
+            else if (!string.IsNullOrWhiteSpace(tableNameFluent))
+                tableName = tableNameFluent;
+            else
+                tableName = type.Name;
 
-            return type.Name;
+            switch (dataBaseType)
+            {
+                case DataBaseType.SqlServer:
+                    return $"[{tableName}]";
+                case DataBaseType.PostgreSQL:
+                    return tableName.ToLower();
+                case DataBaseType.Oracle:
+                default:
+                    return tableName;
+            }
         }
 
         public static bool IsIgnored(Type entityType, PropertyInfo property)

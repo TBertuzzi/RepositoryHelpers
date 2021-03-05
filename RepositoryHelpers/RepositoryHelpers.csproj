@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>tbertuzzi</Authors>
     <Company>KBits</Company>
-    <Copyright>Copyright ©2020 KBits</Copyright>
+    <Copyright>Copyright ©2021 KBits</Copyright>
     <PackageLicenseUrl>http://opensource.org/licenses/MS-PL</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/TBertuzzi/RepositoryHelpers</PackageProjectUrl>
     <PackageTags>repository helpers dapper litedb ddd mvc httpclient rest pattern database db sql oracle sqlserver</PackageTags>
@@ -13,9 +13,9 @@
     <PackageIconUrl></PackageIconUrl>
     <RepositoryUrl>https://github.com/TBertuzzi/RepositoryHelpers</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.6.3</Version>
-    <AssemblyVersion>2.6.3.0</AssemblyVersion>
-    <FileVersion>2.6.3.0</FileVersion>
+    <Version>2.6.4</Version>
+    <AssemblyVersion>2.6.4.0</AssemblyVersion>
+    <FileVersion>2.6.4.0</FileVersion>
     <PackageIcon>RepositoryHelpersIcon.png</PackageIcon>
   </PropertyGroup>
 
