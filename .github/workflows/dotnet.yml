@@ -16,10 +16,10 @@ jobs:
         dotnet-version: 3.1.101
     - name: Install dependencies
       run: dotnet restore
-   # - name: Build
-   #   run: dotnet build --configuration Release --no-restore
-   # - name: Publish RepositoryHelpers
-   #   uses: brandedoutcast/publish-nuget@v2.5.2
-   #   with:
-   #       PROJECT_FILE_PATH: RepositoryHelpers/RepositoryHelpers.csproj
-   #       NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    - name: Publish RepositoryHelpers
+      uses: brandedoutcast/publish-nuget@v2.5.2
+      with:
+          PROJECT_FILE_PATH: RepositoryHelpers/RepositoryHelpers.csproj
+          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
