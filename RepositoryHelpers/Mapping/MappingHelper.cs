@@ -35,8 +35,10 @@ namespace RepositoryHelpers.Mapping
         {
             foreach (var property in type.GetProperties())
             {
-                var isIdentity = property.CustomAttributes.ToList().Any(x => x.GetAttributeName() == Attributes.IdentityIgnore);
+                
+                var isIdentity = property.CustomAttributes.ToList().Any(x => x.GetAttributeName() == Attributes.Identity);
 
+                // if is not attribute identity, search Fluent
                 if (!isIdentity)
                 {
                     var propertyMap = GetFluentPropertyMap(type, property);
@@ -50,18 +52,29 @@ namespace RepositoryHelpers.Mapping
             return null;
         }
 
-        public static string GetTableName(Type type)
+        public static string GetTableName(Type type,DataBaseType dataBaseType)
         {
             var table = type.GetCustomAttributes(typeof(Table), true).FirstOrDefault() as Table;
             var tableNameFluent = GetFluentEntityMap(type)?.TableName;
+            var tableName = string.Empty;
 
             if (table != null)
-                return table.TableName;
-            
-            if (!string.IsNullOrWhiteSpace(tableNameFluent))
-                return tableNameFluent;
+                tableName = table.TableName;
+            else if (!string.IsNullOrWhiteSpace(tableNameFluent))
+                tableName = tableNameFluent;
+            else
+                tableName = type.Name;
 
-            return type.Name;
+            switch (dataBaseType)
+            {
+                case DataBaseType.SqlServer:
+                    return $"[{tableName}]";
+                case DataBaseType.PostgreSQL:
+                    return tableName.ToLower();
+                case DataBaseType.Oracle:
+                default:
+                    return tableName;
+            }
         }
 
         public static bool IsIgnored(Type entityType, PropertyInfo property)
@@ -70,7 +83,7 @@ namespace RepositoryHelpers.Mapping
             if (customAttributeData.Any())
             {
                 if (customAttributeData.Any(x => x.GetAttributeName() == Attributes.DapperIgnore ||
-                                                 x.GetAttributeName() == Attributes.IdentityIgnore))
+                                                 x.GetAttributeName() == Attributes.Identity))
                     return true;
             }
             else

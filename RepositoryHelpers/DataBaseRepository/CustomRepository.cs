@@ -105,7 +105,7 @@ namespace RepositoryHelpers.DataBaseRepository
                 if (!primaryKey.Any())
                     throw new CustomRepositoryException("Primary key is not defined");
 
-                sql.AppendLine($"update [{MappingHelper.GetTableName(typeof(T))}] set ");
+                sql.AppendLine($"update {MappingHelper.GetTableName(typeof(T), _connection.Database)} set ");
 
                 foreach (var p in item.GetType().GetProperties())
                 {
@@ -221,7 +221,7 @@ namespace RepositoryHelpers.DataBaseRepository
 
                 sqlParameters.Remove(sqlParameters.Length - 1, 1);
 
-                sql.AppendLine($"insert into [{MappingHelper.GetTableName(typeof(T))}] ({sqlParameters.ToString().Replace("@", "")}) ");
+                sql.AppendLine($"insert into {MappingHelper.GetTableName(typeof(T), _connection.Database)} ({sqlParameters.ToString().Replace("@", "")}) ");
 
                 if (identity)
                 {
@@ -229,12 +229,18 @@ namespace RepositoryHelpers.DataBaseRepository
                     if (string.IsNullOrEmpty(identityColumn))
                         throw new CustomRepositoryException("Identity column is not defined");
 
-                    sql.AppendLine($" OUTPUT inserted.{identityColumn} values ({sqlParameters.ToString()}) ");
+                    if (_connection.Database == DataBaseType.SqlServer)
+                        sql.AppendLine($" OUTPUT inserted.{identityColumn} values ({sqlParameters.ToString()}) ");
+                    else if (_connection.Database == DataBaseType.PostgreSQL)
+                        sql.AppendLine($"  values ({sqlParameters.ToString()}) RETURNING {identityColumn} ");
 
+                    object identityObject;
                     if (isCustomTransaction)
-                        return connection.QuerySingleOrDefault<dynamic>(sql.ToString(), parameters, customTransaction.DbCommand.Transaction, commandTimeout).Id;
+                        identityObject = connection.ExecuteScalar(sql.ToString(), parameters, customTransaction.DbCommand.Transaction, commandTimeout);
                     else
-                        return connection.QuerySingleOrDefault<dynamic>(sql.ToString(), parameters, commandTimeout: commandTimeout).Id;
+                        identityObject = connection.ExecuteScalar(sql.ToString(), parameters, commandTimeout: commandTimeout);
+ 
+                    return identityObject;
                 }
                 else
                 {
@@ -316,9 +322,9 @@ namespace RepositoryHelpers.DataBaseRepository
                 var connection = GetConnection(customTransaction);
 
                 if (isCustomTransaction)
-                    return await connection.QueryAsync<T>($"Select * from [{MappingHelper.GetTableName(typeof(T))}] ", transaction: customTransaction.DbCommand.Transaction, commandTimeout: commandTimeout);
+                    return await connection.QueryAsync<T>($"Select * from {MappingHelper.GetTableName(typeof(T), _connection.Database)} ", transaction: customTransaction.DbCommand.Transaction, commandTimeout: commandTimeout);
                 else
-                    return await connection.QueryAsync<T>($"Select * from [{MappingHelper.GetTableName(typeof(T))}] ", commandTimeout: commandTimeout);
+                    return await connection.QueryAsync<T>($"Select * from {MappingHelper.GetTableName(typeof(T), _connection.Database)} ", commandTimeout: commandTimeout);
             }
             catch (Exception ex)
             {
@@ -942,9 +948,9 @@ namespace RepositoryHelpers.DataBaseRepository
                 var connection = GetConnection(customTransaction);
 
                 if (isCustomTransaction)
-                    return await connection.QueryFirstOrDefaultAsync<T>($"Select * from [{MappingHelper.GetTableName(typeof(T))}] where {primaryKeyColumnName} = @ID ", new { ID = id }, customTransaction.DbCommand.Transaction, commandTimeout);
+                    return await connection.QueryFirstOrDefaultAsync<T>($"Select * from {MappingHelper.GetTableName(typeof(T), _connection.Database)} where {primaryKeyColumnName} = @ID ", new { ID = id }, customTransaction.DbCommand.Transaction, commandTimeout);
                 else
-                    return await connection.QueryFirstOrDefaultAsync<T>($"Select * from [{MappingHelper.GetTableName(typeof(T))}] where {primaryKeyColumnName} = @ID ", new { ID = id }, commandTimeout: commandTimeout);
+                    return await connection.QueryFirstOrDefaultAsync<T>($"Select * from {MappingHelper.GetTableName(typeof(T), _connection.Database)} where {primaryKeyColumnName} = @ID ", new { ID = id }, commandTimeout: commandTimeout);
             }
             catch (Exception ex)
             {
@@ -1026,7 +1032,7 @@ namespace RepositoryHelpers.DataBaseRepository
                     { "@ID", id }
                 };
 
-                sql.AppendLine($"delete from [{MappingHelper.GetTableName(typeof(T))}] where {primaryKeyColumnName} = @ID");
+                sql.AppendLine($"delete from {MappingHelper.GetTableName(typeof(T), _connection.Database)} where {primaryKeyColumnName} = @ID");
 
                 if (isCustomTransaction)
                     await connection.ExecuteAsync(sql.ToString(), parameters, customTransaction.DbCommand.Transaction, commandTimeout);
@@ -1099,10 +1105,8 @@ namespace RepositoryHelpers.DataBaseRepository
 
             try
             {
-                if (isCustomTransaction)
-                    DbCommand = customTransaction.DbCommand;
-                else
-                    DbCommand.Connection = DBConnection;
+
+                DbCommand.Connection = GetConnection(customTransaction);
 
                 if (commandTimeout.HasValue)
                     DbCommand.CommandTimeout = commandTimeout.Value;
@@ -1289,14 +1293,19 @@ namespace RepositoryHelpers.DataBaseRepository
             {
                 StringBuilder sbSql = new StringBuilder();
 
-                if (_connection.Database == DataBaseType.SqlServer)
+                switch (_connection.Database)
                 {
-                    sbSql.AppendLine(sql);
-                    sbSql.AppendLine("SELECT CAST(SCOPE_IDENTITY() as int);");
-                }
-                else
-                {
-                    sbSql.AppendLine($"BEGIN {sql} SELECT {identity}.currval FROM DUAL END; ");
+                    case DataBaseType.SqlServer:
+                        sbSql.AppendLine(sql);
+                        sbSql.AppendLine("SELECT CAST(SCOPE_IDENTITY() as int);");
+                        break;
+                    case DataBaseType.Oracle:
+                        sbSql.AppendLine($"BEGIN {sql} SELECT {identity}.currval FROM DUAL END; ");
+                        break;
+                    case DataBaseType.PostgreSQL:
+                        break;
+                    default:
+                        break;
                 }
 
                 if (isCustomTransaction)
@@ -1313,6 +1322,9 @@ namespace RepositoryHelpers.DataBaseRepository
                 {
                     DbCommand.Parameters.Add(_connection.GetParameter(parameter));
                 }
+
+                if (_connection.Database == DataBaseType.PostgreSQL)
+                    sbSql.AppendLine($" RETURNING {identity} ; ");
 
                 DbCommand.CommandText = sbSql.ToString();
 

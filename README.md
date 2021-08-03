@@ -45,7 +45,7 @@ public string InternalControl { get; set; }
 [PrimaryKey] // Primary key
 public int MyCustomId { get; set; }
 [PrimaryKey]
-[IdentityIgnore] //Primary key ignoring Identity
+[Identity] //Indicates that the primary key has some identity, sequence or auto increment
 public int MyBdIdIndentity { get; set; }
 
 //You can optionally map the name of the Database table that refers to the entity

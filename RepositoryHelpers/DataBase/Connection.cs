@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.OracleClient;
 using System.Data.SqlClient;
+using Npgsql;
 using RepositoryHelpers.Utils;
 
 namespace RepositoryHelpers.DataBase
@@ -28,6 +29,8 @@ namespace RepositoryHelpers.DataBase
                         return new SqlConnection(this.ConnectionString);
                     case DataBaseType.Oracle:
                         return new OracleConnection(this.ConnectionString);
+                    case DataBaseType.PostgreSQL:
+                        return new NpgsqlConnection(this.ConnectionString);
                     default: return null;
                 }
             }
@@ -41,6 +44,8 @@ namespace RepositoryHelpers.DataBase
                     return new SqlCommand();
                 case DataBaseType.Oracle:
                     return new OracleCommand();
+                case DataBaseType.PostgreSQL:
+                    return new NpgsqlCommand();
                 default: return null;
             }
         }
@@ -53,6 +58,8 @@ namespace RepositoryHelpers.DataBase
                     return new SqlCommand(sql, (SqlConnection)dbConnection);
                 case DataBaseType.Oracle:
                     return new OracleCommand(sql, (OracleConnection)dbConnection);
+                case DataBaseType.PostgreSQL:
+                    return new NpgsqlCommand(sql, (NpgsqlConnection)dbConnection);
                 default: return null;
             }
         }
@@ -64,6 +71,9 @@ namespace RepositoryHelpers.DataBase
                 case DataBaseType.SqlServer:
                     return new SqlDataAdapter();
                 case DataBaseType.Oracle:
+                    return new OracleDataAdapter();
+                case DataBaseType.PostgreSQL:
+                    return new NpgsqlDataAdapter();
                 default:
                     return null;
             }
@@ -76,6 +86,9 @@ namespace RepositoryHelpers.DataBase
                 case DataBaseType.SqlServer:
                     return new SqlParameter($"@{parameter.Key}", parameter.Value);
                 case DataBaseType.Oracle:
+                    return new OracleParameter($"@{parameter.Key}", parameter.Value);
+                case  DataBaseType.PostgreSQL:
+                    return new NpgsqlParameter($"@{parameter.Key}", parameter.Value);
                 default:
                     return null;
             }
