@@ -16,6 +16,7 @@ namespace RepositoryHelpers.DataBaseRepository
             _connection = connection;
         }
 
+        public DbConnection GetDBConnection() => DBConnection;
 
         //DefaultConnection
         private DbConnection _DBConnection;
