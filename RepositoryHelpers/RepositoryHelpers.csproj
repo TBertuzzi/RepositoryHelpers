@@ -8,26 +8,27 @@
     <PackageLicenseUrl>http://opensource.org/licenses/MS-PL</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/TBertuzzi/RepositoryHelpers</PackageProjectUrl>
     <PackageTags>repository helpers dapper litedb ddd mvc httpclient rest pattern database db sql oracle sqlserver</PackageTags>
-    <PackageReleaseNotes>added PostgreSQL</PackageReleaseNotes>
+    <PackageReleaseNotes>added DBConnection</PackageReleaseNotes>
     <Description>Extensions for HttpClient and Custom Repository based on dapper</Description>
     <PackageIconUrl></PackageIconUrl>
     <RepositoryUrl>https://github.com/TBertuzzi/RepositoryHelpers</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.7.0</Version>
-    <AssemblyVersion>2.7.0.0</AssemblyVersion>
-    <FileVersion>2.7.0.0</FileVersion>
+    <Version>2.8.0</Version>
+    <AssemblyVersion>2.8.0.0</AssemblyVersion>
+    <FileVersion>2.8.0.0</FileVersion>
     <PackageIcon>RepositoryHelpersIcon.png</PackageIcon>
+    <PackageVersion>2.8.0</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Dapper.FluentMap.Dommel" Version="2.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="Npgsql" Version="5.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Npgsql" Version="5.0.7" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
-    <PackageReference Include="LiteDB" Version="5.0.10" />
+    <PackageReference Include="LiteDB" Version="5.0.11" />
     <PackageReference Include="System.Data.OracleClient" Version="1.0.8" />
     <PackageReference Include="Dapper.Contrib" Version="2.0.78" />
-    <PackageReference Include="HttpExtension" Version="2.1.0" />
+    <PackageReference Include="HttpExtension" Version="3.1.1" />
   </ItemGroup>
 
   <ItemGroup>
