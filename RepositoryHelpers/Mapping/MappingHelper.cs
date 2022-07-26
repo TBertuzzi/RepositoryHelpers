@@ -77,6 +77,33 @@ namespace RepositoryHelpers.Mapping
             }
         }
 
+        public static string GetFieldName(Type type, DataBaseType dataBaseType)
+        {
+            //var table = type.GetCustomAttributes(typeof(CustomField), true).FirstOrDefault() as Table;
+            //var tableNameFluent = GetFluentEntityMap(type)?.;
+            //var tableName = string.Empty;
+
+            //if (table != null)
+            //    tableName = table.TableName;
+            //else if (!string.IsNullOrWhiteSpace(tableNameFluent))
+            //    tableName = tableNameFluent;
+            //else
+            //    tableName = type.Name;
+
+            //switch (dataBaseType)
+            //{
+            //    case DataBaseType.SqlServer:
+            //        return $"[{tableName}]";
+            //    case DataBaseType.PostgreSQL:
+            //        return tableName.ToLower();
+            //    case DataBaseType.Oracle:
+            //    default:
+            //        return tableName;
+            //}
+
+            return null;
+        }
+
         public static bool IsIgnored(Type entityType, PropertyInfo property)
         {
             var customAttributeData = property.CustomAttributes.ToList();
