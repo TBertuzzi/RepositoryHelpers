@@ -230,9 +230,9 @@ namespace RepositoryHelpers.DataBaseRepository
                         throw new CustomRepositoryException("Identity column is not defined");
 
                     if (_connection.Database == DataBaseType.SqlServer)
-                        sql.AppendLine($" OUTPUT inserted.{identityColumn} values ({sqlParameters.ToString()}) ");
+                        sql.AppendLine($" OUTPUT inserted.{identityColumn} values ({sqlParameters}) ");
                     else if (_connection.Database == DataBaseType.PostgreSQL)
-                        sql.AppendLine($"  values ({sqlParameters.ToString()}) RETURNING {identityColumn} ");
+                        sql.AppendLine($"  values ({sqlParameters}) RETURNING {identityColumn} ");
 
                     object identityObject;
                     if (isCustomTransaction)
@@ -244,7 +244,7 @@ namespace RepositoryHelpers.DataBaseRepository
                 }
                 else
                 {
-                    sql.AppendLine($" values ({sqlParameters.ToString()}) ");
+                    sql.AppendLine($" values ({sqlParameters}) ");
 
                     if (isCustomTransaction)
                         return await connection.ExecuteAsync(sql.ToString(), parameters, customTransaction.DbCommand.Transaction, commandTimeout);
